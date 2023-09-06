@@ -10,12 +10,12 @@ import (
 )
 
 func main() {
-	r := mux.NewRouter()
+	gorillaRouter := mux.NewRouter()
 
-	r.HandleFunc("/api/product/{id}", handlers.UpdateProduct).Methods("PATCH")
-	r.HandleFunc("/api/product/", handlers.AddProduct).Methods("POST")
-	r.HandleFunc("/api/config/", handlers.GetConfig).Methods("GET")
+	gorillaRouter.HandleFunc("/api/product/{id}", handlers.UpdateProduct).Methods("PATCH")
+	gorillaRouter.HandleFunc("/api/product/", handlers.AddProduct).Methods("POST")
+	gorillaRouter.HandleFunc("/api/config/", handlers.GetConfig).Methods("GET")
 
 	fmt.Println("Server started at :8080")
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":8080", gorillaRouter)
 }
