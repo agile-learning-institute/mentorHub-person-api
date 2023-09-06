@@ -1,0 +1,97 @@
+openapi: 3.0.3
+info:
+  title: Product API
+  description: |-
+    This is a super simple API for managing products
+  contact:
+    email: devs@agile-learning.institute
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+paths:
+  /api/product/{id}:
+    patch:
+      summary: Update an existing product
+      description: Update an existing product by Id
+      operationId: updateProduct
+      parameters:
+        - name: id
+          in: path
+          description: ID of product to return
+          required: true
+          schema:
+            type: string
+            format: GUID
+      requestBody:
+        description: Updated field
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'          
+        '404':
+          description: Product not found
+        '405':
+          description: Validation exception
+  /api/product/:
+    post:
+      description: Add a new Product
+      operationId: addProduct
+      requestBody:
+        description: Prodcut Name
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'          
+        '405':
+          description: Invalid input
+  /api/config/:
+    get:
+      description: Get API Configuration Information
+      operationId: getConfig
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'          
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: GUID
+          example: de8b31e7-00af-4872-9116-8b950b30b778
+        name:
+          type: string
+          example: Foo
+        description:
+          type: string
+          example: Longer foo string
+    Config:
+      type: object
+      properties:
+        apiVersion:
+          type: string
+        dataVersion:
+          type: string
