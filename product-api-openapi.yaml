@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: Product API
+  title: person API
   description: |-
-    This is a super simple API for managing products
+    This is a super simple API for managing persons
   contact:
     email: devs@agile-learning.institute
   license:
@@ -10,15 +10,15 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.11
 paths:
-  /api/product/{id}:
+  /api/person/{id}:
     patch:
-      summary: Update an existing product
-      description: Update an existing product by Id
-      operationId: updateProduct
+      summary: Update an existing person
+      description: Update an existing person by Id
+      operationId: updatePerson
       parameters:
         - name: id
           in: path
-          description: ID of product to return
+          description: ID of person to update
           required: true
           schema:
             type: string
@@ -28,7 +28,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/Person'
         required: true
       responses:
         '200':
@@ -36,21 +36,44 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'          
+                $ref: '#/components/schemas/Person'          
         '404':
-          description: Product not found
+          description: person not found
         '405':
           description: Validation exception
-  /api/product/:
+    get:
+      summary: Get an existing person
+      description: Get an existing person by Id
+      operationId: gettPerson
+      parameters:
+        - name: id
+          in: path
+          description: ID of person to return
+          required: true
+          schema:
+            type: string
+            format: GUID
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person'          
+        '404':
+          description: person not found
+        '405':
+          description: Validation exception
+  /api/person/:
     post:
-      description: Add a new Product
-      operationId: addProduct
+      description: Add a new person
+      operationId: addperson
       requestBody:
         description: Prodcut Name
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
+              $ref: '#/components/schemas/person'
         required: true
       responses:
         '200':
@@ -58,7 +81,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'          
+                $ref: '#/components/schemas/person'          
         '405':
           description: Invalid input
   /api/config/:
@@ -75,7 +98,7 @@ paths:
 
 components:
   schemas:
-    Product:
+    Person:
       type: object
       properties:
         id:

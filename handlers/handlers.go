@@ -4,43 +4,60 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"product-api/models"
+	"institute-person-api/models"
 )
 
-func UpdateProduct(responseWriter http.ResponseWriter, request *http.Request) {
-	// Extract the product ID from the URL parameters
-	// vars := mux.Vars(r)
-	// id := vars["id"]
-
-	// Decode the request body to get the updated product details
-	var updatedProduct models.Product
-	err := json.NewDecoder(request.Body).Decode(&updatedProduct)
+func AddPerson(responseWriter http.ResponseWriter, request *http.Request) {
+	// Decode the request body to get the new Person details
+	var newPerson models.Person
+	err := json.NewDecoder(request.Body).Decode(&newPerson)
 	if err != nil {
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	// TODO: Update the product in your database or data store
+	// TODO: Add the Person to your database or data store
+	// newPerson = connection.insertOne(newPerson);
 
-	// Return the updated product as JSON
+	// Return the new Person as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(responseWriter).Encode(updatedProduct)
+	json.NewEncoder(responseWriter).Encode(newPerson)
 }
 
-func AddProduct(responseWriter http.ResponseWriter, request *http.Request) {
-	// Decode the request body to get the new product details
-	var newProduct models.Product
-	err := json.NewDecoder(request.Body).Decode(&newProduct)
+func GetPerson(responseWriter http.ResponseWriter, request *http.Request) {
+	// Decode the request body to get the new Person details
+	var getPerson models.Person
+
+	// TODO: Get the Person from the database or data store
+	// id := mux.Vars(request)["id"]
+	// query := {_id: new ObjectID(id)}
+	// getPerson = connection.findOne(query);
+
+	// Return the Person as JSON
+	responseWriter.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(responseWriter).Encode(getPerson)
+}
+
+func UpdatePerson(responseWriter http.ResponseWriter, request *http.Request) {
+	// Decode the request body to get the updated Person details
+	var updatedPerson models.Person
+	err := json.NewDecoder(request.Body).Decode(&updatedPerson)
 	if err != nil {
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	// TODO: Add the product to your database or data store
+	// TODO: Update the Person in your database or data store
+	// Extract the Person ID from the URL parameters
+	// id := mux.Vars(request)["id"]
+	// query := {_id:new ObjectId(id)}
+	// update := {$set{updatePerson}}
+	// options := {returnAfter:true}
+	// updatePerson = connection.findOneAndUpdate(query, update, options)
 
-	// Return the new product as JSON
+	// Return the updated Person as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(responseWriter).Encode(newProduct)
+	json.NewEncoder(responseWriter).Encode(updatedPerson)
 }
 
 func GetConfig(responseWriter http.ResponseWriter, request *http.Request) {
