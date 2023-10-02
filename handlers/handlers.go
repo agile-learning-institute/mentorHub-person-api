@@ -2,12 +2,28 @@ package handlers
 
 import (
 	"encoding/json"
+	"io"
+	"log"
 	"net/http"
 
+	"institute-person-api/config"
 	"institute-person-api/models"
+
+	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func AddPerson(responseWriter http.ResponseWriter, request *http.Request) {
+type Handler struct {
+	config *config.Config
+}
+
+func NewHandler(config *config.Config) *Handler {
+	return &Handler{config: config}
+}
+
+func (h *Handler) AddPerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// Decode the request body to get the new Person details
 	var newPerson models.Person
 	err := json.NewDecoder(request.Body).Decode(&newPerson)
@@ -16,55 +32,70 @@ func AddPerson(responseWriter http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	// TODO: Add the Person to your database or data store
-	// newPerson = connection.insertOne(newPerson);
+	// Add the Person to the database
+	people := h.config.GetPeopleCollection()
+	ctx, cancel := h.config.GetTimeoutContext()
+	defer cancel()
+	result, err := people.InsertOne(ctx, newPerson)
+
+	// Get the new document
+	query := bson.M{"_id": result.InsertedID}
+	ctx, cancel = h.config.GetTimeoutContext()
+	defer cancel()
+	err = people.FindOne(ctx, query).Decode(&newPerson)
 
 	// Return the new Person as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(responseWriter).Encode(newPerson)
 }
 
-func GetPerson(responseWriter http.ResponseWriter, request *http.Request) {
-	// Decode the request body to get the new Person details
+func (h *Handler) GetPerson(responseWriter http.ResponseWriter, request *http.Request) {
+	// Get the Person from the database
+	id := mux.Vars(request)["id"]
+	objectID, _ := primitive.ObjectIDFromHex(id)
+	query := bson.M{"_id": objectID}
+	people := h.config.GetPeopleCollection()
 	var getPerson models.Person
-
-	// TODO: Get the Person from the database or data store
-	// id := mux.Vars(request)["id"]
-	// query := {_id: new ObjectID(id)}
-	// getPerson = connection.findOne(query);
+	ctx, cancel := h.config.GetTimeoutContext()
+	defer cancel()
+	people.FindOne(ctx, query).Decode(&getPerson)
 
 	// Return the Person as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(responseWriter).Encode(getPerson)
 }
 
-func UpdatePerson(responseWriter http.ResponseWriter, request *http.Request) {
+func (h *Handler) UpdatePerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// Decode the request body to get the updated Person details
-	var updatedPerson models.Person
-	err := json.NewDecoder(request.Body).Decode(&updatedPerson)
+	body, err := io.ReadAll(request.Body)
 	if err != nil {
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
 	}
+	var updateValues bson.M
+	json.Unmarshal(body, &updateValues)
 
-	// TODO: Update the Person in your database or data store
-	// Extract the Person ID from the URL parameters
-	// id := mux.Vars(request)["id"]
-	// query := {_id:new ObjectId(id)}
-	// update := {$set{updatePerson}}
-	// options := {returnAfter:true}
-	// updatePerson = connection.findOneAndUpdate(query, update, options)
+	// Update the Person with provided values
+	people := h.config.GetPeopleCollection()
+	id := mux.Vars(request)["id"]
+	objectID, _ := primitive.ObjectIDFromHex(id)
+	query := bson.M{"_id": objectID}
+	options := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	update := bson.M{"$set": updateValues}
+
+	ctx, cancel := h.config.GetTimeoutContext()
+	defer cancel()
+	var updatedPerson models.Person
+	people.FindOneAndUpdate(ctx, query, update, options).Decode(&updatedPerson)
+	log.Println("Updated Document: ", updatedPerson)
 
 	// Return the updated Person as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(responseWriter).Encode(updatedPerson)
 }
 
-func GetConfig(responseWriter http.ResponseWriter, request *http.Request) {
-	// Create a Config object
-	config := models.Config{APIVersion: "1.0", DataVersion: "1.0"}
-
+func (h *Handler) GetConfig(responseWriter http.ResponseWriter, request *http.Request) {
 	// Return the Config object as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(responseWriter).Encode(config)
+	json.NewEncoder(responseWriter).Encode(h.config.ToJSONStruct())
 }
