@@ -8,7 +8,7 @@ To run locally, first start Mongo and MongoExpress in docker desktop
 docker compose up --detach
 ```
 
-The install dependencies and run the API
+Then install dependencies and run the API
 
 ```bash
 go get -u
@@ -36,14 +36,14 @@ curl -X POST http://localhost:8080/api/person/ \
 Test get a person
 
 ```bash
-curl http://localhost:8080/api/person/123
+curl http://localhost:8080/api/person/[ID]
 
 ```
 
 Test update a person
 
 ```bash
-curl -X PATCH http://localhost:8080/api/person/123 \
+curl -X PATCH http://localhost:8080/api/person/[ID] \
      -H "Content-Type: application/json" \
      -d '{"name":"Bar", "description":"Some long description"}'
 

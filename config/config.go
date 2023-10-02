@@ -22,7 +22,6 @@ type Config struct {
 	apiVersion       string
 	dataVersion      string
 	databaseName     string
-	peopleCollection string
 	databaseTimeout  int
 	connectionString string
 	client           *mongo.Client
@@ -34,7 +33,6 @@ const (
 	DefaultConfigFolder     = "/opt/"
 	DefaultConnectionString = "mongodb://root:example@localhost:27017/?tls=false&directConnection=true"
 	DefaultDatabaseName     = "agile-learning-institute"
-	DefaultPeopleCollection = "people"
 	DefaultTimeout          = 10
 )
 
@@ -44,7 +42,6 @@ func NewConfig() *Config {
 	this.connectionString = this.findStringValue("CONNECTION_STRING", DefaultConnectionString)
 	this.databaseName = this.findStringValue("DATABASE_NAME", DefaultDatabaseName)
 	this.databaseTimeout = this.findIntValue("CONNECTION_TIMEOUT", DefaultTimeout)
-	this.peopleCollection = this.findStringValue("PEPOLE_COLLECTION", DefaultPeopleCollection)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(this.databaseTimeout)*time.Second)
 	this.cancel = cancel
@@ -69,8 +66,8 @@ func (cfg *Config) Disconnect() {
 	cfg.cancel()
 }
 
-func (cfg *Config) GetPeopleCollection() *mongo.Collection {
-	return cfg.database.Collection(cfg.peopleCollection)
+func (cfg *Config) GetCollection(name string) *mongo.Collection {
+	return cfg.database.Collection(name)
 }
 
 func (cfg *Config) GetTimeoutContext() (context.Context, context.CancelFunc) {
