@@ -2,72 +2,57 @@ package models
 
 import (
 	"encoding/json"
-	"institute-person-api/config"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Person struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
 	Name        string             `json:"name,omitempty"`
 	Description string             `json:"description,omitempty"`
+	store       *PersonStore
 }
 
 const (
 	PeopleCollectionName = "people"
 )
 
-func GetPerson(id string, config *config.Config) *Person {
-	var thePerson Person
-	objectID, _ := primitive.ObjectIDFromHex(id)
-	query := bson.M{"_id": objectID}
-	people := config.GetCollection(PeopleCollectionName)
-	ctx, cancel := config.GetTimeoutContext()
-	defer cancel()
-	people.FindOne(ctx, query).Decode(&thePerson)
-	return &thePerson
+func NewPerson(theStore *PersonStore) *Person {
+	this := &Person{}
+	this.store = theStore
+	return this
 }
 
-func PostPerson(body []byte, config *config.Config) *Person {
+func (this *Person) GetPerson(id string) *Person {
+	objectID, _ := primitive.ObjectIDFromHex(id)
+	query := bson.M{"_id": objectID}
+	return this.store.FindOne(query)
+}
+
+func (this *Person) PostPerson(body []byte) *Person {
 	// Get the values to insert
 	var insertValues bson.M
 	json.Unmarshal(body, &insertValues)
 
 	// Insert the new Person
-	people := config.GetCollection(PeopleCollectionName)
-	addContext, addCancel := config.GetTimeoutContext()
-	defer addCancel()
-	result, _ := people.InsertOne(addContext, insertValues)
+	result := this.store.Insert(insertValues)
+	query := bson.M{"_id": result.InsertedID}
 
 	// Get the new document
-	query := bson.M{"_id": result.InsertedID}
-	getContext, getCancel := config.GetTimeoutContext()
-	defer getCancel()
-	var thePerson Person
-	people.FindOne(getContext, query).Decode(&thePerson)
-
-	return &thePerson
+	return this.store.FindOne(query)
 }
 
-func PatchPerson(id string, body []byte, config *config.Config) *Person {
-	// Get the update values
-	var updateValues bson.M
-	json.Unmarshal(body, &updateValues)
-
-	// Build the update parameteres
+func (this *Person) PatchPerson(id string, body []byte) *Person {
+	// Build the query on ID
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	query := bson.M{"_id": objectID}
-	options := options.FindOneAndUpdate().SetReturnDocument(options.After)
+
+	// Create the update set command
+	var updateValues bson.M
+	json.Unmarshal(body, &updateValues)
 	update := bson.M{"$set": updateValues}
 
 	// Update the document
-	var updatedPerson Person
-	people := config.GetCollection(PeopleCollectionName)
-	ctx, cancel := config.GetTimeoutContext()
-	defer cancel()
-	people.FindOneAndUpdate(ctx, query, update, options).Decode(&updatedPerson)
-
-	return &updatedPerson
+	return this.store.FindOneAndUpdate(query, update)
 }

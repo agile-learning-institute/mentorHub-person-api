@@ -5,21 +5,20 @@ import (
 	"io"
 	"net/http"
 
-	"institute-person-api/config"
 	"institute-person-api/models"
 
 	"github.com/gorilla/mux"
 )
 
-type Handler struct {
-	config *config.Config
+type PersonHandler struct {
+	person *models.Person
 }
 
-func NewHandler(config *config.Config) *Handler {
-	return &Handler{config: config}
+func NewPersonHandler(person *models.Person) *PersonHandler {
+	return &PersonHandler{person: person}
 }
 
-func (h *Handler) AddPerson(responseWriter http.ResponseWriter, request *http.Request) {
+func (h *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// Read the request body
 	body, err := io.ReadAll(request.Body)
 	if err != nil {
@@ -28,26 +27,26 @@ func (h *Handler) AddPerson(responseWriter http.ResponseWriter, request *http.Re
 	}
 
 	// Insert the new person document
-	newPerson := models.PostPerson(body, h.config)
+	newPerson := h.person.PostPerson(body)
 
 	// Return the new Person as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(responseWriter).Encode(newPerson)
 }
 
-func (h *Handler) GetPerson(responseWriter http.ResponseWriter, request *http.Request) {
+func (h *PersonHandler) GetPerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// Get the Person ID from the path
 	id := mux.Vars(request)["id"]
 
 	// Get the Person from the database
-	person := models.GetPerson(id, h.config)
+	person := h.person.GetPerson(id)
 
 	// Return the Person as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(responseWriter).Encode(person)
 }
 
-func (h *Handler) UpdatePerson(responseWriter http.ResponseWriter, request *http.Request) {
+func (h *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// Get the Person ID from the path
 	id := mux.Vars(request)["id"]
 
@@ -59,15 +58,9 @@ func (h *Handler) UpdatePerson(responseWriter http.ResponseWriter, request *http
 	}
 
 	// Update the person
-	updatedPerson := models.PatchPerson(id, body, h.config)
+	updatedPerson := h.person.PatchPerson(id, body)
 
 	// Return the updated Person as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(responseWriter).Encode(updatedPerson)
-}
-
-func (h *Handler) GetConfig(responseWriter http.ResponseWriter, request *http.Request) {
-	// Return the Config object as JSON
-	responseWriter.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(responseWriter).Encode(h.config.ToJSONStruct())
 }

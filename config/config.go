@@ -2,99 +2,120 @@ package config
 
 import (
 	"context"
-	"log"
+	"strconv"
 	"time"
-
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type ConfigJSON struct {
-	ConfigFolder    string `json:"configFolder"`
-	ApiVersion      string `json:"apiVersion"`
-	DataVersion     string `json:"dataVersion"`
-	DatabaseName    string `json:"databaseName"`
-	DatabaseTimeout int    `json:"databaseTimeout"`
+type ConfigItem struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+	From  string `json:"from"`
 }
 
 type Config struct {
-	configFolder     string
-	apiVersion       string
-	dataVersion      string
-	databaseName     string
-	databaseTimeout  int
-	connectionString string
-	client           *mongo.Client
-	database         *mongo.Database
-	cancel           context.CancelFunc
+	ConfigItems          []*ConfigItem
+	Version              string
+	patch                string
+	configFolder         string
+	databaseName         string
+	peopleCollectionName string
+	databaseTimeout      int
+	connectionString     string
 }
 
 const (
-	DefaultConfigFolder     = "/opt/"
-	DefaultConnectionString = "mongodb://root:example@localhost:27017/?tls=false&directConnection=true"
-	DefaultDatabaseName     = "agile-learning-institute"
-	DefaultTimeout          = 10
+	VersionMajor                = "1"
+	VersionMinor                = "0"
+	DefaultConfigFolder         = "/opt/"
+	DefaultConnectionString     = "mongodb://root:example@localhost:27017/?tls=false&directConnection=true"
+	DefaultDatabaseName         = "agile-learning-institute"
+	DefaultPeopleCollectionName = "people"
+	DefaultTimeout              = 10
 )
 
+/**
+* Construct a config item by finding all the configuration values
+ */
 func NewConfig() *Config {
 	this := &Config{}
-	this.configFolder = this.findStringValue("CONFIG_FOLDER", DefaultConfigFolder)
-	this.connectionString = this.findStringValue("CONNECTION_STRING", DefaultConnectionString)
-	this.databaseName = this.findStringValue("DATABASE_NAME", DefaultDatabaseName)
-	this.databaseTimeout = this.findIntValue("CONNECTION_TIMEOUT", DefaultTimeout)
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(this.databaseTimeout)*time.Second)
-	this.cancel = cancel
-
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(this.connectionString))
-	if err != nil {
-		log.Fatal(err)
-	}
-	this.client = client
-
-	this.database = client.Database(this.databaseName)
-	this.apiVersion = "LocalDev"  // TODO: Read apiVersion from files
-	this.dataVersion = "LocalDev" // TODO: Load DB Version from Database
+	this.configFolder = this.findStringValue("CONFIG_FOLDER", DefaultConfigFolder, false)
+	this.connectionString = this.findStringValue("CONNECTION_STRING", DefaultConnectionString, true)
+	this.databaseName = this.findStringValue("DATABASE_NAME", DefaultDatabaseName, false)
+	this.peopleCollectionName = this.findStringValue("PEOPLE_COLLECTION_NAME", DefaultPeopleCollectionName, false)
+	this.databaseTimeout = this.findIntValue("CONNECTION_TIMEOUT", DefaultTimeout, false)
+	this.patch = this.findStringValue("PATCH_LEVEL", "LocalDev", false)
+	this.Version = VersionMajor + "." + VersionMinor + "." + this.patch
 
 	return this
 }
 
-func (cfg *Config) Disconnect() {
-	if err := cfg.client.Disconnect(context.Background()); err != nil {
-		log.Fatal(err)
-	}
-	cfg.cancel()
+/**
+* Simple Getters
+ */
+func (cfg *Config) GetConnectionString() string {
+	return cfg.connectionString
 }
 
-func (cfg *Config) GetCollection(name string) *mongo.Collection {
-	return cfg.database.Collection(name)
+func (cfg *Config) GetDatabaseName() string {
+	return cfg.databaseName
 }
 
+func (cfg *Config) GetPeopleCollectionName() string {
+	return cfg.peopleCollectionName
+}
+
+/**
+* Get a Timeout Context using the configured defalut wait
+ */
 func (cfg *Config) GetTimeoutContext() (context.Context, context.CancelFunc) {
 	timeout := time.Duration(cfg.databaseTimeout) * time.Second
 	return context.WithTimeout(context.Background(), timeout)
 }
 
-func (cfg *Config) ToJSONStruct() ConfigJSON {
-	return ConfigJSON{
-		ConfigFolder:    cfg.configFolder,
-		ApiVersion:      cfg.apiVersion,
-		DataVersion:     cfg.dataVersion,
-		DatabaseName:    cfg.databaseName,
-		DatabaseTimeout: cfg.databaseTimeout,
+/**
+* Find a configuration value, and build the ConfigItems array
+* 	If in an Environment Variable exists use it
+* 	If not, and a Config File exists use that
+* 	If all else fails use the default value provided
+ */
+func (cfg *Config) findStringValue(key string, defaultValue string, secret bool) string {
+
+	// Start with default values
+	theValue := defaultValue
+	from := "default"
+
+	// Check for Config File
+	// if file.exists(cfg.configFolder/key) {
+	// 	theValue = slurp file
+	// 	from = "file"
+	// }
+
+	// Check for Environemt Variable
+	// if ENV.exists(key) {
+	// 	theValue = ENV KEY
+	// 	from = "enviroment"
+	// }
+
+	// Create the CI and add it to the list
+	theItem := &ConfigItem{}
+	theItem.Name = key
+	theItem.From = from
+	if secret {
+		theItem.Value = "Secret"
+	} else {
+		theItem.Value = theValue
 	}
-}
+	cfg.ConfigItems = append(cfg.ConfigItems, theItem)
 
-func (cfg *Config) findStringValue(key string, defaultValue string) string {
-	theValue := defaultValue
-	// TODO: Look in Environemnt for key name
-	// TODO: Look in cfg.ConfigFolder for key file
+	// Return the config value
 	return theValue
 }
 
-func (cfg *Config) findIntValue(key string, defaultValue int) int {
-	theValue := defaultValue
-	// TODO: Look in Environemnt for key name
-	// TODO: Look in cfg.ConfigFolder for key file
-	return theValue
+/**
+* Find an Integer configuration value - find the string value and convert it
+ */
+func (cfg *Config) findIntValue(key string, defaultValue int, secret bool) int {
+	theValue := cfg.findStringValue(key, strconv.Itoa(defaultValue), secret)
+	theInteger, _ := strconv.Atoi(theValue)
+	return theInteger
 }
