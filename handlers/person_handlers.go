@@ -46,6 +46,15 @@ func (h *PersonHandler) GetPerson(responseWriter http.ResponseWriter, request *h
 	json.NewEncoder(responseWriter).Encode(person)
 }
 
+func (h *PersonHandler) GetPeople(responseWriter http.ResponseWriter, request *http.Request) {
+	// Get all the people
+	allPeople := h.person.GetAllNames()
+
+	// Return the new Person as JSON
+	responseWriter.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(responseWriter).Encode(allPeople)
+}
+
 func (h *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// Get the Person ID from the path
 	id := mux.Vars(request)["id"]

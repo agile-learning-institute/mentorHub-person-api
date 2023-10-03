@@ -25,6 +25,7 @@ func main() {
 
 	// Define the Routes
 	gorillaRouter.HandleFunc("/api/person/", personHandler.AddPerson).Methods("POST")
+	gorillaRouter.HandleFunc("/api/person/", personHandler.GetPeople).Methods("GET")
 	gorillaRouter.HandleFunc("/api/person/{id}", personHandler.GetPerson).Methods("GET")
 	gorillaRouter.HandleFunc("/api/person/{id}", personHandler.UpdatePerson).Methods("PATCH")
 	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
