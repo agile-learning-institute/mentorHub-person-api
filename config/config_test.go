@@ -2,6 +2,8 @@ package config
 
 import (
 	"context"
+	"encoding/json"
+	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -39,8 +41,9 @@ func TestNewConfig(t *testing.T) {
 	assert.Equal(t, "default", cfg.ConfigItems[5].From)
 	assert.Equal(t, "LocalDev", cfg.ConfigItems[5].Value)
 
-	// jsonConfig, err := json.Marshal(cfg)
-	// assert.Nil(t, err)
+	jsonConfig, err := json.Marshal(cfg)
+	assert.Nil(t, err)
+	log.Printf("Config %s/n", jsonConfig)
 	// assert output - replace above test?
 }
 

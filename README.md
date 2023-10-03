@@ -12,7 +12,8 @@ To run locally, first start Mongo and MongoExpress in docker desktop
 ```bash
 docker compose up --detach
 ```
-Once those containers have started, you can access the Express instance [here](http://localhost:8081). 
+
+Once those containers have started, you can access the Express instance [here](http://localhost:8081).
 If this is the first time your've started the containers you will want to create a "agile-learning-institute" database with a "people" collection
 
 If you need to stop or start the containers you can use:

@@ -15,6 +15,7 @@ type ConfigItem struct {
 type Config struct {
 	ConfigItems          []*ConfigItem
 	Version              string
+	DBVersion            string
 	patch                string
 	configFolder         string
 	databaseName         string

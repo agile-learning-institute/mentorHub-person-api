@@ -14,7 +14,7 @@ type ConfigHandler struct {
 func NewConfigHandler() *ConfigHandler {
 	this := &ConfigHandler{}
 	this.config = config.NewConfig()
-	return &ConfigHandler{}
+	return this
 }
 
 func (h *ConfigHandler) GetConfig(responseWriter http.ResponseWriter, request *http.Request) {

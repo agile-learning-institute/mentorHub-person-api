@@ -42,6 +42,9 @@ func NewPersonStore() *PersonStore {
 	this.database = this.client.Database(this.config.GetDatabaseName())
 	this.collection = this.database.Collection(this.config.GetPeopleCollectionName())
 
+	// Get the database Version
+	this.config.DBVersion = this.GetDatabaseVersion()
+
 	return this
 }
 
@@ -104,5 +107,5 @@ func (store *PersonStore) FindOneAndUpdate(query bson.M, update bson.M) *Person 
 
 func (store *PersonStore) GetDatabaseVersion() string {
 	// TODO: - get the database schema version
-	return ""
+	return "1.0.Dev"
 }
