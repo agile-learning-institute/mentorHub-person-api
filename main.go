@@ -33,7 +33,7 @@ func main() {
 	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
 
 	// Start the server
-	log.Printf("Server Version %s", config.Version)
-	log.Printf("Server Listening at %s", config.Port)
+	log.Printf("INFO: Server Version %s", config.Version)
+	log.Printf("INFO: Server Listening at %s", config.Port)
 	http.ListenAndServe(config.Port, gorillaRouter)
 }
