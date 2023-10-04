@@ -82,11 +82,11 @@ func (store *PersonStore) Insert(information bson.M) *mongo.InsertOneResult {
 * Find a single person by _id
  */
 func (store *PersonStore) FindOne(query bson.M) PersonInterface {
-	var thePerson PersonInterface
+	var thePerson Person
 	context, cancel := store.config.GetTimeoutContext()
 	defer cancel()
 	store.collection.FindOne(context, query).Decode(&thePerson)
-	return thePerson
+	return &thePerson
 }
 
 /**
@@ -105,12 +105,12 @@ func (store *PersonStore) FindMany(query bson.M, options options.FindOptions) []
 * Find One person and Update with the data provided
  */
 func (store *PersonStore) FindOneAndUpdate(query bson.M, update bson.M) PersonInterface {
-	var thePerson PersonInterface
+	var thePerson Person
 	options := options.FindOneAndUpdate().SetReturnDocument(options.After)
 	ctx, cancel := store.config.GetTimeoutContext()
 	defer cancel()
 	store.collection.FindOneAndUpdate(ctx, query, update, options).Decode(&thePerson)
-	return thePerson
+	return &thePerson
 }
 
 func (store *PersonStore) GetDatabaseVersion() string {
