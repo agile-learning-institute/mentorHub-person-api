@@ -11,10 +11,10 @@ import (
 )
 
 type PersonHandler struct {
-	person *models.Person
+	person models.PersonInterface
 }
 
-func NewPersonHandler(person *models.Person) *PersonHandler {
+func NewPersonHandler(person models.PersonInterface) *PersonHandler {
 	return &PersonHandler{person: person}
 }
 

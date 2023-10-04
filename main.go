@@ -14,7 +14,8 @@ func main() {
 	// Setup the PersonHandler and Store
 	personStore := models.NewPersonStore()
 	defer personStore.Disconnect()
-	person := models.NewPerson(personStore)
+	var _ models.PersonStoreInterface = &models.PersonStore{}
+	person := models.NewPerson(&personStore)
 	personHandler := handlers.NewPersonHandler(person)
 
 	// Setup the ConfigHandler

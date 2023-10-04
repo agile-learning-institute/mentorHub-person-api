@@ -13,10 +13,10 @@ import (
 
 // Define the PersonStoreInterface interface
 type PersonStoreInterface interface {
-	FindOne(query interface{}) *Person
-	FindMany(query interface{}, opts *options.FindOptions) *[]PersonShort
-	Insert(values interface{}) *mongo.InsertOneResult
-	FindOneAndUpdate(query interface{}, update interface{}) *Person
+	FindOne(query bson.M) PersonInterface
+	FindMany(query bson.M, options options.FindOptions) []PersonShort
+	Insert(information bson.M) *mongo.InsertOneResult
+	FindOneAndUpdate(query bson.M, update bson.M) PersonInterface
 }
 type PersonStore struct {
 	config     *config.Config
@@ -30,8 +30,8 @@ type PersonStore struct {
 /**
 * Construct a PersonStore to handle person database io
  */
-func NewPersonStore() *PersonStore {
-	this := &PersonStore{}
+func NewPersonStore() PersonStore {
+	this := PersonStore{}
 
 	// get Configuration Values
 	this.config = config.NewConfig()
@@ -81,36 +81,36 @@ func (store *PersonStore) Insert(information bson.M) *mongo.InsertOneResult {
 /**
 * Find a single person by _id
  */
-func (store *PersonStore) FindOne(query bson.M) *Person {
-	var thePerson Person
+func (store *PersonStore) FindOne(query bson.M) PersonInterface {
+	var thePerson PersonInterface
 	context, cancel := store.config.GetTimeoutContext()
 	defer cancel()
 	store.collection.FindOne(context, query).Decode(&thePerson)
-	return &thePerson
+	return thePerson
 }
 
 /**
 * Find may people by a matcher
  */
-func (store *PersonStore) FindMany(query bson.M, options *options.FindOptions) *[]PersonShort {
+func (store *PersonStore) FindMany(query bson.M, options options.FindOptions) []PersonShort {
 	var people []PersonShort
 	context, cancel := store.config.GetTimeoutContext()
 	defer cancel()
-	cursor, _ := store.collection.Find(context, query, options)
+	cursor, _ := store.collection.Find(context, query, &options)
 	cursor.All(context, &people)
-	return &people
+	return people
 }
 
 /**
 * Find One person and Update with the data provided
  */
-func (store *PersonStore) FindOneAndUpdate(query bson.M, update bson.M) *Person {
-	var thePerson Person
+func (store *PersonStore) FindOneAndUpdate(query bson.M, update bson.M) PersonInterface {
+	var thePerson PersonInterface
 	options := options.FindOneAndUpdate().SetReturnDocument(options.After)
 	ctx, cancel := store.config.GetTimeoutContext()
 	defer cancel()
 	store.collection.FindOneAndUpdate(ctx, query, update, options).Decode(&thePerson)
-	return &thePerson
+	return thePerson
 }
 
 func (store *PersonStore) GetDatabaseVersion() string {
