@@ -28,7 +28,7 @@ const (
 	VersionMajor                = "1"
 	VersionMinor                = "0"
 	DefaultConfigFolder         = "/opt/"
-	DefaultConnectionString     = "mongodb://root:example@localhost:27017/?tls=false&directConnection=true"
+	DefaultConnectionString     = "mongodb://root:example@institute-person-db:27017/?tls=false&directConnection=true"
 	DefaultDatabaseName         = "agile-learning-institute"
 	DefaultPeopleCollectionName = "people"
 	DefaultTimeout              = 10

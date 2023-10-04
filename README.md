@@ -14,7 +14,7 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 - [Go Language](https://go.dev/doc/install)
 - [Mongo Compass](https://www.mongodb.com/try/download/compass) - if you want a way to look into the database
 
-To run locally, you need to build and run the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-person-db) and follow the instructions to build and run the container. Once that container is running you can connect with MongoCompas to verify that the database agile-learning-institute exists, with a collection named people.
+To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-person-db) and follow the instructions to build the container. Once that container built it will be run by the docker compose command below.
 
 ## Install dependencies and run the API
 
@@ -23,19 +23,46 @@ go get -u
 go run main.go
 ```
 
+## Build the Container
+
+```bash
+GOOS=linux GOARCH=amd64 go build -o "institute-person-api" main.go
+docker build . --tag institute-person-api
+```
+
+## Run the API and Database Container
+
+```bash
+docker compose up --detach
+```
+
+## Stop and Start the containers without loosing data
+
+```bash
+docker compose stop
+docker compose start
+```
+
+## Restart the containers (Reset the database)
+
+```bash
+docker compose down
+docker compose up --deatch
+```
+
 ## Test with CURL
 
 Test Config
 
 ```bash
-curl http://localhost:8080/api/config/
+curl http://localhost:8081/api/config/
 
 ```
 
 Test add a person
 
 ```bash
-curl -X POST http://localhost:8080/api/person/ \
+curl -X POST http://localhost:8081/api/person/ \
      -H "Content-Type: application/json" \
      -d '{"name":"Foo"}'
 
@@ -44,20 +71,20 @@ curl -X POST http://localhost:8080/api/person/ \
 Test get a person
 
 ```bash
-curl http://localhost:8080/api/person/[ID]
+curl http://localhost:8081/api/person/[ID]
 
 ```
 
 Test find all people with ID
 
 ```bash
-curl http://localhost:8080/api/person/
+curl http://localhost:8081/api/person/
 ```
 
 Test update a person
 
 ```bash
-curl -X PATCH http://localhost:8080/api/person/[ID] \
+curl -X PATCH http://localhost:8081/api/person/[ID] \
      -H "Content-Type: application/json" \
      -d '{"name":"Bar", "description":"Some long description"}'
 

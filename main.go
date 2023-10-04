@@ -32,6 +32,6 @@ func main() {
 	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
 
 	// Start the server
-	fmt.Println("Server started at :8080")
-	http.ListenAndServe(":8080", gorillaRouter)
+	fmt.Println("Server started at :8081")
+	http.ListenAndServe(":8081", gorillaRouter)
 }
