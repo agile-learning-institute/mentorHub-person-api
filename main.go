@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"institute-person-api/config"
@@ -32,5 +33,7 @@ func main() {
 	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
 
 	// Start the server
+	log.Printf("Server Version %s", config.Version)
+	log.Printf("Server Listening at %s", config.Port)
 	http.ListenAndServe(config.Port, gorillaRouter)
 }

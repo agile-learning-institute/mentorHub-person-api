@@ -105,3 +105,9 @@ curl -X PATCH http://localhost:8081/api/person/[ID] \
      -d '{"description":"Some long description"}'
 
 ```
+
+## A Note for future SRE
+
+The docker build expects a linux native binary, and a text file called PATCH_LEVEL to exist, you may want to implement this as a two-stage build that includes the binary compile. Sorry for the inconvience, if we can keep the final built container as thin as this it would be great!
+
+The PATCH_LEVEL file that is located in the same folder as the executable should be populated by CI with the hash of the commit-to-main that triggers CI. This will be used on the Version number reported by the /config endpoint.
