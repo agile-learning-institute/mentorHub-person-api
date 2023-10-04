@@ -12,35 +12,9 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 - [Go Language](https://go.dev/doc/install)
+- [Mongo Compass](https://www.mongodb.com/try/download/compass) - if you want a way to look into the database, the connection string will be 
 
-To run locally, first start Mongo and MongoExpress in docker desktop
-
-```bash
-docker compose up --detach
-```
-
-Once those containers have started, you can access the Express instance [here](http://localhost:8081).
-If this is the first time your've started the containers you will want to create a "agile-learning-institute" database with a "people" collection
-
-If you need to stop or start the containers you can use:
-
-```bash
-docker compose stop
-```
-
-or
-
-```bash
-docker compose start
-```
-
-When you are done you can remove the containers with:
-
-```bash
-docker compose down
-```
-
-NOTE: `docker compose down` will remove the database and collection
+To run locally, you need to build and run the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-person-db) and follow the instructions to build and run the container. Once that container is running you can connect with MongoCompas to verify that the database agile-learning-institute exists, with a collection named people.
 
 ## Install dependencies and run the API
 
