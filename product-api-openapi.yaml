@@ -59,7 +59,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/person'          
+                $ref: '#/components/schemas/Person'          
         '404':
           description: person not found
         '405':
@@ -73,7 +73,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/person'
+              $ref: '#/components/schemas/Person'
         required: true
       responses:
         '200':
@@ -81,7 +81,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/person'          
+                $ref: '#/components/schemas/Person'          
         '405':
           description: Invalid input
     get:
@@ -94,7 +94,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/people'          
+                $ref: '#/components/schemas/People'          
         '404':
           description: not found
         '405':
