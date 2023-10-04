@@ -12,7 +12,7 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 - [Go Language](https://go.dev/doc/install)
-- [Mongo Compass](https://www.mongodb.com/try/download/compass) - if you want a way to look into the database, the connection string will be 
+- [Mongo Compass](https://www.mongodb.com/try/download/compass) - if you want a way to look into the database
 
 To run locally, you need to build and run the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-person-db) and follow the instructions to build and run the container. Once that container is running you can connect with MongoCompas to verify that the database agile-learning-institute exists, with a collection named people.
 
