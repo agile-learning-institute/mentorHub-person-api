@@ -77,13 +77,10 @@ curl http://localhost:8081/api/config/
 
 ```
 
-Test add a person
+Test find all people with IDs
 
 ```bash
-curl -X POST http://localhost:8081/api/person/ \
-     -H "Content-Type: application/json" \
-     -d '{"name":"Foo"}'
-
+curl http://localhost:8081/api/person/
 ```
 
 Test get a person
@@ -93,17 +90,18 @@ curl http://localhost:8081/api/person/[ID]
 
 ```
 
-Test find all people with ID
+Test add a person
 
 ```bash
-curl http://localhost:8081/api/person/
+curl -X POST http://localhost:8081/api/person/ \
+     -d '{"name":"Foo", "description":"Some short description"}'
+
 ```
 
 Test update a person
 
 ```bash
 curl -X PATCH http://localhost:8081/api/person/[ID] \
-     -H "Content-Type: application/json" \
-     -d '{"name":"Bar", "description":"Some long description"}'
+     -d '{"description":"Some long description"}'
 
 ```
