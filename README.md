@@ -68,6 +68,12 @@ curl http://localhost:8080/api/person/[ID]
 
 ```
 
+Test find all people with ID
+
+```bash
+curl http://localhost:8080/api/person/
+```
+
 Test update a person
 
 ```bash
