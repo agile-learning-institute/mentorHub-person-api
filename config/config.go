@@ -29,7 +29,7 @@ type Config struct {
 const (
 	VersionMajor                = "1"
 	VersionMinor                = "0"
-	DefaultConfigFolder         = "/opt/"
+	DefaultConfigFolder         = "./"
 	DefaultConnectionString     = "mongodb://root:example@localhost:27017/?tls=false&directConnection=true"
 	DefaultDatabaseName         = "agile-learning-institute"
 	DefaultPeopleCollectionName = "people"
@@ -42,12 +42,13 @@ const (
  */
 func NewConfig() *Config {
 	this := &Config{}
+	// loading PATCH_LEVEL value only from ./ by looking for it before CONFIG_FOLDER
+	this.patch = this.findStringValue("PATCH_LEVEL", "LocalDev", false)
 	this.configFolder = this.findStringValue("CONFIG_FOLDER", DefaultConfigFolder, false)
 	this.connectionString = this.findStringValue("CONNECTION_STRING", DefaultConnectionString, true)
 	this.databaseName = this.findStringValue("DATABASE_NAME", DefaultDatabaseName, false)
 	this.peopleCollectionName = this.findStringValue("PEOPLE_COLLECTION_NAME", DefaultPeopleCollectionName, false)
 	this.databaseTimeout = this.findIntValue("CONNECTION_TIMEOUT", DefaultTimeout, false)
-	this.patch = this.findStringValue("PATCH_LEVEL", "LocalDev", false)
 	this.Port = this.findStringValue("PORT", DefaultPort, false)
 	this.Version = VersionMajor + "." + VersionMinor + "." + this.patch
 
@@ -84,16 +85,19 @@ func (cfg *Config) GetTimeoutContext() (context.Context, context.CancelFunc) {
 * 	If all else fails use the default value provided
  */
 func (cfg *Config) findStringValue(key string, defaultValue string, secret bool) string {
+	var theValue string
+	var from string
 
 	// Start with default values
-	theValue := defaultValue
-	from := "default"
+	theValue = defaultValue
+	from = "default"
 
-	// Check for Config File
-	// if file.exists(cfg.configFolder/key) {
-	// 	theValue = slurp file
-	// 	from = "file"
-	// }
+	// Check for a file value
+	fileValue := cfg.fileValue(key)
+	if fileValue != "" {
+		theValue = fileValue
+		from = "file"
+	}
 
 	// Check for Environemt Variable
 	envValue, isSet := os.LookupEnv(key)
@@ -124,4 +128,17 @@ func (cfg *Config) findIntValue(key string, defaultValue int, secret bool) int {
 	theValue := cfg.findStringValue(key, strconv.Itoa(defaultValue), secret)
 	theInteger, _ := strconv.Atoi(theValue)
 	return theInteger
+}
+
+func (cfg *Config) fileValue(key string) string {
+	// Check for Config in a File
+	var theFile = cfg.configFolder + key
+	_, error := os.Stat(theFile)
+	if error == nil {
+		fileContent, err := os.ReadFile(theFile)
+		if err == nil {
+			return string(fileContent)
+		}
+	}
+	return ""
 }

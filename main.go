@@ -12,14 +12,17 @@ import (
 )
 
 func main() {
+	// Setup the ConfigHandler
+	config := config.NewConfig()
+	log.Printf("Server Starting at port %s", config.Port)
+	log.Printf("Using connection string %s", config.GetConnectionString())
+	configHandler := handlers.NewConfigHandler()
+
 	// Setup the PersonHandler and Store
 	personStore := models.NewPersonStore()
 	defer personStore.Disconnect()
 	person := models.NewPerson(&personStore)
 	personHandler := handlers.NewPersonHandler(person)
-
-	// Setup the ConfigHandler
-	configHandler := handlers.NewConfigHandler()
 
 	// Setup the HttpServer Router
 	gorillaRouter := mux.NewRouter()
@@ -32,7 +35,5 @@ func main() {
 	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
 
 	// Start the server
-	config := config.NewConfig()
-	log.Println("Server Started at port", config.Port)
 	http.ListenAndServe(config.Port, gorillaRouter)
 }
