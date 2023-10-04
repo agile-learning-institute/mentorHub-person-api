@@ -94,7 +94,7 @@ func (cfg *Config) findStringValue(key string, defaultValue string, secret bool)
 	// Check for Environemt Variable
 	// if ENV.exists(key) {
 	// 	theValue = ENV KEY
-	// 	from = "enviroment"
+	// 	from = "environment"
 	// }
 
 	// Create the CI and add it to the list

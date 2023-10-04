@@ -84,6 +84,21 @@ paths:
                 $ref: '#/components/schemas/person'          
         '405':
           description: Invalid input
+    get:
+      summary: Get a list of people names and ids
+      description: Get list of people names
+      operationId: getNames
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/people'          
+        '404':
+          description: not found
+        '405':
+          description: Validation exception
   /api/config/:
     get:
       description: Get API Configuration Information
@@ -101,16 +116,25 @@ components:
     Person:
       type: object
       properties:
-        id:
+        ID:
           type: string
           format: GUID
-          example: de8b31e7-00af-4872-9116-8b950b30b778
         name:
           type: string
-          example: Foo
         description:
           type: string
-          example: Longer foo string
+    People: 
+      type: array
+      items:
+        type: object
+        properties: 
+          ID:
+            description: MongoDB _id
+            type: string
+            format: uuid
+          name:
+            description: Person Name
+            type: string      
     Config:
       type: object
       properties:
@@ -118,3 +142,21 @@ components:
           type: string
         dataVersion:
           type: string
+        ConfigItems:
+          type: array
+          items:
+            type: object
+            properties: 
+              name:
+                description: Conf Item Name (Env Var Name, File Name)
+                type: string
+              value:
+                description: The value for that config item
+                type: string
+              from:
+                description: Where the value was found
+                type: string
+                enum:
+                  - default
+                  - environment
+                  - file
