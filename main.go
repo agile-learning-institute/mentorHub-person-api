@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"institute-person-api/config"
@@ -14,8 +13,6 @@ import (
 func main() {
 	// Setup the ConfigHandler
 	config := config.NewConfig()
-	log.Printf("Server Starting at port %s", config.Port)
-	log.Printf("Using connection string %s", config.GetConnectionString())
 	configHandler := handlers.NewConfigHandler()
 
 	// Setup the PersonHandler and Store
