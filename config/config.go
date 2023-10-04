@@ -2,6 +2,7 @@ package config
 
 import (
 	"context"
+	"os"
 	"strconv"
 	"time"
 )
@@ -16,6 +17,7 @@ type Config struct {
 	ConfigItems          []*ConfigItem
 	Version              string
 	DBVersion            string
+	Port                 string
 	patch                string
 	configFolder         string
 	databaseName         string
@@ -28,9 +30,10 @@ const (
 	VersionMajor                = "1"
 	VersionMinor                = "0"
 	DefaultConfigFolder         = "/opt/"
-	DefaultConnectionString     = "mongodb://root:example@institute-person-db:27017/?tls=false&directConnection=true"
+	DefaultConnectionString     = "mongodb://root:example@localhost:27017/?tls=false&directConnection=true"
 	DefaultDatabaseName         = "agile-learning-institute"
 	DefaultPeopleCollectionName = "people"
+	DefaultPort                 = ":8080"
 	DefaultTimeout              = 10
 )
 
@@ -45,6 +48,7 @@ func NewConfig() *Config {
 	this.peopleCollectionName = this.findStringValue("PEOPLE_COLLECTION_NAME", DefaultPeopleCollectionName, false)
 	this.databaseTimeout = this.findIntValue("CONNECTION_TIMEOUT", DefaultTimeout, false)
 	this.patch = this.findStringValue("PATCH_LEVEL", "LocalDev", false)
+	this.Port = this.findStringValue("PORT", DefaultPort, false)
 	this.Version = VersionMajor + "." + VersionMinor + "." + this.patch
 
 	return this
@@ -92,10 +96,11 @@ func (cfg *Config) findStringValue(key string, defaultValue string, secret bool)
 	// }
 
 	// Check for Environemt Variable
-	// if ENV.exists(key) {
-	// 	theValue = ENV KEY
-	// 	from = "environment"
-	// }
+	envValue, isSet := os.LookupEnv(key)
+	if isSet {
+		theValue = envValue
+		from = "environment"
+	}
 
 	// Create the CI and add it to the list
 	theItem := &ConfigItem{}

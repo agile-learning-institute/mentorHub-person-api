@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
+	"institute-person-api/config"
 	"institute-person-api/handlers"
 	"institute-person-api/models"
 
@@ -14,7 +15,6 @@ func main() {
 	// Setup the PersonHandler and Store
 	personStore := models.NewPersonStore()
 	defer personStore.Disconnect()
-	var _ models.PersonStoreInterface = &models.PersonStore{}
 	person := models.NewPerson(&personStore)
 	personHandler := handlers.NewPersonHandler(person)
 
@@ -32,6 +32,7 @@ func main() {
 	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
 
 	// Start the server
-	fmt.Println("Server started at :8081")
-	http.ListenAndServe(":8081", gorillaRouter)
+	config := config.NewConfig()
+	log.Println("Server Started at port", config.Port)
+	http.ListenAndServe(config.Port, gorillaRouter)
 }

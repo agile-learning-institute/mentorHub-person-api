@@ -17,3 +17,6 @@ services:
     restart: always
     ports:
       - 8081:8081
+    environment:
+      CONNECTION_STRING: mongodb://root:example@institute-person-db:27017/?tls=false&directConnection=true
+      PORT: ":8081"

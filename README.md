@@ -16,25 +16,39 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 
 To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-person-db) and follow the instructions to build the container. Once that container built it will be run by the docker compose command below.
 
-## Install dependencies and run the API
+## Install dependencies and run the API locally
+
+If you have started the database separatly, you can run the API locally
 
 ```bash
 go get -u
 go run main.go
 ```
 
-## Build the Container
+## To Build the Container
 
 ```bash
 GOOS=linux GOARCH=amd64 go build -o "institute-person-api" main.go
 docker build . --tag institute-person-api
 ```
 
-## Run the API and Database Container
+## To Run the API and Database Container 
 
 ```bash
 docker compose up --detach
 ```
+
+Note: If you see an error that looks like this
+
+```bash
+Error response from daemon: driver failed programming external connectivity on endpoint institute-person-api-institute-person-db-1 (f1517663e417de527d1ebf9d30a9ac21e4ca045d15bebb6297a79724f54536e9): Bind for 127.0.0.1:27017 failed: port is already allocated
+```
+
+You will need to stop the database container
+
+- issue a ```docker compose down``` command
+- cd to the database project and issue a ```docker compose down``` command
+- cd back to the api project and try ```docker compose up``` again
 
 ## Stop and Start the containers without loosing data
 
@@ -52,7 +66,11 @@ docker compose up --deatch
 
 ## Test with CURL
 
-Test Config
+NOTE: If you are running the API from the command line with ```go run main.go``` the API will be served at port 8080, 
+if you run the API in containers with ```docker compose up``` then it will be served at port 8081. 
+Adjust the following URI's accordingly.
+
+Test Config Endpoint
 
 ```bash
 curl http://localhost:8081/api/config/

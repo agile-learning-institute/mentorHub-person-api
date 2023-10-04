@@ -2,8 +2,6 @@ package config
 
 import (
 	"context"
-	"encoding/json"
-	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -18,10 +16,11 @@ func TestNewConfig(t *testing.T) {
 	assert.Equal(t, DefaultDatabaseName, cfg.databaseName)
 	assert.Equal(t, DefaultPeopleCollectionName, cfg.peopleCollectionName)
 	assert.Equal(t, DefaultTimeout, cfg.databaseTimeout)
+	assert.Equal(t, DefaultPort, cfg.Port)
 	assert.Equal(t, "LocalDev", cfg.patch)
 	assert.Equal(t, "1.0.LocalDev", cfg.Version)
 
-	assert.Equal(t, 6, len(cfg.ConfigItems))
+	assert.Equal(t, 7, len(cfg.ConfigItems))
 	assert.Equal(t, "CONFIG_FOLDER", cfg.ConfigItems[0].Name)
 	assert.Equal(t, "default", cfg.ConfigItems[0].From)
 	assert.Equal(t, DefaultConfigFolder, cfg.ConfigItems[0].Value)
@@ -40,11 +39,9 @@ func TestNewConfig(t *testing.T) {
 	assert.Equal(t, "PATCH_LEVEL", cfg.ConfigItems[5].Name)
 	assert.Equal(t, "default", cfg.ConfigItems[5].From)
 	assert.Equal(t, "LocalDev", cfg.ConfigItems[5].Value)
-
-	jsonConfig, err := json.Marshal(cfg)
-	assert.Nil(t, err)
-	log.Printf("Config %s/n", jsonConfig)
-	// assert output - replace above test?
+	assert.Equal(t, "PORT", cfg.ConfigItems[6].Name)
+	assert.Equal(t, "default", cfg.ConfigItems[6].From)
+	assert.Equal(t, ":8080", cfg.ConfigItems[6].Value)
 }
 
 func TestGetConnectionString(t *testing.T) {
