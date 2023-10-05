@@ -8,6 +8,7 @@ import (
 	"institute-person-api/handlers"
 	"institute-person-api/models"
 
+	gorillaHandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -24,6 +25,13 @@ func main() {
 
 	// Setup the HttpServer Router
 	gorillaRouter := mux.NewRouter()
+	// gorillaRouter.Use(loggingMiddleware)
+
+	// Configure cors filters
+	// originsOk := gorillaHandlers.AllowedOrigins([]string{"*"})
+	headersOk := gorillaHandlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+	originsOk := gorillaHandlers.AllowedOrigins([]string{"http://localhost:8080"}) // Your frontend's origin
+	methodsOk := gorillaHandlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"})
 
 	// Define the Routes
 	gorillaRouter.HandleFunc("/api/person/", personHandler.AddPerson).Methods("POST")
@@ -32,8 +40,9 @@ func main() {
 	gorillaRouter.HandleFunc("/api/person/{id}", personHandler.UpdatePerson).Methods("PATCH")
 	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
 
-	// Start the server
+	// Start the server with Cors handler
+
 	log.Printf("INFO: Server Version %s", config.Version)
 	log.Printf("INFO: Server Listening at %s", config.Port)
-	http.ListenAndServe(config.Port, gorillaRouter)
+	http.ListenAndServe(":8081", gorillaHandlers.CORS(originsOk, headersOk, methodsOk)(gorillaRouter))
 }
