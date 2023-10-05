@@ -55,8 +55,8 @@ func NewConfig() *Config {
 	this.Version = VersionMajor + "." + VersionMinor + "." + this.patch
 	this.DBVersion = "TODO"
 	// After refactor config dependency injection
-	//	this.Person = newPerson()
-	//  this.PersonStore = new PersonStore()
+	//	this.Person = newPerson(this)
+	//  this.PersonStore = new PersonStore(this)
 	return this
 }
 
