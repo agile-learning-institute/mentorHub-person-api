@@ -24,6 +24,8 @@ type Config struct {
 	peopleCollectionName string
 	databaseTimeout      int
 	connectionString     string
+	// Person Person
+	// PersonStore PersonStore
 }
 
 const (
@@ -51,12 +53,16 @@ func NewConfig() *Config {
 	this.databaseTimeout = this.findIntValue("CONNECTION_TIMEOUT", DefaultTimeout, false)
 	this.Port = this.findStringValue("PORT", DefaultPort, false)
 	this.Version = VersionMajor + "." + VersionMinor + "." + this.patch
-
+	this.DBVersion = "TODO"
+	// After refactor config dependency injection
+	//	this.Person = newPerson()
+	//  this.PersonStore = new PersonStore()
 	return this
 }
 
 /**
-* Simple Getters
+* Simple Getters - Read Only attributes
+* TODO: Make all attributes read-only (creat getters)
  */
 func (cfg *Config) GetConnectionString() string {
 	return cfg.connectionString
@@ -107,9 +113,7 @@ func (cfg *Config) findStringValue(key string, defaultValue string, secret bool)
 	}
 
 	// Create the CI and add it to the list
-	theItem := &ConfigItem{}
-	theItem.Name = key
-	theItem.From = from
+	theItem := &ConfigItem{Name: key, From: from}
 	if secret {
 		theItem.Value = "Secret"
 	} else {
