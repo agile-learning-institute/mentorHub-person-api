@@ -130,6 +130,7 @@ docker logs -f institute-person-api-institute-person-api-1
 
 ## Refactors and Enhancements
 
+- [ ] Update Person Struct with new fields
 - [ ] Add testing of config-handler
 - [ ] Add godoc comments
 - [ ] Add Person and PersonStore to Config and disconnect wrapper
