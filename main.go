@@ -44,5 +44,8 @@ func main() {
 
 	log.Printf("INFO: Server Version %s", config.Version)
 	log.Printf("INFO: Server Listening at %s", config.Port)
-	http.ListenAndServe(":8081", gorillaHandlers.CORS(originsOk, headersOk, methodsOk)(gorillaRouter))
+	err := http.ListenAndServe(":8081", gorillaHandlers.CORS(originsOk, headersOk, methodsOk)(gorillaRouter))
+	if err != nil {
+		log.Println("ERROR: Server Ending with error", err)
+	}
 }
