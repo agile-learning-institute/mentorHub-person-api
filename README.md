@@ -127,3 +127,12 @@ Logging is implemented with a INFO: or TRANSACTION: prefix (ERROR: is coming soo
 ```bash
 docker logs -f institute-person-api-institute-person-api-1
 ```
+
+## Refactors and Enhancements
+
+- [ ] Add testing of config-handler
+- [ ] Add godoc comments
+- [ ] Add Person and PersonStore to Config and disconnect wrapper
+- [ ] Inject config into Handlers and Stores and Person
+- [ ] Person-store delivers DB Version to Config (Config returns store?)
+- [ ] Improved Error Handling & testing (data dependency)
