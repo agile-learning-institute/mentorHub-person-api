@@ -128,13 +128,43 @@ Logging is implemented with a INFO: or TRANSACTION: prefix (ERROR: is coming soo
 docker logs -f institute-person-api-institute-person-api-1
 ```
 
-## Refactors and Enhancements
+## Shortcut scripts
 
-- [ ] Add breadcrumbs
-- [ ] Update Person Struct with new fields
-- [ ] Add testing of config-handler
-- [ ] Add godoc comments
-- [ ] Add Person and PersonStore to Config and disconnect wrapper
-- [ ] Inject config into Handlers and Stores and Person
-- [ ] Person-store delivers DB Version to Config (Config returns store?)
+### Tail API logs
+
+```bash
+./shell/logs.sh
+```
+
+### Rebuild API Container
+
+```bash
+./shell/rebuld.sh
+```
+
+### Quick CURL test of API
+
+```bash
+./shell/quicktest.sh
+```
+
+## Backlog and Feature Branch info
+
+- [ ] Shift dependency injection to Config object
+  - injection-refactor branch
+  - [ ] GetPerson and GetStore added to Config
+  - [ ] NewConfig initilizes Person injects config
+  - [ ] NewConfig initilizes Store injects config
+  - [ ] Person-store delivers DB Version to Config
+  - [ ] ConfigHandler injects object
+  - [ ] PersonHandler injects object
+  - [ ] All PersonStore timeout and errors logged and thrown
 - [ ] Improved Error Handling & testing (data dependency)
+  - error-refactor branch
+  - [ ] Handlers to catch and return errors
+  - [ ] Gorilla logging handler
+- [ ] Update Person Struct with new fields
+  - [ ] Add breadcrumbs
+  - [ ] Add attributes from database
+- [ ] Add unit testing of config-handler
+- [ ] Add godoc comments
