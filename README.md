@@ -14,7 +14,15 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 - [Go Language](https://go.dev/doc/install)
 - [Mongo Compass](https://www.mongodb.com/try/download/compass) - if you want a way to look into the database
 
-To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-person-db) and follow the instructions to build the container. Once that container built it will be run by the docker compose command below.
+## Instructions for the API Developer
+
+To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-person-db) and follow the instructions to build the container. Once that container is built you can run it independently using the database docker compose option
+
+## Instructions for the UI Developer
+
+If you want to run both the API and Database containers you can build the database container, and then build the API container, and then use the docker compose command below to run both of them together.
+
+NOTE: You can not have it both ways.
 
 ## Install dependencies and run the API locally
 
@@ -46,9 +54,9 @@ Error response from daemon: driver failed programming external connectivity on e
 
 You will need to stop the database container
 
-- issue a ```docker compose down``` command
-- cd to the database project and issue a ```docker compose down``` command
-- cd back to the api project and try ```docker compose up``` again
+- issue a ```docker compose down``` command to stop the API containers.
+- cd to the database project and issue a ```docker compose down``` command to stop the solo database container.
+- cd back to the api project and try ```docker compose up``` again to restart the API and Database together
 
 ## Stop and Start the containers without loosing data
 
