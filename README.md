@@ -32,7 +32,7 @@ GOOS=linux GOARCH=amd64 go build -o "institute-person-api" main.go
 docker build . --tag institute-person-api
 ```
 
-## To Run the API and Database Container 
+## To Run the API and Database Container
 
 ```bash
 docker compose up --detach
@@ -66,8 +66,8 @@ docker compose up --deatch
 
 ## Test with CURL
 
-NOTE: If you are running the API from the command line with ```go run main.go``` the API will be served at port 8080, 
-if you run the API in containers with ```docker compose up``` then it will be served at port 8081. 
+NOTE: If you are running the API from the command line with ```go run main.go``` the API will be served at port 8080,
+if you run the API in containers with ```docker compose up``` then it will be served at port 8081.
 Adjust the following URI's accordingly.
 
 Test Config Endpoint
