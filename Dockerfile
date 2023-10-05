@@ -2,7 +2,7 @@
 FROM amd64/ubuntu:latest
 
 ADD ./institute-person-api /
-ADD ./PATCH /
+ADD ./PATCH_LEVEL /
 
 EXPOSE 8081:8081
 
