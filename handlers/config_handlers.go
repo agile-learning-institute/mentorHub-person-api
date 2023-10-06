@@ -14,9 +14,9 @@ type ConfigHandler struct {
 	config *config.Config
 }
 
-func NewConfigHandler(theConfig config.Config) *ConfigHandler {
+func NewConfigHandler(theConfig *config.Config) *ConfigHandler {
 	this := &ConfigHandler{}
-	this.config = &theConfig
+	this.config = theConfig
 	return this
 }
 

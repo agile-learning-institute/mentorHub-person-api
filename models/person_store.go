@@ -28,7 +28,7 @@ type PersonStoreInterface interface {
 	Disconnect()
 }
 type PersonStore struct {
-	config     config.Config
+	config     *config.Config
 	client     *mongo.Client
 	database   *mongo.Database
 	collection *mongo.Collection
@@ -44,7 +44,7 @@ const (
 /**
 * Construct a PersonStore to handle person database io
  */
-func NewPersonStore(cfg config.Config) PersonStoreInterface {
+func NewPersonStore(cfg *config.Config) PersonStoreInterface {
 	this := &PersonStore{}
 
 	// get Configuration Values

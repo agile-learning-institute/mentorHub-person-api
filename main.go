@@ -1,3 +1,4 @@
+// This application implements a simple Person API
 package main
 
 import (
@@ -15,11 +16,11 @@ import (
 func main() {
 	// Setup the ConfigHandler
 	config := config.NewConfig()
-	configHandler := handlers.NewConfigHandler(config)
 
 	// Setup the PersonHandler and Store
 	var personStore models.PersonStoreInterface
 	personStore = models.NewPersonStore(config)
+	configHandler := handlers.NewConfigHandler(config)
 	defer personStore.Disconnect()
 	var person models.PersonInterface
 	person = models.NewPerson(personStore)
@@ -27,12 +28,11 @@ func main() {
 
 	// Setup the HttpServer Router
 	gorillaRouter := mux.NewRouter()
-	// gorillaRouter.Use(loggingMiddleware)
 
 	// Configure cors filters
-	// originsOk := gorillaHandlers.AllowedOrigins([]string{"*"})
+	originsOk := gorillaHandlers.AllowedOrigins([]string{"*"})
 	headersOk := gorillaHandlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
-	originsOk := gorillaHandlers.AllowedOrigins([]string{"http://localhost:8080"}) // Your frontend's origin
+	// originsOk := gorillaHandlers.AllowedOrigins([]string{"http://localhost:8080"}) // Your frontend's origin
 	methodsOk := gorillaHandlers.AllowedMethods([]string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"})
 
 	// Define the Routes
