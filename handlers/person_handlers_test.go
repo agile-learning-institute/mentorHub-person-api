@@ -56,7 +56,7 @@ func TestGetPerson(t *testing.T) {
 
 	// Tell the Mock how to respond to GetPerson
 	// id := primitive.NewObjectID().Hex()
-	personJSON := `"name": "John Doe", "description": "Test Person"}`
+	personJSON := `{"name": "John Doe", "description": "Test Person"}`
 	request := httptest.NewRequest("GET", "/person/000000000000000000000000/", strings.NewReader(personJSON))
 	responseRecorder := httptest.NewRecorder()
 	mockPerson.EXPECT().GetPerson(gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"})
