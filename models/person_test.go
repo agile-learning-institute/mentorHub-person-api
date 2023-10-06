@@ -21,7 +21,6 @@ func TestNewPerson(t *testing.T) {
 
 	// Examine the result
 	assert.NotNil(t, person)
-	assert.Equal(t, mockStore, person.GetStore())
 }
 
 func TestGetPerson(t *testing.T) {

@@ -7,14 +7,6 @@ import (
 	"time"
 )
 
-type ConfigInterface interface {
-	GetConnectionString() string
-	GetDatabaseName() string
-	GetPeopleCollectionName() string
-	GetPort() string
-	GetTimeoutContext() (context.Context, context.CancelFunc)
-	SetDbVersion(theVersion string)
-}
 type ConfigItem struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
