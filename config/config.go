@@ -7,6 +7,14 @@ import (
 	"time"
 )
 
+type ConfigInterface interface {
+	GetConnectionString() string
+	GetDatabaseName() string
+	GetPeopleCollectionName() string
+	GetPort() string
+	GetTimeoutContext() (context.Context, context.CancelFunc)
+	SetDbVersion(theVersion string)
+}
 type ConfigItem struct {
 	Name  string `json:"name"`
 	Value string `json:"value"`
@@ -17,15 +25,15 @@ type Config struct {
 	ConfigItems          []*ConfigItem
 	Version              string
 	DBVersion            string
-	Port                 string
+	port                 string
 	patch                string
 	configFolder         string
 	databaseName         string
 	peopleCollectionName string
 	databaseTimeout      int
 	connectionString     string
-	// Person Person
-	// PersonStore PersonStore
+	// person               models.PersonInterface
+	// personStore          models.PersonStoreInterface
 }
 
 const (
@@ -44,25 +52,20 @@ const (
  */
 func NewConfig() *Config {
 	this := &Config{}
-	// loading PATCH_LEVEL value only from ./ by looking for it before CONFIG_FOLDER
 	this.patch = this.findStringValue("PATCH_LEVEL", "LocalDev", false)
 	this.configFolder = this.findStringValue("CONFIG_FOLDER", DefaultConfigFolder, false)
 	this.connectionString = this.findStringValue("CONNECTION_STRING", DefaultConnectionString, true)
 	this.databaseName = this.findStringValue("DATABASE_NAME", DefaultDatabaseName, false)
 	this.peopleCollectionName = this.findStringValue("PEOPLE_COLLECTION_NAME", DefaultPeopleCollectionName, false)
 	this.databaseTimeout = this.findIntValue("CONNECTION_TIMEOUT", DefaultTimeout, false)
-	this.Port = this.findStringValue("PORT", DefaultPort, false)
+	this.port = this.findStringValue("PORT", DefaultPort, false)
 	this.Version = VersionMajor + "." + VersionMinor + "." + this.patch
-	this.DBVersion = "TODO"
-	// After refactor config dependency injection
-	//	this.Person = newPerson(this)
-	//  this.PersonStore = new PersonStore(this)
+	this.DBVersion = "Pending"
 	return this
 }
 
 /**
 * Simple Getters - Read Only attributes
-* TODO: Make all attributes read-only (creat getters)
  */
 func (cfg *Config) GetConnectionString() string {
 	return cfg.connectionString
@@ -74,6 +77,17 @@ func (cfg *Config) GetDatabaseName() string {
 
 func (cfg *Config) GetPeopleCollectionName() string {
 	return cfg.peopleCollectionName
+}
+
+func (cfg *Config) GetPort() string {
+	return cfg.port
+}
+
+/**
+* the one and only Setter
+ */
+func (cfg *Config) SetDbVersion(theVersion string) {
+	cfg.DBVersion = theVersion
 }
 
 /**
@@ -134,6 +148,9 @@ func (cfg *Config) findIntValue(key string, defaultValue int, secret bool) int {
 	return theInteger
 }
 
+/**
+* Return the contents of a file if it exists, or an empty string otherwise
+ */
 func (cfg *Config) fileValue(key string) string {
 	// Check for Config in a File
 	var theFile = cfg.configFolder + key

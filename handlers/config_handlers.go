@@ -11,12 +11,12 @@ import (
 )
 
 type ConfigHandler struct {
-	config *config.Config
+	config *config.ConfigInterface
 }
 
-func NewConfigHandler() *ConfigHandler {
+func NewConfigHandler(theConfig config.ConfigInterface) *ConfigHandler {
 	this := &ConfigHandler{}
-	this.config = config.NewConfig()
+	this.config = &theConfig
 	return this
 }
 

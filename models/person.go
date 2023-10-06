@@ -9,7 +9,6 @@ import (
 )
 
 type PersonInterface interface {
-	GetStore() PersonStoreInterface
 	GetPerson(id string) PersonInterface
 	GetAllNames() []PersonShort
 	PostPerson(body []byte) PersonInterface
@@ -25,12 +24,7 @@ type Person struct {
 	Name        string             `json:"name,omitempty"`
 	Description string             `json:"description,omitempty"`
 	store       PersonStoreInterface
-	person      PersonInterface
 }
-
-const (
-	PeopleCollectionName = "people"
-)
 
 func NewPerson(theStore PersonStoreInterface) PersonInterface {
 	this := &Person{}
@@ -38,14 +32,12 @@ func NewPerson(theStore PersonStoreInterface) PersonInterface {
 	return this
 }
 
-func (this *Person) GetStore() PersonStoreInterface {
-	return this.store
-}
 func (this *Person) GetPerson(id string) PersonInterface {
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	query := bson.M{"_id": objectID}
 	return this.store.FindOne(query)
 }
+
 func (this *Person) GetAllNames() []PersonShort {
 	query := bson.M{}
 	theOptions := options.Find().SetProjection(bson.D{{Key: "name", Value: 1}})

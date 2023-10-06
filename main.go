@@ -15,12 +15,14 @@ import (
 func main() {
 	// Setup the ConfigHandler
 	config := config.NewConfig()
-	configHandler := handlers.NewConfigHandler()
+	configHandler := handlers.NewConfigHandler(config)
 
 	// Setup the PersonHandler and Store
-	personStore := models.NewPersonStore()
+	var personStore models.PersonStoreInterface
+	personStore = models.NewPersonStore(config)
 	defer personStore.Disconnect()
-	person := models.NewPerson(&personStore)
+	var person models.PersonInterface
+	person = models.NewPerson(personStore)
 	personHandler := handlers.NewPersonHandler(person)
 
 	// Setup the HttpServer Router
@@ -41,10 +43,10 @@ func main() {
 	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
 
 	// Start the server with Cors handler
-
+	port := config.GetPort()
 	log.Printf("INFO: Server Version %s", config.Version)
-	log.Printf("INFO: Server Listening at %s", config.Port)
-	err := http.ListenAndServe(":8081", gorillaHandlers.CORS(originsOk, headersOk, methodsOk)(gorillaRouter))
+	log.Printf("INFO: Server Listening at %s", port)
+	err := http.ListenAndServe(port, gorillaHandlers.CORS(originsOk, headersOk, methodsOk)(gorillaRouter))
 	if err != nil {
 		log.Println("ERROR: Server Ending with error", err)
 	}
