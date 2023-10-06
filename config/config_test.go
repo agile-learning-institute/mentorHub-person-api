@@ -16,7 +16,7 @@ func TestNewConfig(t *testing.T) {
 	assert.Equal(t, DefaultDatabaseName, cfg.databaseName)
 	assert.Equal(t, DefaultPeopleCollectionName, cfg.peopleCollectionName)
 	assert.Equal(t, DefaultTimeout, cfg.databaseTimeout)
-	assert.Equal(t, DefaultPort, cfg.Port)
+	assert.Equal(t, DefaultPort, cfg.port)
 	assert.Equal(t, "LocalDev", cfg.patch)
 	assert.Equal(t, "1.0.LocalDev", cfg.Version)
 
