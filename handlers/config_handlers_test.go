@@ -12,7 +12,7 @@ import (
 func TestNewConfigHandler(t *testing.T) {
 	// Setup a config
 	config := config.NewConfig()
-	configHandler := NewConfigHandler(*config)
+	configHandler := NewConfigHandler(config)
 
 	// Examine the result
 	assert.NotNil(t, configHandler)
@@ -21,7 +21,7 @@ func TestNewConfigHandler(t *testing.T) {
 func TestGetConfig(t *testing.T) {
 	// Setup
 	config := config.NewConfig()
-	configHandler := NewConfigHandler(*config)
+	configHandler := NewConfigHandler(config)
 	request := httptest.NewRequest("GET", "/config/", nil)
 	responseRecorder := httptest.NewRecorder()
 	// jsonString, _ := json.Marshal(config)
