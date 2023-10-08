@@ -1,3 +1,4 @@
+// This application implements a simple Person API
 package main
 
 import (
@@ -15,22 +16,22 @@ import (
 func main() {
 	// Setup the ConfigHandler
 	config := config.NewConfig()
-	configHandler := handlers.NewConfigHandler()
 
 	// Setup the PersonHandler and Store
-	personStore := models.NewPersonStore()
+	var personStore models.PersonStoreInterface
+	personStore = models.NewPersonStore(config)
+	configHandler := handlers.NewConfigHandler(config)
 	defer personStore.Disconnect()
-	person := models.NewPerson(&personStore)
+	var person models.PersonInterface
+	person = models.NewPerson(personStore)
 	personHandler := handlers.NewPersonHandler(person)
 
 	// Setup the HttpServer Router
 	gorillaRouter := mux.NewRouter()
-	// gorillaRouter.Use(loggingMiddleware)
 
 	// Configure cors filters
-	// originsOk := gorillaHandlers.AllowedOrigins([]string{"*"})
+	originsOk := gorillaHandlers.AllowedOrigins([]string{"*"})
 	headersOk := gorillaHandlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
-	originsOk := gorillaHandlers.AllowedOrigins([]string{"http://localhost:8080"}) // Your frontend's origin
 	methodsOk := gorillaHandlers.AllowedMethods([]string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"})
 
 	// Define the Routes
@@ -41,10 +42,10 @@ func main() {
 	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
 
 	// Start the server with Cors handler
-
+	port := config.GetPort()
 	log.Printf("INFO: Server Version %s", config.Version)
-	log.Printf("INFO: Server Listening at %s", config.Port)
-	err := http.ListenAndServe(":8081", gorillaHandlers.CORS(originsOk, headersOk, methodsOk)(gorillaRouter))
+	log.Printf("INFO: Server Listening at %s", port)
+	err := http.ListenAndServe(port, gorillaHandlers.CORS(originsOk, headersOk, methodsOk)(gorillaRouter))
 	if err != nil {
 		log.Println("ERROR: Server Ending with error", err)
 	}

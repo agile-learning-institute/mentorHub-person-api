@@ -36,6 +36,18 @@ func (m *MockPersonStoreInterface) EXPECT() *MockPersonStoreInterfaceMockRecorde
 	return m.recorder
 }
 
+// Disconnect mocks base method.
+func (m *MockPersonStoreInterface) Disconnect() {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "Disconnect")
+}
+
+// Disconnect indicates an expected call of Disconnect.
+func (mr *MockPersonStoreInterfaceMockRecorder) Disconnect() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Disconnect", reflect.TypeOf((*MockPersonStoreInterface)(nil).Disconnect))
+}
+
 // FindMany mocks base method.
 func (m *MockPersonStoreInterface) FindMany(query bson.M, options options.FindOptions) []PersonShort {
 	m.ctrl.T.Helper()

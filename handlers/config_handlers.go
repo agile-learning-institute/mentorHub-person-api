@@ -4,28 +4,27 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"os/exec"
-	"strings"
 
 	"institute-person-api/config"
+
+	"github.com/google/uuid"
 )
 
 type ConfigHandler struct {
 	config *config.Config
 }
 
-func NewConfigHandler() *ConfigHandler {
+func NewConfigHandler(theConfig *config.Config) *ConfigHandler {
 	this := &ConfigHandler{}
-	this.config = config.NewConfig()
+	this.config = theConfig
 	return this
 }
 
 func (h *ConfigHandler) GetConfig(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
-	correltionId, _ := exec.Command("uuidgen").Output()
-	stringId := strings.TrimSuffix(string(correltionId), "\n")
-	log.Printf("TRANSACTION CID: %s Get Config Start", stringId)
-	defer log.Printf("TRANSACTION CID: %s Get Config Complete", stringId)
+	correltionId, _ := uuid.NewRandom()
+	log.Printf("TRANSACTION CID: %s Get Config Start", correltionId)
+	defer log.Printf("TRANSACTION CID: %s Get Config Complete", correltionId)
 
 	// Return the Config object as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")

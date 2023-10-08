@@ -150,21 +150,17 @@ docker logs -f institute-person-api-institute-person-api-1
 
 ## Backlog and Feature Branch info
 
-- [ ] Shift dependency injection to Config object
+- [X] Shift dependency injection to Config object Bad Idea!
   - injection-refactor branch
-  - [ ] GetPerson and GetStore added to Config
-  - [ ] NewConfig initilizes Person injects config
-  - [ ] NewConfig initilizes Store injects config
-  - [ ] Person-store delivers DB Version to Config
-  - [ ] ConfigHandler injects object
-  - [ ] PersonHandler injects object
-  - [ ] All PersonStore timeout and errors logged and thrown
+  - [X] Person-store delivers DB Version to Config
+  - [X] ConfigHandler injects config
+  - [X] Add unit testing of config-handler
 - [ ] Improved Error Handling & testing (data dependency)
   - error-refactor branch
+  - [ ] All PersonStore timeout and errors logged and thrown
   - [ ] Handlers to catch and return errors
   - [ ] Gorilla logging handler
 - [ ] Update Person Struct with new fields
   - [ ] Add breadcrumbs
   - [ ] Add attributes from database
-- [ ] Add unit testing of config-handler
 - [ ] Add godoc comments

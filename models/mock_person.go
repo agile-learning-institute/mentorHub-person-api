@@ -61,20 +61,6 @@ func (mr *MockPersonInterfaceMockRecorder) GetPerson(id interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPerson", reflect.TypeOf((*MockPersonInterface)(nil).GetPerson), id)
 }
 
-// GetStore mocks base method.
-func (m *MockPersonInterface) GetStore() PersonStoreInterface {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetStore")
-	ret0, _ := ret[0].(PersonStoreInterface)
-	return ret0
-}
-
-// GetStore indicates an expected call of GetStore.
-func (mr *MockPersonInterfaceMockRecorder) GetStore() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetStore", reflect.TypeOf((*MockPersonInterface)(nil).GetStore))
-}
-
 // PatchPerson mocks base method.
 func (m *MockPersonInterface) PatchPerson(id string, body []byte) PersonInterface {
 	m.ctrl.T.Helper()

@@ -5,11 +5,10 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os/exec"
-	"strings"
 
 	"institute-person-api/models"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
@@ -23,15 +22,14 @@ func NewPersonHandler(person models.PersonInterface) *PersonHandler {
 
 func (h *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
-	correltionId, _ := exec.Command("uuidgen").Output()
-	stringId := strings.TrimSuffix(string(correltionId), "\n")
-	log.Printf("TRANSACTION CID: %s Add Person Start", stringId)
-	defer log.Printf("TRANSACTION CID: %s Add Person Complete", stringId)
+	correltionId, _ := uuid.NewRandom()
+	log.Printf("TRANSACTION CID: %s Add Person Start", correltionId)
+	defer log.Printf("TRANSACTION CID: %s Add Person Complete", correltionId)
 
 	// Read the request body
 	body, err := io.ReadAll(request.Body)
 	if err != nil {
-		log.Printf("TRANSACTION ERROR CID: %s Bad Body Read %s", stringId, err.Error())
+		log.Printf("TRANSACTION ERROR CID: %s Bad Body Read %s", correltionId, err.Error())
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -46,10 +44,9 @@ func (h *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request *h
 
 func (h *PersonHandler) GetPerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
-	correltionId, _ := exec.Command("uuidgen").Output()
-	stringId := strings.TrimSuffix(string(correltionId), "\n")
-	log.Printf("TRANSACTION CID: %s Get Person Start", stringId)
-	defer log.Printf("TRANSACTION CID: %s Get Person Complete", stringId)
+	correltionId, _ := uuid.NewRandom()
+	log.Printf("TRANSACTION CID: %s Get Person Start", correltionId)
+	defer log.Printf("TRANSACTION CID: %s Get Person Complete", correltionId)
 
 	// Get the Person ID from the path
 	id := mux.Vars(request)["id"]
@@ -64,10 +61,9 @@ func (h *PersonHandler) GetPerson(responseWriter http.ResponseWriter, request *h
 
 func (h *PersonHandler) GetPeople(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
-	correltionId, _ := exec.Command("uuidgen").Output()
-	stringId := strings.TrimSuffix(string(correltionId), "\n")
-	log.Printf("TRANSACTION CID: %s Get People Start", stringId)
-	defer log.Printf("TRANSACTION CID: %s Get People Complete", stringId)
+	correltionId, _ := uuid.NewRandom()
+	log.Printf("TRANSACTION CID: %s Get People Start", correltionId)
+	defer log.Printf("TRANSACTION CID: %s Get People Complete", correltionId)
 
 	// Get all the people
 	allPeople := h.person.GetAllNames()
@@ -79,10 +75,9 @@ func (h *PersonHandler) GetPeople(responseWriter http.ResponseWriter, request *h
 
 func (h *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
-	correltionId, _ := exec.Command("uuidgen").Output()
-	stringId := strings.TrimSuffix(string(correltionId), "\n")
-	log.Printf("TRANSACTION CID: %s Update Person Start", stringId)
-	defer log.Printf("TRANSACTION CID: %s Update Person Complete", stringId)
+	correltionId, _ := uuid.NewRandom()
+	log.Printf("TRANSACTION CID: %s Update Person Start", correltionId)
+	defer log.Printf("TRANSACTION CID: %s Update Person Complete", correltionId)
 
 	// Get the Person ID from the path
 	id := mux.Vars(request)["id"]
@@ -90,7 +85,7 @@ func (h *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request
 	// Get the Request Body
 	body, err := io.ReadAll(request.Body)
 	if err != nil {
-		log.Printf("TRANSACTION ERROR CID: %s Bad Body Read %s", stringId, err.Error())
+		log.Printf("TRANSACTION ERROR CID: %s Bad Body Read %s", correltionId, err.Error())
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
 	}

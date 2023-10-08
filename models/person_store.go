@@ -7,9 +7,17 @@ import (
 	"institute-person-api/config"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+type VersionInfo struct {
+	ID          primitive.ObjectID `bson:"_id,omitempty"`
+	Name        string             `json:"name,omitempty"`
+	Description string             `json:"description,omitempty"`
+	Version     string             `json:"version,omitempty"`
+}
 
 // Define the PersonStoreInterface interface
 type PersonStoreInterface interface {
@@ -17,6 +25,7 @@ type PersonStoreInterface interface {
 	FindMany(query bson.M, options options.FindOptions) []PersonShort
 	Insert(information bson.M) *mongo.InsertOneResult
 	FindOneAndUpdate(query bson.M, update bson.M) PersonInterface
+	Disconnect()
 }
 type PersonStore struct {
 	config     *config.Config
@@ -27,14 +36,19 @@ type PersonStore struct {
 	store      PersonStoreInterface
 }
 
+const (
+	PeopleCollectionName = "people"
+	VersionDocumentName  = "VERSION"
+)
+
 /**
 * Construct a PersonStore to handle person database io
  */
-func NewPersonStore() PersonStore {
-	this := PersonStore{}
+func NewPersonStore(cfg *config.Config) PersonStoreInterface {
+	this := &PersonStore{}
 
 	// get Configuration Values
-	this.config = config.NewConfig()
+	this.config = cfg
 
 	// Connect to the database
 	ctx, cancel := this.config.GetTimeoutContext()
@@ -50,8 +64,8 @@ func NewPersonStore() PersonStore {
 	this.database = this.client.Database(this.config.GetDatabaseName())
 	this.collection = this.database.Collection(this.config.GetPeopleCollectionName())
 
-	// Get the database Version
-	this.config.DBVersion = this.GetDatabaseVersion()
+	// Put the database Version in the Config
+	this.config.SetDbVersion(this.GetDatabaseVersion())
 
 	return this
 }
@@ -114,6 +128,10 @@ func (store *PersonStore) FindOneAndUpdate(query bson.M, update bson.M) PersonIn
 }
 
 func (store *PersonStore) GetDatabaseVersion() string {
-	// TODO: - get the database schema version
-	return "1.0.Dev"
+	var theVersion VersionInfo
+	query := bson.M{"name": "VERSION"}
+	context, cancel := store.config.GetTimeoutContext()
+	defer cancel()
+	store.collection.FindOne(context, query).Decode(&theVersion)
+	return theVersion.Version
 }
