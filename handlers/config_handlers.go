@@ -23,8 +23,8 @@ func NewConfigHandler(theConfig *config.Config) *ConfigHandler {
 func (h *ConfigHandler) GetConfig(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
 	correltionId, _ := uuid.NewRandom()
-	log.Printf("TRANSACTION CID: %s Get Config Start", correltionId)
-	defer log.Printf("TRANSACTION CID: %s Get Config Complete", correltionId)
+	log.Printf("Begin CID: %s Get Config", correltionId)
+	defer log.Printf("End CID: %s Get Config", correltionId)
 
 	// Return the Config object as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
