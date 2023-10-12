@@ -14,7 +14,7 @@ type ConfigItem struct {
 }
 
 type Config struct {
-	ConfigItems          []*configItems
+	ConfigItems          []*ConfigItem
 	Version              string
 	DBVersion            string
 	port                 string
