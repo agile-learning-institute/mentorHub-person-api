@@ -40,7 +40,7 @@ func (this *Person) GetPerson(id string) (PersonInterface, error) {
 }
 
 func (this *Person) GetAllNames() ([]PersonShort, error) {
-	query := bson.M{}
+	query := bson.M{"name": bson.M{"$ne": "VERSION"}}
 	theOptions := options.Find().SetProjection(bson.D{{Key: "name", Value: 1}})
 	result, err := this.Store.FindMany(query, *theOptions)
 	return result, err
