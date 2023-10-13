@@ -20,10 +20,7 @@
   - [Test add a person](#test-add-a-person)
   - [Test update a person](#test-update-a-person)
 - [Observability and Configuration](#observability-and-configuration)
-- [Shortcut scripts](#shortcut-scripts)
-  - [Tail API logs](#tail-api-logs)
-  - [Rebuild API Container](#rebuild-api-container)
-  - [Quick CURL test of API all end points](#quick-curl-test-of-api-all-end-points)
+- [Quick CURL test of API all end points](#quick-curl-test-of-api-all-end-points)
 - [Backlog and Feature Branch info](#backlog-and-feature-branch-info)
 
 ## Overview
@@ -46,7 +43,7 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 
 ### Building the Database Container
 
-To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-person-db) and follow the instructions to build the container. Once that container is built you can run it independently using the database docker compose option
+To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-person-db) and follow the instructions to build the container. Once that container is built you can run it independently using the database docker compose option.
 
 ### Install dependencies and run the API locally
 
@@ -61,11 +58,12 @@ go run main.go
 
 If you want to run both the API and Database containers you can build the database container as described [above](#building-the-database-container), and then build the API container, and then use the docker compose command below to run both of them together.
 
-### Building the API Container
+### Build Both containers
+
+To build all of the needed containers, first clone down the data repo as described above, then you can run this script to buld both the database and api containers.
 
 ```bash
-GOOS=linux GOARCH=amd64 go build -o "institute-person-api" main.go
-docker build . --tag institute-person-api
+./docker-build-all.sh
 ```
 
 ### To Run the API and Database Container
@@ -73,18 +71,6 @@ docker build . --tag institute-person-api
 ```bash
 docker compose up --detach
 ```
-
-Note: If you see an error that looks like this
-
-```bash
-Error response from daemon: driver failed programming external connectivity on endpoint institute-person-api-institute-person-db-1 (f1517663e417de527d1ebf9d30a9ac21e4ca045d15bebb6297a79724f54536e9): Bind for 127.0.0.1:27017 failed: port is already allocated
-```
-
-You will need to stop the database container
-
-- issue a ```docker compose down``` command to stop the API containers.
-- cd to the database project and issue a ```docker compose down``` command to stop the solo database container.
-- cd back to the api project and try ```docker compose up``` again to restart the API and Database together
 
 ### Stoping and Starting the containers without loosing data
 
@@ -98,6 +84,13 @@ docker compose start
 ```bash
 docker compose down
 docker compose up --deatch
+```
+
+### Building the API Container
+
+```bash
+GOOS=linux GOARCH=amd64 go build -o "institute-person-api" main.go
+docker build . --tag institute-person-api
 ```
 
 ## Local API Testing with CURL
@@ -152,30 +145,16 @@ The docker build expects a linux native binary, and a text file called PATCH_LEV
 
 The PATCH_LEVEL file that is located in the same folder as the executable should be populated by CI with the hash of the commit-to-main that triggers CI. This will be used on the Version number reported by the /api/config/ endpoint.
 
-Logging is implemented with a INFO: or TRANSACTION: prefix (ERROR: is coming soon)- Transactions have correlation ID's and start/stop events. To watch server logs first use ```docker container ls``` to find the container name, typicaly ```institute-person-api-institute-person-api-1``` and issue the command
+Logging is implemented with a INFO: or TRANSACTION: prefix (ERROR: is coming soon)- Transactions have correlation ID's and start/stop events. To watch server logs first use ```docker container ls``` to find the container id, and issue the command
 
 ```bash
-docker logs -f institute-person-api-institute-person-api-1
-```
-
-## Shortcut scripts
-
-### Tail API logs
-
-```bash
-./shell/logs.sh
-```
-
-### Rebuild API Container
-
-```bash
-./shell/rebuld.sh
+docker logs -f [id]
 ```
 
 ### Quick CURL test of API all end points
 
 ```bash
-./shell/quicktest.sh
+./docker-quick-test.sh
 ```
 
 ## Backlog and Feature Branch info

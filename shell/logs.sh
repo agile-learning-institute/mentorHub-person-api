@@ -1,1 +1,0 @@
-clear; docker logs -f institute-person-api-institute-person-api-1
