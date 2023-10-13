@@ -13,11 +13,11 @@ import (
 )
 
 type PersonHandler struct {
-	person models.PersonInterface
+	Person models.PersonInterface
 }
 
 func NewPersonHandler(person models.PersonInterface) *PersonHandler {
-	return &PersonHandler{person: person}
+	return &PersonHandler{Person: person}
 }
 
 func (h *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request *http.Request) {
@@ -35,7 +35,12 @@ func (h *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request *h
 	}
 
 	// Insert the new person document
-	newPerson := h.person.PostPerson(body)
+	newPerson, err := h.Person.PostPerson(body)
+	if err != nil {
+		log.Printf("ERROR CID: %s PostPerson %s", correltionId, err.Error())
+		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	// Return the new Person as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
@@ -52,7 +57,12 @@ func (h *PersonHandler) GetPerson(responseWriter http.ResponseWriter, request *h
 	id := mux.Vars(request)["id"]
 
 	// Get the Person from the database
-	person := h.person.GetPerson(id)
+	person, err := h.Person.GetPerson(id)
+	if err != nil {
+		log.Printf("ERROR CID: %s GetPerson %s", correltionId, err.Error())
+		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	// Return the Person as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
@@ -66,7 +76,12 @@ func (h *PersonHandler) GetPeople(responseWriter http.ResponseWriter, request *h
 	defer log.Printf("End CID: %s Get People", correltionId)
 
 	// Get all the people
-	allPeople := h.person.GetAllNames()
+	allPeople, err := h.Person.GetAllNames()
+	if err != nil {
+		log.Printf("ERROR CID: %s GetAllNames %s", correltionId, err.Error())
+		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	// Return the new Person as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
@@ -91,7 +106,12 @@ func (h *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request
 	}
 
 	// Update the person
-	updatedPerson := h.person.PatchPerson(id, body)
+	updatedPerson, err := h.Person.PatchPerson(id, body)
+	if err != nil {
+		log.Printf("ERROR CID: %s Bad PatchPerson %s", correltionId, err.Error())
+		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	// Return the updated Person as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")

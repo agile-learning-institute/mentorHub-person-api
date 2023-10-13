@@ -21,10 +21,10 @@ type VersionInfo struct {
 
 // Define the PersonStoreInterface interface
 type PersonStoreInterface interface {
-	FindOne(query bson.M) PersonInterface
-	FindMany(query bson.M, options options.FindOptions) []PersonShort
-	Insert(information bson.M) *mongo.InsertOneResult
-	FindOneAndUpdate(query bson.M, update bson.M) PersonInterface
+	FindOne(query bson.M) (PersonInterface, error)
+	FindMany(query bson.M, options options.FindOptions) ([]PersonShort, error)
+	Insert(information bson.M) (*mongo.InsertOneResult, error)
+	FindOneAndUpdate(query bson.M, update bson.M) (PersonInterface, error)
 	Disconnect()
 }
 type PersonStore struct {
@@ -44,8 +44,9 @@ const (
 /**
 * Construct a PersonStore to handle person database io
  */
-func NewPersonStore(cfg *config.Config) PersonStoreInterface {
+func NewPersonStore(cfg *config.Config) (PersonStoreInterface, error) {
 	this := &PersonStore{}
+	var err error
 
 	// get Configuration Values
 	this.config = cfg
@@ -56,7 +57,7 @@ func NewPersonStore(cfg *config.Config) PersonStoreInterface {
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(this.config.GetConnectionString()))
 	if err != nil {
 		cancel()
-		log.Fatal(err)
+		return nil, err
 	}
 
 	// Get the database and collection objects
@@ -65,9 +66,14 @@ func NewPersonStore(cfg *config.Config) PersonStoreInterface {
 	this.collection = this.database.Collection(this.config.GetPeopleCollectionName())
 
 	// Put the database Version in the Config
-	this.config.SetDbVersion(this.GetDatabaseVersion())
+	version, err := this.GetDatabaseVersion()
+	if err != nil {
+		cancel()
+		return nil, err
+	}
+	this.config.SetDbVersion(version)
 
-	return this
+	return this, err
 }
 
 /**
@@ -84,54 +90,83 @@ func (store *PersonStore) Disconnect() {
 /**
 * Insert a new person with the information provided
  */
-func (store *PersonStore) Insert(information bson.M) *mongo.InsertOneResult {
+func (store *PersonStore) Insert(information bson.M) (*mongo.InsertOneResult, error) {
 	var result *mongo.InsertOneResult
+	var err error
+
 	context, cancel := store.config.GetTimeoutContext()
 	defer cancel()
-	result, _ = store.collection.InsertOne(context, information)
-	return result
+	result, err = store.collection.InsertOne(context, information)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 /**
 * Find a single person by _id
  */
-func (store *PersonStore) FindOne(query bson.M) PersonInterface {
+func (store *PersonStore) FindOne(query bson.M) (PersonInterface, error) {
 	var thePerson Person
+	var err error
 	context, cancel := store.config.GetTimeoutContext()
 	defer cancel()
-	store.collection.FindOne(context, query).Decode(&thePerson)
-	return &thePerson
+	err = store.collection.FindOne(context, query).Decode(&thePerson)
+	if err != nil {
+		return nil, err
+	}
+	return &thePerson, nil
 }
 
 /**
 * Find may people by a matcher
  */
-func (store *PersonStore) FindMany(query bson.M, options options.FindOptions) []PersonShort {
+func (store *PersonStore) FindMany(query bson.M, options options.FindOptions) ([]PersonShort, error) {
 	var people []PersonShort
+	var err error
+
 	context, cancel := store.config.GetTimeoutContext()
 	defer cancel()
-	cursor, _ := store.collection.Find(context, query, &options)
-	cursor.All(context, &people)
-	return people
+	cursor, err := store.collection.Find(context, query, &options)
+	if err != nil {
+		return nil, err
+	}
+	err = cursor.All(context, &people)
+	if err != nil {
+		return nil, err
+	}
+
+	return people, nil
 }
 
 /**
 * Find One person and Update with the data provided
  */
-func (store *PersonStore) FindOneAndUpdate(query bson.M, update bson.M) PersonInterface {
+func (store *PersonStore) FindOneAndUpdate(query bson.M, update bson.M) (PersonInterface, error) {
 	var thePerson Person
+	var err error
+
 	options := options.FindOneAndUpdate().SetReturnDocument(options.After)
 	ctx, cancel := store.config.GetTimeoutContext()
 	defer cancel()
-	store.collection.FindOneAndUpdate(ctx, query, update, options).Decode(&thePerson)
-	return &thePerson
+	err = store.collection.FindOneAndUpdate(ctx, query, update, options).Decode(&thePerson)
+	if err != nil {
+		return nil, err
+	}
+
+	return &thePerson, nil
 }
 
-func (store *PersonStore) GetDatabaseVersion() string {
+func (store *PersonStore) GetDatabaseVersion() (string, error) {
 	var theVersion VersionInfo
+	var err error
+
 	query := bson.M{"name": "VERSION"}
 	context, cancel := store.config.GetTimeoutContext()
 	defer cancel()
-	store.collection.FindOne(context, query).Decode(&theVersion)
-	return theVersion.Version
+	err = store.collection.FindOne(context, query).Decode(&theVersion)
+	if err != nil {
+		return "", err
+	}
+	return theVersion.Version, nil
 }

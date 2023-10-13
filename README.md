@@ -54,6 +54,15 @@ go get -u
 go run main.go
 ```
 
+### Generate fresh mocks
+
+If you make substantial changes to the interfaces, you may need to regenerate gomock mocks used in unit testing.
+
+```bash
+mockgen -source=models/person.go -destination=mocks/mock_person.go -package=mocks
+mockgen -source=models/person_store.go -destination=mocks/mock_person_store.go -package=mocks
+```
+
 ## Getting Started for UI Engineers
 
 If you want to run both the API and Database containers you can build the database container as described [above](#building-the-database-container), and then build the API container, and then use the docker compose command below to run both of them together.
@@ -97,8 +106,7 @@ docker build . --tag institute-person-api
 
 ### A word on ports
 
-NOTE: If you are running the API from the command line with ```go run main.go``` the API will be served at port 8080,
-if you run the API in containers with ```docker compose up``` then it will be served at port 8081.
+NOTE: If you are running the API from the command line with ```go run main.go``` the API will be served at port 8080, if you run the API in containers with ```docker compose up``` then it will be served at port 8081.
 Adjust the following URI's accordingly.
 
 ### Test Config Endpoint
