@@ -24,8 +24,6 @@ type Config struct {
 	peopleCollectionName string
 	databaseTimeout      int
 	connectionString     string
-	// person               models.PersonInterface
-	// personStore          models.PersonStoreInterface
 }
 
 const (
@@ -59,12 +57,24 @@ func NewConfig() *Config {
 /**
 * Simple Getters - Read Only attributes
  */
+func (cfg *Config) GetConfigFolder() string {
+	return cfg.configFolder
+}
+
 func (cfg *Config) GetConnectionString() string {
 	return cfg.connectionString
 }
 
 func (cfg *Config) GetDatabaseName() string {
 	return cfg.databaseName
+}
+
+func (cfg *Config) GetDatabaseTimeout() int {
+	return cfg.databaseTimeout
+}
+
+func (cfg *Config) GetPatch() string {
+	return cfg.patch
 }
 
 func (cfg *Config) GetPeopleCollectionName() string {

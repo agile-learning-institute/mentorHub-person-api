@@ -9,10 +9,10 @@ import (
 )
 
 type PersonInterface interface {
-	GetPerson(id string) PersonInterface
-	GetAllNames() []PersonShort
-	PostPerson(body []byte) PersonInterface
-	PatchPerson(id string, body []byte) PersonInterface
+	GetPerson(id string) (PersonInterface, error)
+	GetAllNames() ([]PersonShort, error)
+	PostPerson(body []byte) (PersonInterface, error)
+	PatchPerson(id string, body []byte) (PersonInterface, error)
 }
 
 type PersonShort struct {
@@ -23,50 +23,62 @@ type Person struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
 	Name        string             `json:"name,omitempty"`
 	Description string             `json:"description,omitempty"`
-	store       PersonStoreInterface
+	Store       PersonStoreInterface
 }
 
 func NewPerson(theStore PersonStoreInterface) PersonInterface {
 	this := &Person{}
-	this.store = theStore
+	this.Store = theStore
 	return this
 }
 
-func (this *Person) GetPerson(id string) PersonInterface {
+func (this *Person) GetPerson(id string) (PersonInterface, error) {
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	query := bson.M{"_id": objectID}
-	return this.store.FindOne(query)
+	result, err := this.Store.FindOne(query)
+	return result, err
 }
 
-func (this *Person) GetAllNames() []PersonShort {
+func (this *Person) GetAllNames() ([]PersonShort, error) {
 	query := bson.M{}
 	theOptions := options.Find().SetProjection(bson.D{{Key: "name", Value: 1}})
-	return this.store.FindMany(query, *theOptions)
+	result, err := this.Store.FindMany(query, *theOptions)
+	return result, err
 }
 
-func (this *Person) PostPerson(body []byte) PersonInterface {
+func (this *Person) PostPerson(body []byte) (PersonInterface, error) {
 	// Get the values to insert
 	var insertValues bson.M
-	json.Unmarshal(body, &insertValues)
+	err := json.Unmarshal(body, &insertValues)
+	if err != nil {
+		return nil, err
+	}
 
 	// Insert the new Person
-	result := this.store.Insert(insertValues)
-	query := bson.M{"_id": result.InsertedID}
+	result, err := this.Store.Insert(insertValues)
+	if err != nil {
+		return nil, err
+	}
 
 	// Get the new document
-	return this.store.FindOne(query)
+	query := bson.M{"_id": result.InsertedID}
+	person, err := this.Store.FindOne(query)
+	return person, err
 }
 
-func (this *Person) PatchPerson(id string, body []byte) PersonInterface {
+func (this *Person) PatchPerson(id string, body []byte) (PersonInterface, error) {
 	// Build the query on ID
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	query := bson.M{"_id": objectID}
 
 	// Create the update set command
 	var updateValues bson.M
-	json.Unmarshal(body, &updateValues)
+	err := json.Unmarshal(body, &updateValues)
+	if err != nil {
+		return nil, err
+	}
 	update := bson.M{"$set": updateValues}
 
 	// Update the document
-	return this.store.FindOneAndUpdate(query, update)
+	return this.Store.FindOneAndUpdate(query, update)
 }

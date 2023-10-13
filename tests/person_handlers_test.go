@@ -1,6 +1,8 @@
-package handlers
+package tests
 
 import (
+	"institute-person-api/handlers"
+	"institute-person-api/mocks"
 	"institute-person-api/models"
 	"net/http"
 	"net/http/httptest"
@@ -15,28 +17,28 @@ func TestNewPersonHandler(t *testing.T) {
 	// Setup the Mock
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mockPerson := models.NewMockPersonInterface(ctrl)
+	mockPerson := mocks.NewMockPersonInterface(ctrl)
 
 	// Invoke NewPerson
-	handler := NewPersonHandler(mockPerson)
+	handler := handlers.NewPersonHandler(mockPerson)
 
 	// Examine the result
 	assert.NotNil(t, handler)
-	assert.Equal(t, mockPerson, handler.person)
+	assert.Equal(t, mockPerson, handler.Person)
 }
 
 func TestAddPerson(t *testing.T) {
 	// Setup the Mock
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mockPerson := models.NewMockPersonInterface(ctrl)
-	handler := PersonHandler{person: mockPerson}
+	mockPerson := mocks.NewMockPersonInterface(ctrl)
+	handler := handlers.PersonHandler{Person: mockPerson}
 
 	// Tell the Mock how to respond to PostPerson
 	personJSON := `{"name": "John Doe", "description": "Test Person"}`
 	request := httptest.NewRequest("POST", "/person", strings.NewReader(personJSON))
 	responseRecorder := httptest.NewRecorder()
-	mockPerson.EXPECT().PostPerson([]byte(personJSON)).Return(&models.Person{Name: "John Doe", Description: "Test Person"})
+	mockPerson.EXPECT().PostPerson([]byte(personJSON)).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
 
 	// Invoke NewPerson
 	handler.AddPerson(responseRecorder, request)
@@ -44,22 +46,22 @@ func TestAddPerson(t *testing.T) {
 	// Examine the result
 	assert.Equal(t, http.StatusOK, responseRecorder.Code)
 	assert.Equal(t, "application/json", responseRecorder.Header().Get("Content-Type"))
-	assert.Equal(t, "{\"ID\":\"000000000000000000000000\",\"name\":\"John Doe\",\"description\":\"Test Person\"}\n", responseRecorder.Body.String())
+	assert.Equal(t, "{\"ID\":\"000000000000000000000000\",\"name\":\"John Doe\",\"description\":\"Test Person\",\"Store\":null}\n", responseRecorder.Body.String())
 }
 
-func TestGetPerson(t *testing.T) {
+func TestGetPersonWithHandler(t *testing.T) {
 	// Setup the Mock
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mockPerson := models.NewMockPersonInterface(ctrl)
-	handler := PersonHandler{person: mockPerson}
+	mockPerson := mocks.NewMockPersonInterface(ctrl)
+	handler := handlers.PersonHandler{Person: mockPerson}
 
 	// Tell the Mock how to respond to GetPerson
 	// id := primitive.NewObjectID().Hex()
 	personJSON := `{"name": "John Doe", "description": "Test Person"}`
 	request := httptest.NewRequest("GET", "/person/000000000000000000000000/", strings.NewReader(personJSON))
 	responseRecorder := httptest.NewRecorder()
-	mockPerson.EXPECT().GetPerson(gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"})
+	mockPerson.EXPECT().GetPerson(gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
 
 	// Invoke NewPerson
 	handler.GetPerson(responseRecorder, request)
@@ -67,15 +69,15 @@ func TestGetPerson(t *testing.T) {
 	// Examine the result
 	assert.Equal(t, http.StatusOK, responseRecorder.Code)
 	assert.Equal(t, "application/json", responseRecorder.Header().Get("Content-Type"))
-	assert.Equal(t, "{\"ID\":\"000000000000000000000000\",\"name\":\"John Doe\",\"description\":\"Test Person\"}\n", responseRecorder.Body.String())
+	assert.Equal(t, "{\"ID\":\"000000000000000000000000\",\"name\":\"John Doe\",\"description\":\"Test Person\",\"Store\":null}\n", responseRecorder.Body.String())
 }
 
 func TestGetPeople(t *testing.T) {
 	// Setup the Mock
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mockPerson := models.NewMockPersonInterface(ctrl)
-	handler := PersonHandler{person: mockPerson}
+	mockPerson := mocks.NewMockPersonInterface(ctrl)
+	handler := handlers.PersonHandler{Person: mockPerson}
 
 	// Tell the Mock how to respond to GetPerson
 	// id := primitive.NewObjectID().Hex()
@@ -85,7 +87,7 @@ func TestGetPeople(t *testing.T) {
 	}
 	request := httptest.NewRequest("GET", "/person/", strings.NewReader(""))
 	responseRecorder := httptest.NewRecorder()
-	mockPerson.EXPECT().GetAllNames().Return(expectedNames)
+	mockPerson.EXPECT().GetAllNames().Return(expectedNames, nil)
 
 	// Invoke NewPerson
 	handler.GetPeople(responseRecorder, request)
@@ -100,14 +102,14 @@ func TestUpdatePerson(t *testing.T) {
 	// Setup the Mock
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mockPerson := models.NewMockPersonInterface(ctrl)
-	handler := PersonHandler{person: mockPerson}
+	mockPerson := mocks.NewMockPersonInterface(ctrl)
+	handler := handlers.PersonHandler{Person: mockPerson}
 
 	// Tell the Mock how to respond to GetPerson
 	personJSON := `"name": "John Doe", "description": "Test Person"}`
 	request := httptest.NewRequest("PATCH", "/person/000000000000000000000000/", strings.NewReader(personJSON))
 	responseRecorder := httptest.NewRecorder()
-	mockPerson.EXPECT().PatchPerson(gomock.Any(), []byte(personJSON)).Return(&models.Person{Name: "John Doe", Description: "Test Person"})
+	mockPerson.EXPECT().PatchPerson(gomock.Any(), []byte(personJSON)).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
 
 	// Invoke NewPerson
 	handler.UpdatePerson(responseRecorder, request)
@@ -115,5 +117,5 @@ func TestUpdatePerson(t *testing.T) {
 	// Examine the result
 	assert.Equal(t, http.StatusOK, responseRecorder.Code)
 	assert.Equal(t, "application/json", responseRecorder.Header().Get("Content-Type"))
-	assert.Equal(t, "{\"ID\":\"000000000000000000000000\",\"name\":\"John Doe\",\"description\":\"Test Person\"}\n", responseRecorder.Body.String())
+	assert.Equal(t, "{\"ID\":\"000000000000000000000000\",\"name\":\"John Doe\",\"description\":\"Test Person\",\"Store\":null}\n", responseRecorder.Body.String())
 }

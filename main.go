@@ -19,7 +19,13 @@ func main() {
 
 	// Setup the PersonHandler and Store
 	var personStore models.PersonStoreInterface
-	personStore = models.NewPersonStore(config)
+	var err error
+	personStore, err = models.NewPersonStore(config)
+	if err != nil {
+		log.Fatal("PersonStore Construction Error:", err)
+	}
+
+	// Setup the ConfigHandler and Store
 	configHandler := handlers.NewConfigHandler(config)
 	defer personStore.Disconnect()
 	var person models.PersonInterface
@@ -45,7 +51,7 @@ func main() {
 	port := config.GetPort()
 	log.Printf("INFO: Server Version %s", config.Version)
 	log.Printf("INFO: Server Listening at %s", port)
-	err := http.ListenAndServe(port, gorillaHandlers.CORS(originsOk, headersOk, methodsOk)(gorillaRouter))
+	err = http.ListenAndServe(port, gorillaHandlers.CORS(originsOk, headersOk, methodsOk)(gorillaRouter))
 	if err != nil {
 		log.Println("ERROR: Server Ending with error", err)
 	}
