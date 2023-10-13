@@ -172,12 +172,9 @@ docker logs -f [id]
   - [X] Person-store delivers DB Version to Config
   - [X] ConfigHandler injects config
   - [X] Add unit testing of config-handler
-- [ ] Improved Error Handling & testing (data dependency)
-  - error-refactor branch
-  - [ ] All PersonStore timeout and errors logged and thrown
-  - [ ] Handlers to catch and return errors
-  - [ ] Gorilla logging handler?
-- [ ] Update Person Struct with new fields
-  - [ ] Add breadcrumbs
-  - [ ] Add attributes from database v1.1.Test
-- [ ] Add comments (at least at the Class level)
+- [x] Improved Error Handling & testing (data dependency)
+  - [x] All PersonStore timeout and errors logged and thrown
+  - [x] Handlers to catch and return errors
+- [ ] Add attributes from database v1.1.Test
+- [ ] Add breadcrumbs
+- [ ] Gorilla logging handler?
