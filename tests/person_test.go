@@ -61,7 +61,7 @@ func TestGetAllNames(t *testing.T) {
 	mockStore := mocks.NewMockPersonStoreInterface(ctrl)
 
 	// Configure Mock return value
-	match := bson.M{}
+	match := bson.M{"name": bson.M{"$ne": "VERSION"}}
 	options := gomock.Not(gomock.Nil())
 	expectedNames := []models.PersonShort{
 		{Name: "Mock Name 1"},
