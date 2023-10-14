@@ -68,7 +68,7 @@ If you want to run both the API and Database containers you can build the databa
 
 ### Bulid and Run in one step
 
-To build and run both of the containers, first clone [the mongodb repo](https://github.com/agile-learning-institute/institute-mongodb) as a sibling to this project folder, then you can run this script to buld both the database and api containers and start the stack.
+To build and run both of the containers, first clone [data](https://github.com/agile-learning-institute/institute-mongodb) repo as a sibling to this repo, then you can run this script to build both the database and api containers and start the stack.
 
 ```bash
 ./docker-build-all.sh
@@ -96,7 +96,7 @@ docker compose up --deatch
 
 ### Building the API Container
 
-The containerization expects the go API to be compiled to a linux binary, and the PATCH_LEVEL file to contain the build hash. If you run ```docker-build.sh``` will run the following commands:
+The containerization expects the go API to be compiled to a linux binary, and the PATCH_LEVEL file to contain the build hash. This has not bee tested on Apple silicone, or Windows. If you run ```docker-build.sh``` will run the following commands:
 
 ```bash
 GOOS=linux GOARCH=amd64 go build -o "institute-person-api" main.go
