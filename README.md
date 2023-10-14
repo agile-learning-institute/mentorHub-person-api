@@ -175,6 +175,6 @@ docker logs -f [id]
 - [x] Improved Error Handling & testing (data dependency)
   - [x] All PersonStore timeout and errors logged and thrown
   - [x] Handlers to catch and return errors
-- [ ] Add attributes from database v1.1.Test
+- [x] Add attributes from database v1.1.Test
 - [ ] Add breadcrumbs
 - [ ] Gorilla logging handler?
