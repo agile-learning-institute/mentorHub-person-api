@@ -30,7 +30,7 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 
 [Here](https://github.com/orgs/agile-learning-institute/repositories?q=institute-person&type=all&sort=name) are the repositories in the person microservice.
 
-[here](https://github.com/orgs/agile-learning-institute/repositories?q=institute&type=all&sort=name) are all of the repositories in the [Institute](https://github.com/agile-learning-institute/institute/tree/main) system
+[Here](https://github.com/orgs/agile-learning-institute/repositories?q=institute&type=all&sort=name) are all of the repositories in the [Institute](https://github.com/agile-learning-institute/institute/tree/main) system
 
 ## Prerequisits
 
@@ -68,7 +68,7 @@ If you want to run both the API and Database containers you can build the databa
 
 ### Bulid and Run in one step
 
-To build both of the containers, first clone [the mongodb repo](https://github.com/agile-learning-institute/institute-mongodb) as a sibling to this project folder, then you can run this script to buld both the database and api containers and start the stack.
+To build and run both of the containers, first clone [the mongodb repo](https://github.com/agile-learning-institute/institute-mongodb) as a sibling to this project folder, then you can run this script to buld both the database and api containers and start the stack.
 
 ```bash
 ./docker-build-all.sh
@@ -96,7 +96,7 @@ docker compose up --deatch
 
 ### Building the API Container
 
-The containerization expects the go API to be compiled to a linux binary, and the PATCH_LEVEL file to contain the build hash
+The containerization expects the go API to be compiled to a linux binary, and the PATCH_LEVEL file to contain the build hash. If you run ```docker-build.sh``` will run the following commands:
 
 ```bash
 GOOS=linux GOARCH=amd64 go build -o "institute-person-api" main.go
@@ -156,12 +156,6 @@ The ```api/config/``` endpoint will return a list of configuration values. These
 The docker build expects a linux native binary, and a text file called PATCH_LEVEL to exist, you may want to implement this as a two-stage build that includes the binary compile. Sorry for the inconvience, if we can keep the final built container as thin as this it would be great! I don't like source code left around in containers.
 
 The PATCH_LEVEL file that is located in the same folder as the executable should be populated by CI with the hash of the commit-to-main that triggers CI. This will be used on the Version number reported by the /api/config/ endpoint.
-
-Logging is implemented with a INFO: or TRANSACTION: prefix (ERROR: is coming soon)- Transactions have correlation ID's and start/stop events. To watch server logs first use ```docker container ls``` to find the container id, and issue the command
-
-```bash
-docker logs -f [id]
-```
 
 ## Backlog and Feature Branch info
 
