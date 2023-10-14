@@ -9,3 +9,5 @@ echo $BRANCH.$PATCH > PATCH_LEVEL
 docker build . --tag institute-person-api
 
 docker image prune -f
+
+docker compose up --detach

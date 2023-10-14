@@ -8,11 +8,11 @@
   - [Building the Database Container](#building-the-database-container)
   - [Install dependencies and run the API locally](#install-dependencies-and-run-the-api-locally)
 - Getting Started [for UI Engineers](#getting-started-for-ui-engineers)
-  - [Building the API Container](#building-the-api-container)
-  - [To Run the API and Database Container](#to-run-the-api-and-database-container)
+  - [Building and Run the API in one step](#bulid-and-run-in-one-step)
+  - [Start the Containers without rebuilding](#start-the-containers-without-rebuilding)
   - [Stoping and Starting the containers without loosing data](#stoping-and-starting-the-containers-without-loosing-data)
   - [Restart the containers and Reseting the database](#restart-the-containers-and-reseting-the-database)
-- [Local API Testing with CURL](#local-api-testing-with-curl)
+- Local API Testing with [CURL](#local-api-testing-with-curl)
   - [A word on ports](#a-word-on-ports)
   - [Test Config Endpoint](#test-config-endpoint)
   - [Test find all people with IDs](#test-find-all-people-with-ids)
@@ -20,7 +20,6 @@
   - [Test add a person](#test-add-a-person)
   - [Test update a person](#test-update-a-person)
 - [Observability and Configuration](#observability-and-configuration)
-- [Quick CURL test of API all end points](#quick-curl-test-of-api-all-end-points)
 - [Backlog and Feature Branch info](#backlog-and-feature-branch-info)
 
 ## Overview
@@ -29,7 +28,7 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 
 [Here](./product-api-openapi.yaml) is the Swagger for the API
 
-[Here](https://github.com/orgs/agile-learning-institute/repositories?q=institute-person&type=all&sort=name) are the repositories in the person triplet
+[Here](https://github.com/orgs/agile-learning-institute/repositories?q=institute-person&type=all&sort=name) are the repositories in the person microservice.
 
 [here](https://github.com/orgs/agile-learning-institute/repositories?q=institute&type=all&sort=name) are all of the repositories in the [Institute](https://github.com/agile-learning-institute/institute/tree/main) system
 
@@ -43,7 +42,7 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 
 ### Building the Database Container
 
-To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-person-db) and follow the instructions to build the container. Once that container is built you can run it independently using the database docker compose option.
+To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-mongodb) and follow the instructions to build the container. Once that container is built you can run it independently using the database docker compose option.
 
 ### Install dependencies and run the API locally
 
@@ -67,15 +66,15 @@ mockgen -source=models/person_store.go -destination=mocks/mock_person_store.go -
 
 If you want to run both the API and Database containers you can build the database container as described [above](#building-the-database-container), and then build the API container, and then use the docker compose command below to run both of them together.
 
-### Build Both containers
+### Bulid and Run in one step
 
-To build all of the needed containers, first clone down the data repo as described above, then you can run this script to buld both the database and api containers.
+To build both of the containers, first clone [the mongodb repo](https://github.com/agile-learning-institute/institute-mongodb) as a sibling to this project folder, then you can run this script to buld both the database and api containers and start the stack.
 
 ```bash
 ./docker-build-all.sh
 ```
 
-### To Run the API and Database Container
+### Start the Containers without rebuilding
 
 ```bash
 docker compose up --detach
@@ -162,12 +161,6 @@ Logging is implemented with a INFO: or TRANSACTION: prefix (ERROR: is coming soo
 
 ```bash
 docker logs -f [id]
-```
-
-### Quick CURL test of API all end points
-
-```bash
-./docker-quick-test.sh
 ```
 
 ## Backlog and Feature Branch info
