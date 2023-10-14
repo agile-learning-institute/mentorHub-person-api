@@ -97,8 +97,13 @@ docker compose up --deatch
 
 ### Building the API Container
 
+The containerization expects the go API to be compiled to a linux binary, and the PATCH_LEVEL file to contain the build hash
+
 ```bash
 GOOS=linux GOARCH=amd64 go build -o "institute-person-api" main.go
+export BRANCH=$(git branch --show-current)
+export PATCH=$(git rev-parse $BRANCH)
+echo $BRANCH.$PATCH > PATCH_LEVEL
 docker build . --tag institute-person-api
 ```
 
