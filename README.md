@@ -153,7 +153,7 @@ curl -X PATCH http://localhost:8081/api/person/[ID] \
 
 The ```api/config/``` endpoint will return a list of configuration values. These values are either "defaults" or loaded from an Environment Variable, or found in a singleton configuration file of the same name. Environment Variables take precidence. The variable "CONFIG_FOLDER" will change the location of configuration files from the default of ```./```
 
-The docker build expects a linux native binary, and a text file called PATCH_LEVEL to exist, you may want to implement this as a two-stage build that includes the binary compile. Sorry for the inconvience, if we can keep the final built container as thin as this it would be great! I don't like source code left around in containers.
+The docker build expects a linux native binary, and a text file called PATCH_LEVEL to exist, I was unable to get the git commands to work in a 2-stage build, so I created [docker-build.sh](./docker-build.sh)
 
 The PATCH_LEVEL file that is located in the same folder as the executable should be populated by CI with the hash of the commit-to-main that triggers CI. This will be used on the Version number reported by the /api/config/ endpoint.
 
