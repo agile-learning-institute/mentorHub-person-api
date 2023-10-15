@@ -168,7 +168,7 @@ The PATCH_LEVEL file that is located in the same folder as the executable should
   - [x] All PersonStore timeout and errors logged and thrown
   - [x] Handlers to catch and return errors
 - [x] Add attributes from database v1.1.Test
-- [ ] Add CID to HTTP Error Responses
-- [ ] Return full document after patch
+- [x] Add CID to HTTP Error Responses
+- [x] Return full document after patch
 - [ ] Add breadcrumbs
 - [ ] Gorilla logging handler?
