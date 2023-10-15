@@ -17,28 +17,28 @@ func TestNewPersonHandler(t *testing.T) {
 	// Setup the Mock
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mockPerson := mocks.NewMockPersonInterface(ctrl)
+	mockStore := mocks.NewMockPersonStoreInterface(ctrl)
 
 	// Invoke NewPerson
-	handler := handlers.NewPersonHandler(mockPerson)
+	handler := handlers.NewPersonHandler(mockStore)
 
 	// Examine the result
 	assert.NotNil(t, handler)
-	assert.Equal(t, mockPerson, handler.Person)
+	assert.Equal(t, mockStore, handler.PersonStore)
 }
 
 func TestAddPerson(t *testing.T) {
 	// Setup the Mock
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mockPerson := mocks.NewMockPersonInterface(ctrl)
-	handler := handlers.PersonHandler{Person: mockPerson}
+	mockStore := mocks.NewMockPersonStoreInterface(ctrl)
+	handler := handlers.NewPersonHandler(mockStore)
 
 	// Tell the Mock how to respond to PostPerson
 	personJSON := `{"name": "John Doe", "description": "Test Person"}`
 	request := httptest.NewRequest("POST", "/person", strings.NewReader(personJSON))
 	responseRecorder := httptest.NewRecorder()
-	mockPerson.EXPECT().PostPerson([]byte(personJSON), gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
+	mockStore.EXPECT().Insert([]byte(personJSON), gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
 
 	// Invoke NewPerson
 	handler.AddPerson(responseRecorder, request)
@@ -49,21 +49,20 @@ func TestAddPerson(t *testing.T) {
 	assert.Equal(t, "{\"ID\":\"000000000000000000000000\",\"name\":\"John Doe\",\"description\":\"Test Person\"}\n", responseRecorder.Body.String())
 }
 
-func TestGetPersonWithHandler(t *testing.T) {
+func TestGetPerson(t *testing.T) {
 	// Setup the Mock
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mockPerson := mocks.NewMockPersonInterface(ctrl)
-	handler := handlers.PersonHandler{Person: mockPerson}
+	mockStore := mocks.NewMockPersonStoreInterface(ctrl)
+	handler := handlers.NewPersonHandler(mockStore)
 
 	// Tell the Mock how to respond to GetPerson
-	// id := primitive.NewObjectID().Hex()
 	personJSON := `{"name": "John Doe", "description": "Test Person"}`
 	request := httptest.NewRequest("GET", "/person/000000000000000000000000/", strings.NewReader(personJSON))
 	responseRecorder := httptest.NewRecorder()
-	mockPerson.EXPECT().GetPerson(gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
+	mockStore.EXPECT().FindOne(gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
 
-	// Invoke NewPerson
+	// Invoke GetPerson
 	handler.GetPerson(responseRecorder, request)
 
 	// Examine the result
@@ -76,18 +75,17 @@ func TestGetPeople(t *testing.T) {
 	// Setup the Mock
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mockPerson := mocks.NewMockPersonInterface(ctrl)
-	handler := handlers.PersonHandler{Person: mockPerson}
+	mockStore := mocks.NewMockPersonStoreInterface(ctrl)
+	handler := handlers.NewPersonHandler(mockStore)
 
 	// Tell the Mock how to respond to GetPerson
-	// id := primitive.NewObjectID().Hex()
 	expectedNames := []models.PersonShort{
 		{Name: "Mock Name 1"},
 		{Name: "Mock Name 2"},
 	}
 	request := httptest.NewRequest("GET", "/person/", strings.NewReader(""))
 	responseRecorder := httptest.NewRecorder()
-	mockPerson.EXPECT().GetAllNames().Return(expectedNames, nil)
+	mockStore.EXPECT().FindMany().Return(expectedNames, nil)
 
 	// Invoke NewPerson
 	handler.GetPeople(responseRecorder, request)
@@ -102,14 +100,14 @@ func TestUpdatePerson(t *testing.T) {
 	// Setup the Mock
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mockPerson := mocks.NewMockPersonInterface(ctrl)
-	handler := handlers.PersonHandler{Person: mockPerson}
+	mockStore := mocks.NewMockPersonStoreInterface(ctrl)
+	handler := handlers.NewPersonHandler(mockStore)
 
 	// Tell the Mock how to respond to GetPerson
 	personJSON := `"name": "John Doe", "description": "Test Person"}`
 	request := httptest.NewRequest("PATCH", "/person/000000000000000000000000/", strings.NewReader(personJSON))
 	responseRecorder := httptest.NewRecorder()
-	mockPerson.EXPECT().PatchPerson(gomock.Any(), []byte(personJSON), gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
+	mockStore.EXPECT().FindOneAndUpdate(gomock.Any(), []byte(personJSON), gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
 
 	// Invoke NewPerson
 	handler.UpdatePerson(responseRecorder, request)

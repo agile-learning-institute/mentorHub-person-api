@@ -9,9 +9,6 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	bson "go.mongodb.org/mongo-driver/bson"
-	mongo "go.mongodb.org/mongo-driver/mongo"
-	options "go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // MockPersonStoreInterface is a mock of PersonStoreInterface interface.
@@ -50,55 +47,55 @@ func (mr *MockPersonStoreInterfaceMockRecorder) Disconnect() *gomock.Call {
 }
 
 // FindMany mocks base method.
-func (m *MockPersonStoreInterface) FindMany(query bson.M, options options.FindOptions) ([]models.PersonShort, error) {
+func (m *MockPersonStoreInterface) FindMany() ([]models.PersonShort, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindMany", query, options)
+	ret := m.ctrl.Call(m, "FindMany")
 	ret0, _ := ret[0].([]models.PersonShort)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindMany indicates an expected call of FindMany.
-func (mr *MockPersonStoreInterfaceMockRecorder) FindMany(query, options interface{}) *gomock.Call {
+func (mr *MockPersonStoreInterfaceMockRecorder) FindMany() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindMany", reflect.TypeOf((*MockPersonStoreInterface)(nil).FindMany), query, options)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindMany", reflect.TypeOf((*MockPersonStoreInterface)(nil).FindMany))
 }
 
 // FindOne mocks base method.
-func (m *MockPersonStoreInterface) FindOne(query bson.M) (models.PersonInterface, error) {
+func (m *MockPersonStoreInterface) FindOne(id string) (*models.Person, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOne", query)
-	ret0, _ := ret[0].(models.PersonInterface)
+	ret := m.ctrl.Call(m, "FindOne", id)
+	ret0, _ := ret[0].(*models.Person)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindOne indicates an expected call of FindOne.
-func (mr *MockPersonStoreInterfaceMockRecorder) FindOne(query interface{}) *gomock.Call {
+func (mr *MockPersonStoreInterfaceMockRecorder) FindOne(id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOne", reflect.TypeOf((*MockPersonStoreInterface)(nil).FindOne), query)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOne", reflect.TypeOf((*MockPersonStoreInterface)(nil).FindOne), id)
 }
 
 // FindOneAndUpdate mocks base method.
-func (m *MockPersonStoreInterface) FindOneAndUpdate(query, update bson.M, crumb *models.BreadCrumb) (models.PersonInterface, error) {
+func (m *MockPersonStoreInterface) FindOneAndUpdate(id string, information []byte, crumb *models.BreadCrumb) (*models.Person, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOneAndUpdate", query, update, crumb)
-	ret0, _ := ret[0].(models.PersonInterface)
+	ret := m.ctrl.Call(m, "FindOneAndUpdate", id, information, crumb)
+	ret0, _ := ret[0].(*models.Person)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindOneAndUpdate indicates an expected call of FindOneAndUpdate.
-func (mr *MockPersonStoreInterfaceMockRecorder) FindOneAndUpdate(query, update, crumb interface{}) *gomock.Call {
+func (mr *MockPersonStoreInterfaceMockRecorder) FindOneAndUpdate(id, information, crumb interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOneAndUpdate", reflect.TypeOf((*MockPersonStoreInterface)(nil).FindOneAndUpdate), query, update, crumb)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOneAndUpdate", reflect.TypeOf((*MockPersonStoreInterface)(nil).FindOneAndUpdate), id, information, crumb)
 }
 
 // Insert mocks base method.
-func (m *MockPersonStoreInterface) Insert(information bson.M, crumb *models.BreadCrumb) (*mongo.InsertOneResult, error) {
+func (m *MockPersonStoreInterface) Insert(information []byte, crumb *models.BreadCrumb) (*models.Person, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Insert", information, crumb)
-	ret0, _ := ret[0].(*mongo.InsertOneResult)
+	ret0, _ := ret[0].(*models.Person)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

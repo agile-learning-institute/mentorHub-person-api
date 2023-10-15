@@ -19,20 +19,18 @@ func main() {
 	// Setup the ConfigHandler
 	config := config.NewConfig()
 
-	// Setup the PersonHandler and Store
+	// Setup the PersonStore
 	var personStore models.PersonStoreInterface
 	var err error
 	personStore, err = models.NewPersonStore(config)
+	defer personStore.Disconnect()
 	if err != nil {
 		log.Fatal("PersonStore Construction Error:", err)
 	}
+	personHandler := handlers.NewPersonHandler(personStore)
 
 	// Setup the ConfigHandler and Store
 	configHandler := handlers.NewConfigHandler(config)
-	defer personStore.Disconnect()
-	var person models.PersonInterface
-	person = models.NewPerson(personStore)
-	personHandler := handlers.NewPersonHandler(person)
 
 	// Setup the HttpServer Router
 	gorillaRouter := mux.NewRouter()

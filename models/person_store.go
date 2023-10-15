@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 
 	"institute-person-api/config"
@@ -21,10 +22,10 @@ type VersionInfo struct {
 
 // Define the PersonStoreInterface interface
 type PersonStoreInterface interface {
-	FindOne(query bson.M) (PersonInterface, error)
-	FindMany(query bson.M, options options.FindOptions) ([]PersonShort, error)
-	Insert(information bson.M, crumb *BreadCrumb) (*mongo.InsertOneResult, error)
-	FindOneAndUpdate(query bson.M, update bson.M, crumb *BreadCrumb) (PersonInterface, error)
+	FindOne(id string) (*Person, error)
+	FindMany() ([]PersonShort, error)
+	Insert(information []byte, crumb *BreadCrumb) (*Person, error)
+	FindOneAndUpdate(id string, information []byte, crumb *BreadCrumb) (*Person, error)
 	Disconnect()
 }
 type PersonStore struct {
@@ -33,7 +34,6 @@ type PersonStore struct {
 	database   *mongo.Database
 	collection *mongo.Collection
 	cancel     context.CancelFunc
-	store      PersonStoreInterface
 }
 
 const (
@@ -79,9 +79,9 @@ func NewPersonStore(cfg *config.Config) (PersonStoreInterface, error) {
 /**
 * Disconnect from the database and housekeep
  */
-func (store *PersonStore) Disconnect() {
-	defer store.cancel()
-	err := store.client.Disconnect(context.Background())
+func (this *PersonStore) Disconnect() {
+	defer this.cancel()
+	err := this.client.Disconnect(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -90,32 +90,46 @@ func (store *PersonStore) Disconnect() {
 /**
 * Insert a new person with the information provided
  */
-func (store *PersonStore) Insert(information bson.M, crumb *BreadCrumb) (*mongo.InsertOneResult, error) {
-	var result *mongo.InsertOneResult
-	var err error
-
-	// Add the breadcrumb
-	information["lastSaved"] = crumb
-
-	// Insert the document
-	context, cancel := store.config.GetTimeoutContext()
-	defer cancel()
-	result, err = store.collection.InsertOne(context, information)
+func (this *PersonStore) Insert(information []byte, crumb *BreadCrumb) (*Person, error) {
+	// Get the document values
+	var insertValues bson.M
+	err := json.Unmarshal(information, &insertValues)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+
+	// Add the breadcrumb
+	insertValues["lastSaved"] = crumb
+
+	// Insert the document
+	var result *mongo.InsertOneResult
+	context, cancel := this.config.GetTimeoutContext()
+	defer cancel()
+	result, err = this.collection.InsertOne(context, insertValues)
+	if err != nil {
+		return nil, err
+	}
+
+	id := result.InsertedID.(primitive.ObjectID).Hex()
+
+	// Get the new document
+	person, err := this.FindOne(id)
+	return person, err
 }
 
 /**
 * Find a single person by _id
  */
-func (store *PersonStore) FindOne(query bson.M) (PersonInterface, error) {
+func (this *PersonStore) FindOne(id string) (*Person, error) {
+	// get the bson ID
+	objectID, _ := primitive.ObjectIDFromHex(id)
+	query := bson.M{"_id": objectID}
+
 	var thePerson Person
 	var err error
-	context, cancel := store.config.GetTimeoutContext()
+	context, cancel := this.config.GetTimeoutContext()
 	defer cancel()
-	err = store.collection.FindOne(context, query).Decode(&thePerson)
+	err = this.collection.FindOne(context, query).Decode(&thePerson)
 	if err != nil {
 		return nil, err
 	}
@@ -125,16 +139,23 @@ func (store *PersonStore) FindOne(query bson.M) (PersonInterface, error) {
 /**
 * Find may people by a matcher
  */
-func (store *PersonStore) FindMany(query bson.M, options options.FindOptions) ([]PersonShort, error) {
+func (this *PersonStore) FindMany() ([]PersonShort, error) {
 	var people []PersonShort
 	var err error
 
-	context, cancel := store.config.GetTimeoutContext()
+	// Setup the query
+	query := bson.M{"name": bson.M{"$ne": "VERSION"}}
+	options := options.Find().SetProjection(bson.D{{Key: "name", Value: 1}})
+
+	// Query the database
+	context, cancel := this.config.GetTimeoutContext()
 	defer cancel()
-	cursor, err := store.collection.Find(context, query, &options)
+	cursor, err := this.collection.Find(context, query, options)
 	if err != nil {
 		return nil, err
 	}
+
+	// Fetch all the results
 	err = cursor.All(context, &people)
 	if err != nil {
 		return nil, err
@@ -146,9 +167,19 @@ func (store *PersonStore) FindMany(query bson.M, options options.FindOptions) ([
 /**
 * Find One person and Update with the data provided
  */
-func (store *PersonStore) FindOneAndUpdate(query bson.M, updateValues bson.M, crumb *BreadCrumb) (PersonInterface, error) {
+func (this *PersonStore) FindOneAndUpdate(id string, request []byte, crumb *BreadCrumb) (*Person, error) {
 	var thePerson Person
-	var err error
+
+	// Build the query on ID
+	objectID, _ := primitive.ObjectIDFromHex(id)
+	query := bson.M{"_id": objectID}
+
+	// Create the update set values
+	var updateValues bson.M
+	err := json.Unmarshal(request, &updateValues)
+	if err != nil {
+		return nil, err
+	}
 
 	// add breadcrumb to update object
 	updateValues["lastSaved"] = crumb.AsBson()
@@ -158,9 +189,9 @@ func (store *PersonStore) FindOneAndUpdate(query bson.M, updateValues bson.M, cr
 
 	// Update the document
 	options := options.FindOneAndUpdate().SetReturnDocument(options.After)
-	ctx, cancel := store.config.GetTimeoutContext()
+	ctx, cancel := this.config.GetTimeoutContext()
 	defer cancel()
-	err = store.collection.FindOneAndUpdate(ctx, query, update, options).Decode(&thePerson)
+	err = this.collection.FindOneAndUpdate(ctx, query, update, options).Decode(&thePerson)
 	if err != nil {
 		// throw the error up the call stack
 		return nil, err
@@ -169,14 +200,14 @@ func (store *PersonStore) FindOneAndUpdate(query bson.M, updateValues bson.M, cr
 	return &thePerson, nil
 }
 
-func (store *PersonStore) GetDatabaseVersion() (string, error) {
+func (this *PersonStore) GetDatabaseVersion() (string, error) {
 	var theVersion VersionInfo
 	var err error
 
 	query := bson.M{"name": "VERSION"}
-	context, cancel := store.config.GetTimeoutContext()
+	context, cancel := this.config.GetTimeoutContext()
 	defer cancel()
-	err = store.collection.FindOne(context, query).Decode(&theVersion)
+	err = this.collection.FindOne(context, query).Decode(&theVersion)
 	if err != nil {
 		// throw the error up the call stack
 		return "", err
