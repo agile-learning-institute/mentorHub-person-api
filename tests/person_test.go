@@ -104,7 +104,7 @@ func TestPostPerson(t *testing.T) {
 	json := "{}"
 	body := []byte(json)
 	person := models.NewPerson(mockStore)
-	result, err := person.PostPerson(body, "")
+	result, err := person.PostPerson(body, "", "")
 
 	// Examine the results of the invocation
 	assert.Nil(t, err)
@@ -133,7 +133,7 @@ func TestPatchPerson(t *testing.T) {
 	json := "{}"
 	body := []byte(json)
 	person := models.NewPerson(mockStore)
-	result, err := person.PatchPerson(id, body, "")
+	result, err := person.PatchPerson(id, body, "", "")
 
 	// Examine the results of the invocation
 	assert.Nil(t, err)
