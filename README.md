@@ -15,6 +15,7 @@
 - Local API Testing with [CURL](#local-api-testing-with-curl)
   - [A word on ports](#a-word-on-ports)
   - [Test Config Endpoint](#test-config-endpoint)
+  - [Test Health Endpoint](#test-health-endpoint)
   - [Test find all people with IDs](#test-find-all-people-with-ids)
   - [Test get a person](#test-get-a-person)
   - [Test add a person](#test-add-a-person)
@@ -117,6 +118,13 @@ Adjust the following URI's accordingly.
 
 ```bash
 curl http://localhost:8081/api/config/
+
+```
+
+### Test Health Endpoint
+
+```bash
+curl http://localhost:8081/api/health/
 
 ```
 
