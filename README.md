@@ -185,3 +185,4 @@ The PATCH_LEVEL file that is located in the same folder as the executable should
 - [x] Refactor Person as Simple Class, PersonStore to abstract mongo specific dependencies
 - [ ] Add beter unit testing of breadcrumbs
 - [ ] Fix unit testing that uses byte[] for string comparisons
+- [ ] Add JWT authentication
