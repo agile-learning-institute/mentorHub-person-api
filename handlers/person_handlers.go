@@ -35,8 +35,11 @@ func (h *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request *h
 		return
 	}
 
+	// Get the IP address from the request
+	ip := request.RemoteAddr
+
 	// Insert the new person document
-	newPerson, err := h.Person.PostPerson(body)
+	newPerson, err := h.Person.PostPerson(body, ip)
 	if err != nil {
 		log.Printf("ERROR CID: %s PostPerson %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
@@ -101,6 +104,9 @@ func (h *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request
 	// Get the Person ID from the path
 	id := mux.Vars(request)["id"]
 
+	// Get the IP address from the request
+	ip := request.RemoteAddr
+
 	// Get the Request Body
 	body, err := io.ReadAll(request.Body)
 	if err != nil {
@@ -111,7 +117,7 @@ func (h *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request
 	}
 
 	// Update the person
-	updatedPerson, err := h.Person.PatchPerson(id, body)
+	updatedPerson, err := h.Person.PatchPerson(id, body, ip)
 	if err != nil {
 		log.Printf("ERROR CID: %s Bad PatchPerson %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())

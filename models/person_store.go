@@ -23,8 +23,8 @@ type VersionInfo struct {
 type PersonStoreInterface interface {
 	FindOne(query bson.M) (PersonInterface, error)
 	FindMany(query bson.M, options options.FindOptions) ([]PersonShort, error)
-	Insert(information bson.M) (*mongo.InsertOneResult, error)
-	FindOneAndUpdate(query bson.M, update bson.M) (PersonInterface, error)
+	Insert(information bson.M, ip string) (*mongo.InsertOneResult, error)
+	FindOneAndUpdate(query bson.M, update bson.M, ip string) (PersonInterface, error)
 	Disconnect()
 }
 type PersonStore struct {
@@ -90,7 +90,7 @@ func (store *PersonStore) Disconnect() {
 /**
 * Insert a new person with the information provided
  */
-func (store *PersonStore) Insert(information bson.M) (*mongo.InsertOneResult, error) {
+func (store *PersonStore) Insert(information bson.M, ip string) (*mongo.InsertOneResult, error) {
 	var result *mongo.InsertOneResult
 	var err error
 
@@ -142,7 +142,7 @@ func (store *PersonStore) FindMany(query bson.M, options options.FindOptions) ([
 /**
 * Find One person and Update with the data provided
  */
-func (store *PersonStore) FindOneAndUpdate(query bson.M, update bson.M) (PersonInterface, error) {
+func (store *PersonStore) FindOneAndUpdate(query bson.M, update bson.M, ip string) (PersonInterface, error) {
 	var thePerson Person
 	var err error
 

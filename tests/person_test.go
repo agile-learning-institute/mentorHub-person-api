@@ -88,7 +88,7 @@ func TestPostPerson(t *testing.T) {
 	id := primitive.NewObjectID().Hex()
 	newId, _ := primitive.ObjectIDFromHex(id)
 	expectedResult := &mongo.InsertOneResult{InsertedID: newId}
-	mockStore.EXPECT().Insert(gomock.Any()).Return(expectedResult, nil)
+	mockStore.EXPECT().Insert(gomock.Any(), gomock.Any()).Return(expectedResult, nil)
 
 	// Configure Mock return values for FindOne
 	expectedPerson := &models.Person{
@@ -104,7 +104,7 @@ func TestPostPerson(t *testing.T) {
 	json := "{}"
 	body := []byte(json)
 	person := models.NewPerson(mockStore)
-	result, err := person.PostPerson(body)
+	result, err := person.PostPerson(body, "")
 
 	// Examine the results of the invocation
 	assert.Nil(t, err)
@@ -127,13 +127,13 @@ func TestPatchPerson(t *testing.T) {
 		Description: "Mock Description",
 		Store:       mockStore,
 	}
-	mockStore.EXPECT().FindOneAndUpdate(match, gomock.Any()).Return(expectedPerson, nil)
+	mockStore.EXPECT().FindOneAndUpdate(match, gomock.Any(), gomock.Any()).Return(expectedPerson, nil)
 
 	// Invoke Patch Person
 	json := "{}"
 	body := []byte(json)
 	person := models.NewPerson(mockStore)
-	result, err := person.PatchPerson(id, body)
+	result, err := person.PatchPerson(id, body, "")
 
 	// Examine the results of the invocation
 	assert.Nil(t, err)
