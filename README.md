@@ -123,6 +123,8 @@ curl http://localhost:8081/api/config/
 
 ### Test Health Endpoint
 
+This endpoint supports the promethius monitoring standards for a healthcheck endpoint
+
 ```bash
 curl http://localhost:8081/api/health/
 
@@ -164,9 +166,6 @@ The ```api/config/``` endpoint will return a list of configuration values. These
 The docker build expects a linux native binary, and a text file called PATCH_LEVEL to exist, I was unable to get the git commands to work in a 2-stage build, so I created [docker-build.sh](./docker-build.sh)
 
 The PATCH_LEVEL file that is located in the same folder as the executable should be populated by CI with the hash of the commit-to-main that triggers CI. This will be used on the Version number reported by the /api/config/ endpoint.
-
-The /api/health/ endpoint is supported by the Go Module github.com/prometheus/client_golang which has an outstanding vunerivibility, access to that endpoint should be restricted to trusted sources and now open to the internet at large. See [here](
-https://github.com/agile-learning-institute/institute-person-api/security/dependabot/1) for more details.
 
 ## Backlog and Feature Branch info
 
