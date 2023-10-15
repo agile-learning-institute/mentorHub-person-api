@@ -27,9 +27,9 @@ func main() {
 	if err != nil {
 		log.Fatal("PersonStore Construction Error:", err)
 	}
-	personHandler := handlers.NewPersonHandler(personStore)
 
-	// Setup the ConfigHandler and Store
+	// Setup the Handlers
+	personHandler := handlers.NewPersonHandler(personStore)
 	configHandler := handlers.NewConfigHandler(config)
 
 	// Setup the HttpServer Router

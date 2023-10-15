@@ -182,6 +182,6 @@ The PATCH_LEVEL file that is located in the same folder as the executable should
 - [x] Return full document after patch
 - [x] Gorilla Promethius Health endpoint
 - [x] Add breadcrumbs
+- [x] Refactor Person as Simple Class, PersonStore to abstract mongo specific dependencies
 - [ ] Add beter unit testing of breadcrumbs
 - [ ] Fix unit testing that uses byte[] for string comparisons
-- [ ] Refactor Person Store to abstract bson types as parameters
