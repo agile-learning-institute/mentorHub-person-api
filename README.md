@@ -165,6 +165,9 @@ The docker build expects a linux native binary, and a text file called PATCH_LEV
 
 The PATCH_LEVEL file that is located in the same folder as the executable should be populated by CI with the hash of the commit-to-main that triggers CI. This will be used on the Version number reported by the /api/config/ endpoint.
 
+The /api/health/ endpoint is supported by the Go Module github.com/prometheus/client_golang which has an outstanding vunerivibility, access to that endpoint should be restricted to trusted sources and now open to the internet at large. See [here](
+https://github.com/agile-learning-institute/institute-person-api/security/dependabot/1) for more details.
+
 ## Backlog and Feature Branch info
 
 - [X] Shift dependency injection to Config object Bad Idea!
