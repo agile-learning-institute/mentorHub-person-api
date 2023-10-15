@@ -38,7 +38,7 @@ func TestAddPerson(t *testing.T) {
 	personJSON := `{"name": "John Doe", "description": "Test Person"}`
 	request := httptest.NewRequest("POST", "/person", strings.NewReader(personJSON))
 	responseRecorder := httptest.NewRecorder()
-	mockPerson.EXPECT().PostPerson([]byte(personJSON), gomock.Any(), gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
+	mockPerson.EXPECT().PostPerson([]byte(personJSON), gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
 
 	// Invoke NewPerson
 	handler.AddPerson(responseRecorder, request)
@@ -109,7 +109,7 @@ func TestUpdatePerson(t *testing.T) {
 	personJSON := `"name": "John Doe", "description": "Test Person"}`
 	request := httptest.NewRequest("PATCH", "/person/000000000000000000000000/", strings.NewReader(personJSON))
 	responseRecorder := httptest.NewRecorder()
-	mockPerson.EXPECT().PatchPerson(gomock.Any(), []byte(personJSON), gomock.Any(), gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
+	mockPerson.EXPECT().PatchPerson(gomock.Any(), []byte(personJSON), gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
 
 	// Invoke NewPerson
 	handler.UpdatePerson(responseRecorder, request)

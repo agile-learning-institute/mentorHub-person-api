@@ -11,8 +11,8 @@ import (
 type PersonInterface interface {
 	GetPerson(id string) (PersonInterface, error)
 	GetAllNames() ([]PersonShort, error)
-	PostPerson(body []byte, ip string, correlation string) (PersonInterface, error)
-	PatchPerson(id string, body []byte, ip string, correlation string) (PersonInterface, error)
+	PostPerson(body []byte, crumb *BreadCrumb) (PersonInterface, error)
+	PatchPerson(id string, body []byte, crumb *BreadCrumb) (PersonInterface, error)
 }
 
 type PersonShort struct {
@@ -59,7 +59,7 @@ func (this *Person) GetAllNames() ([]PersonShort, error) {
 	return result, err
 }
 
-func (this *Person) PostPerson(body []byte, ip string, correlation string) (PersonInterface, error) {
+func (this *Person) PostPerson(body []byte, crumb *BreadCrumb) (PersonInterface, error) {
 	// Get the values to insert
 	var insertValues bson.M
 	err := json.Unmarshal(body, &insertValues)
@@ -68,7 +68,7 @@ func (this *Person) PostPerson(body []byte, ip string, correlation string) (Pers
 	}
 
 	// Insert the new Person
-	result, err := this.Store.Insert(insertValues, ip)
+	result, err := this.Store.Insert(insertValues, crumb)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func (this *Person) PostPerson(body []byte, ip string, correlation string) (Pers
 	return person, err
 }
 
-func (this *Person) PatchPerson(id string, body []byte, ip string, correlation string) (PersonInterface, error) {
+func (this *Person) PatchPerson(id string, body []byte, crumb *BreadCrumb) (PersonInterface, error) {
 	// Build the query on ID
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	query := bson.M{"_id": objectID}
@@ -93,5 +93,5 @@ func (this *Person) PatchPerson(id string, body []byte, ip string, correlation s
 	update := bson.M{"$set": updateValues}
 
 	// Update the document
-	return this.Store.FindOneAndUpdate(query, update, ip)
+	return this.Store.FindOneAndUpdate(query, update, crumb)
 }

@@ -100,11 +100,14 @@ func TestPostPerson(t *testing.T) {
 	match := gomock.Eq(bson.M{"_id": newId})
 	mockStore.EXPECT().FindOne(match).Return(expectedPerson, nil)
 
+	// Build a breadcrumb
+	crumb := models.NewBreadCrumb("SomeIpAddress", "SomeUserUUID", "SomeCorrelationId")
+
 	// Invoke Post Person
 	json := "{}"
 	body := []byte(json)
 	person := models.NewPerson(mockStore)
-	result, err := person.PostPerson(body, "", "")
+	result, err := person.PostPerson(body, crumb)
 
 	// Examine the results of the invocation
 	assert.Nil(t, err)
@@ -127,13 +130,17 @@ func TestPatchPerson(t *testing.T) {
 		Description: "Mock Description",
 		Store:       mockStore,
 	}
+
 	mockStore.EXPECT().FindOneAndUpdate(match, gomock.Any(), gomock.Any()).Return(expectedPerson, nil)
+
+	// Build a breadcrumb
+	crumb := models.NewBreadCrumb("SomeIpAddress", "SomeUserUUID", "SomeCorrelationId")
 
 	// Invoke Patch Person
 	json := "{}"
 	body := []byte(json)
 	person := models.NewPerson(mockStore)
-	result, err := person.PatchPerson(id, body, "", "")
+	result, err := person.PatchPerson(id, body, crumb)
 
 	// Examine the results of the invocation
 	assert.Nil(t, err)

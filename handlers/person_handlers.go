@@ -35,11 +35,11 @@ func (h *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request *h
 		return
 	}
 
-	// Get the IP address from the request
-	ip := request.RemoteAddr
+	// Build the breadcrumb
+	crumb := models.NewBreadCrumb(request.RemoteAddr, "ToBE: UserID", correltionId.String())
 
 	// Insert the new person document
-	newPerson, err := h.Person.PostPerson(body, ip, correltionId.String())
+	newPerson, err := h.Person.PostPerson(body, crumb)
 	if err != nil {
 		log.Printf("ERROR CID: %s PostPerson %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
@@ -104,9 +104,6 @@ func (h *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request
 	// Get the Person ID from the path
 	id := mux.Vars(request)["id"]
 
-	// Get the IP address from the request
-	ip := request.RemoteAddr
-
 	// Get the Request Body
 	body, err := io.ReadAll(request.Body)
 	if err != nil {
@@ -116,8 +113,11 @@ func (h *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request
 		return
 	}
 
+	// Build the breadcrumb
+	crumb := models.NewBreadCrumb(request.RemoteAddr, "ToBE: UserID", correltionId.String())
+
 	// Update the person
-	updatedPerson, err := h.Person.PatchPerson(id, body, ip, correltionId.String())
+	updatedPerson, err := h.Person.PatchPerson(id, body, crumb)
 	if err != nil {
 		log.Printf("ERROR CID: %s Bad PatchPerson %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
