@@ -65,31 +65,31 @@ func (mr *MockPersonInterfaceMockRecorder) GetPerson(id interface{}) *gomock.Cal
 }
 
 // PatchPerson mocks base method.
-func (m *MockPersonInterface) PatchPerson(id string, body []byte) (models.PersonInterface, error) {
+func (m *MockPersonInterface) PatchPerson(id string, body []byte, crumb *models.BreadCrumb) (models.PersonInterface, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "PatchPerson", id, body)
+	ret := m.ctrl.Call(m, "PatchPerson", id, body, crumb)
 	ret0, _ := ret[0].(models.PersonInterface)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // PatchPerson indicates an expected call of PatchPerson.
-func (mr *MockPersonInterfaceMockRecorder) PatchPerson(id, body interface{}) *gomock.Call {
+func (mr *MockPersonInterfaceMockRecorder) PatchPerson(id, body, crumb interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PatchPerson", reflect.TypeOf((*MockPersonInterface)(nil).PatchPerson), id, body)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PatchPerson", reflect.TypeOf((*MockPersonInterface)(nil).PatchPerson), id, body, crumb)
 }
 
 // PostPerson mocks base method.
-func (m *MockPersonInterface) PostPerson(body []byte) (models.PersonInterface, error) {
+func (m *MockPersonInterface) PostPerson(body []byte, crumb *models.BreadCrumb) (models.PersonInterface, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "PostPerson", body)
+	ret := m.ctrl.Call(m, "PostPerson", body, crumb)
 	ret0, _ := ret[0].(models.PersonInterface)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // PostPerson indicates an expected call of PostPerson.
-func (mr *MockPersonInterfaceMockRecorder) PostPerson(body interface{}) *gomock.Call {
+func (mr *MockPersonInterfaceMockRecorder) PostPerson(body, crumb interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PostPerson", reflect.TypeOf((*MockPersonInterface)(nil).PostPerson), body)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PostPerson", reflect.TypeOf((*MockPersonInterface)(nil).PostPerson), body, crumb)
 }

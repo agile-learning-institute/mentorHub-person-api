@@ -180,5 +180,8 @@ The PATCH_LEVEL file that is located in the same folder as the executable should
 - [x] Add attributes from database v1.1.Test
 - [x] Add CID to HTTP Error Responses
 - [x] Return full document after patch
-- [ ] Add breadcrumbs
-- [ ] Gorilla logging handler?
+- [x] Gorilla Promethius Health endpoint
+- [x] Add breadcrumbs
+- [ ] Add beter unit testing of breadcrumbs
+- [ ] Fix unit testing that uses byte[] for string comparisons
+- [ ] Refactor Person Store to abstract bson types as parameters

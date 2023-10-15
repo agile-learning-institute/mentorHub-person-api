@@ -35,8 +35,11 @@ func (h *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request *h
 		return
 	}
 
+	// Build the breadcrumb
+	crumb := models.NewBreadCrumb(request.RemoteAddr, "ToBE: UserID", correltionId.String())
+
 	// Insert the new person document
-	newPerson, err := h.Person.PostPerson(body)
+	newPerson, err := h.Person.PostPerson(body, crumb)
 	if err != nil {
 		log.Printf("ERROR CID: %s PostPerson %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
@@ -110,8 +113,11 @@ func (h *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request
 		return
 	}
 
+	// Build the breadcrumb
+	crumb := models.NewBreadCrumb(request.RemoteAddr, "ToBE: UserID", correltionId.String())
+
 	// Update the person
-	updatedPerson, err := h.Person.PatchPerson(id, body)
+	updatedPerson, err := h.Person.PatchPerson(id, body, crumb)
 	if err != nil {
 		log.Printf("ERROR CID: %s Bad PatchPerson %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())

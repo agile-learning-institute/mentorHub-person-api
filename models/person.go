@@ -11,8 +11,8 @@ import (
 type PersonInterface interface {
 	GetPerson(id string) (PersonInterface, error)
 	GetAllNames() ([]PersonShort, error)
-	PostPerson(body []byte) (PersonInterface, error)
-	PatchPerson(id string, body []byte) (PersonInterface, error)
+	PostPerson(body []byte, crumb *BreadCrumb) (PersonInterface, error)
+	PatchPerson(id string, body []byte, crumb *BreadCrumb) (PersonInterface, error)
 }
 
 type PersonShort struct {
@@ -36,6 +36,7 @@ type Person struct {
 	Location    string               `json:"location,omitempty"`
 	MentorName  string               `json:"mentorName,omitempty"`
 	PartnerName string               `json:"partnerName,omitempty"`
+	LastSaved   *BreadCrumb          `json:"lastSaved,omitempty"`
 	Store       PersonStoreInterface `json:"-"`
 }
 
@@ -59,7 +60,7 @@ func (this *Person) GetAllNames() ([]PersonShort, error) {
 	return result, err
 }
 
-func (this *Person) PostPerson(body []byte) (PersonInterface, error) {
+func (this *Person) PostPerson(body []byte, crumb *BreadCrumb) (PersonInterface, error) {
 	// Get the values to insert
 	var insertValues bson.M
 	err := json.Unmarshal(body, &insertValues)
@@ -68,7 +69,7 @@ func (this *Person) PostPerson(body []byte) (PersonInterface, error) {
 	}
 
 	// Insert the new Person
-	result, err := this.Store.Insert(insertValues)
+	result, err := this.Store.Insert(insertValues, crumb)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +80,7 @@ func (this *Person) PostPerson(body []byte) (PersonInterface, error) {
 	return person, err
 }
 
-func (this *Person) PatchPerson(id string, body []byte) (PersonInterface, error) {
+func (this *Person) PatchPerson(id string, body []byte, crumb *BreadCrumb) (PersonInterface, error) {
 	// Build the query on ID
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	query := bson.M{"_id": objectID}
@@ -90,8 +91,7 @@ func (this *Person) PatchPerson(id string, body []byte) (PersonInterface, error)
 	if err != nil {
 		return nil, err
 	}
-	update := bson.M{"$set": updateValues}
 
 	// Update the document
-	return this.Store.FindOneAndUpdate(query, update)
+	return this.Store.FindOneAndUpdate(query, updateValues, crumb)
 }

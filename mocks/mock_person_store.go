@@ -80,31 +80,31 @@ func (mr *MockPersonStoreInterfaceMockRecorder) FindOne(query interface{}) *gomo
 }
 
 // FindOneAndUpdate mocks base method.
-func (m *MockPersonStoreInterface) FindOneAndUpdate(query, update bson.M) (models.PersonInterface, error) {
+func (m *MockPersonStoreInterface) FindOneAndUpdate(query, update bson.M, crumb *models.BreadCrumb) (models.PersonInterface, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOneAndUpdate", query, update)
+	ret := m.ctrl.Call(m, "FindOneAndUpdate", query, update, crumb)
 	ret0, _ := ret[0].(models.PersonInterface)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindOneAndUpdate indicates an expected call of FindOneAndUpdate.
-func (mr *MockPersonStoreInterfaceMockRecorder) FindOneAndUpdate(query, update interface{}) *gomock.Call {
+func (mr *MockPersonStoreInterfaceMockRecorder) FindOneAndUpdate(query, update, crumb interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOneAndUpdate", reflect.TypeOf((*MockPersonStoreInterface)(nil).FindOneAndUpdate), query, update)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOneAndUpdate", reflect.TypeOf((*MockPersonStoreInterface)(nil).FindOneAndUpdate), query, update, crumb)
 }
 
 // Insert mocks base method.
-func (m *MockPersonStoreInterface) Insert(information bson.M) (*mongo.InsertOneResult, error) {
+func (m *MockPersonStoreInterface) Insert(information bson.M, crumb *models.BreadCrumb) (*mongo.InsertOneResult, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Insert", information)
+	ret := m.ctrl.Call(m, "Insert", information, crumb)
 	ret0, _ := ret[0].(*mongo.InsertOneResult)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Insert indicates an expected call of Insert.
-func (mr *MockPersonStoreInterfaceMockRecorder) Insert(information interface{}) *gomock.Call {
+func (mr *MockPersonStoreInterfaceMockRecorder) Insert(information, crumb interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Insert", reflect.TypeOf((*MockPersonStoreInterface)(nil).Insert), information)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Insert", reflect.TypeOf((*MockPersonStoreInterface)(nil).Insert), information, crumb)
 }

@@ -38,7 +38,7 @@ func TestAddPerson(t *testing.T) {
 	personJSON := `{"name": "John Doe", "description": "Test Person"}`
 	request := httptest.NewRequest("POST", "/person", strings.NewReader(personJSON))
 	responseRecorder := httptest.NewRecorder()
-	mockPerson.EXPECT().PostPerson([]byte(personJSON)).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
+	mockPerson.EXPECT().PostPerson([]byte(personJSON), gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
 
 	// Invoke NewPerson
 	handler.AddPerson(responseRecorder, request)
@@ -46,7 +46,7 @@ func TestAddPerson(t *testing.T) {
 	// Examine the result
 	assert.Equal(t, http.StatusOK, responseRecorder.Code)
 	assert.Equal(t, "application/json", responseRecorder.Header().Get("Content-Type"))
-	assert.Equal(t, "{\"ID\":\"000000000000000000000000\",\"name\":\"John Doe\",\"description\":\"Test Person\",\"Store\":null}\n", responseRecorder.Body.String())
+	assert.Equal(t, "{\"ID\":\"000000000000000000000000\",\"name\":\"John Doe\",\"description\":\"Test Person\"}\n", responseRecorder.Body.String())
 }
 
 func TestGetPersonWithHandler(t *testing.T) {
@@ -69,7 +69,7 @@ func TestGetPersonWithHandler(t *testing.T) {
 	// Examine the result
 	assert.Equal(t, http.StatusOK, responseRecorder.Code)
 	assert.Equal(t, "application/json", responseRecorder.Header().Get("Content-Type"))
-	assert.Equal(t, "{\"ID\":\"000000000000000000000000\",\"name\":\"John Doe\",\"description\":\"Test Person\",\"Store\":null}\n", responseRecorder.Body.String())
+	assert.Equal(t, "{\"ID\":\"000000000000000000000000\",\"name\":\"John Doe\",\"description\":\"Test Person\"}\n", responseRecorder.Body.String())
 }
 
 func TestGetPeople(t *testing.T) {
@@ -109,7 +109,7 @@ func TestUpdatePerson(t *testing.T) {
 	personJSON := `"name": "John Doe", "description": "Test Person"}`
 	request := httptest.NewRequest("PATCH", "/person/000000000000000000000000/", strings.NewReader(personJSON))
 	responseRecorder := httptest.NewRecorder()
-	mockPerson.EXPECT().PatchPerson(gomock.Any(), []byte(personJSON)).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
+	mockPerson.EXPECT().PatchPerson(gomock.Any(), []byte(personJSON), gomock.Any()).Return(&models.Person{Name: "John Doe", Description: "Test Person"}, nil)
 
 	// Invoke NewPerson
 	handler.UpdatePerson(responseRecorder, request)
@@ -117,5 +117,5 @@ func TestUpdatePerson(t *testing.T) {
 	// Examine the result
 	assert.Equal(t, http.StatusOK, responseRecorder.Code)
 	assert.Equal(t, "application/json", responseRecorder.Header().Get("Content-Type"))
-	assert.Equal(t, "{\"ID\":\"000000000000000000000000\",\"name\":\"John Doe\",\"description\":\"Test Person\",\"Store\":null}\n", responseRecorder.Body.String())
+	assert.Equal(t, "{\"ID\":\"000000000000000000000000\",\"name\":\"John Doe\",\"description\":\"Test Person\"}\n", responseRecorder.Body.String())
 }
