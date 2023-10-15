@@ -36,6 +36,7 @@ type Person struct {
 	Location    string               `json:"location,omitempty"`
 	MentorName  string               `json:"mentorName,omitempty"`
 	PartnerName string               `json:"partnerName,omitempty"`
+	LastSaved   *BreadCrumb          `json:"lastSaved,omitempty"`
 	Store       PersonStoreInterface `json:"-"`
 }
 
@@ -90,8 +91,7 @@ func (this *Person) PatchPerson(id string, body []byte, crumb *BreadCrumb) (Pers
 	if err != nil {
 		return nil, err
 	}
-	update := bson.M{"$set": updateValues}
 
 	// Update the document
-	return this.Store.FindOneAndUpdate(query, update, crumb)
+	return this.Store.FindOneAndUpdate(query, updateValues, crumb)
 }

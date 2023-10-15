@@ -2,6 +2,8 @@ package models
 
 import (
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type BreadCrumb struct {
@@ -18,4 +20,13 @@ func NewBreadCrumb(ip string, user string, corrId string) *BreadCrumb {
 	this.CorrelationId = corrId
 	this.AtTime = time.Now().Format("2006-01-02 15:04:05")
 	return this
+}
+
+func (this *BreadCrumb) AsBson() bson.M {
+	return bson.M{
+		"fromIp":        this.FromIp,
+		"byUser":        this.ByUser,
+		"atTime":        this.AtTime,
+		"correlationId": this.CorrelationId,
+	}
 }

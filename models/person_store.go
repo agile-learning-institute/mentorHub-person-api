@@ -94,6 +94,10 @@ func (store *PersonStore) Insert(information bson.M, crumb *BreadCrumb) (*mongo.
 	var result *mongo.InsertOneResult
 	var err error
 
+	// Add the breadcrumb
+	information["lastSaved"] = crumb
+
+	// Insert the document
 	context, cancel := store.config.GetTimeoutContext()
 	defer cancel()
 	result, err = store.collection.InsertOne(context, information)
@@ -142,15 +146,23 @@ func (store *PersonStore) FindMany(query bson.M, options options.FindOptions) ([
 /**
 * Find One person and Update with the data provided
  */
-func (store *PersonStore) FindOneAndUpdate(query bson.M, update bson.M, crumb *BreadCrumb) (PersonInterface, error) {
+func (store *PersonStore) FindOneAndUpdate(query bson.M, updateValues bson.M, crumb *BreadCrumb) (PersonInterface, error) {
 	var thePerson Person
 	var err error
 
+	// add breadcrumb to update object
+	updateValues["lastSaved"] = crumb.AsBson()
+
+	// Create the update object
+	update := bson.M{"$set": updateValues}
+
+	// Update the document
 	options := options.FindOneAndUpdate().SetReturnDocument(options.After)
 	ctx, cancel := store.config.GetTimeoutContext()
 	defer cancel()
 	err = store.collection.FindOneAndUpdate(ctx, query, update, options).Decode(&thePerson)
 	if err != nil {
+		// throw the error up the call stack
 		return nil, err
 	}
 
@@ -166,6 +178,7 @@ func (store *PersonStore) GetDatabaseVersion() (string, error) {
 	defer cancel()
 	err = store.collection.FindOne(context, query).Decode(&theVersion)
 	if err != nil {
+		// throw the error up the call stack
 		return "", err
 	}
 	return theVersion.Version, nil
