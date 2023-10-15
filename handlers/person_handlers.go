@@ -30,6 +30,7 @@ func (h *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request *h
 	body, err := io.ReadAll(request.Body)
 	if err != nil {
 		log.Printf("ERROR CID: %s Bad Body Read %s", correltionId, err.Error())
+		responseWriter.Header().Add("CorrelationId", correltionId.String())
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -38,6 +39,7 @@ func (h *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request *h
 	newPerson, err := h.Person.PostPerson(body)
 	if err != nil {
 		log.Printf("ERROR CID: %s PostPerson %s", correltionId, err.Error())
+		responseWriter.Header().Add("CorrelationId", correltionId.String())
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -60,6 +62,7 @@ func (h *PersonHandler) GetPerson(responseWriter http.ResponseWriter, request *h
 	person, err := h.Person.GetPerson(id)
 	if err != nil {
 		log.Printf("ERROR CID: %s GetPerson %s", correltionId, err.Error())
+		responseWriter.Header().Add("CorrelationId", correltionId.String())
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -79,6 +82,7 @@ func (h *PersonHandler) GetPeople(responseWriter http.ResponseWriter, request *h
 	allPeople, err := h.Person.GetAllNames()
 	if err != nil {
 		log.Printf("ERROR CID: %s GetAllNames %s", correltionId, err.Error())
+		responseWriter.Header().Add("CorrelationId", correltionId.String())
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -101,6 +105,7 @@ func (h *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request
 	body, err := io.ReadAll(request.Body)
 	if err != nil {
 		log.Printf("ERROR CID: %s Bad Body Read %s", correltionId, err.Error())
+		responseWriter.Header().Add("CorrelationId", correltionId.String())
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -109,6 +114,7 @@ func (h *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request
 	updatedPerson, err := h.Person.PatchPerson(id, body)
 	if err != nil {
 		log.Printf("ERROR CID: %s Bad PatchPerson %s", correltionId, err.Error())
+		responseWriter.Header().Add("CorrelationId", correltionId.String())
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
 	}

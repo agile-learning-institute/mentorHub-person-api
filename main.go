@@ -11,6 +11,8 @@ import (
 
 	gorillaHandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	muxprom "gitlab.com/msvechla/mux-prometheus/pkg/middleware"
 )
 
 func main() {
@@ -35,12 +37,17 @@ func main() {
 	// Setup the HttpServer Router
 	gorillaRouter := mux.NewRouter()
 
+	// Setup the Promethius health middleware
+	instrumentation := muxprom.NewDefaultInstrumentation()
+	gorillaRouter.Use(instrumentation.Middleware)
+
 	// Configure cors filters
 	originsOk := gorillaHandlers.AllowedOrigins([]string{"*"})
 	headersOk := gorillaHandlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
 	methodsOk := gorillaHandlers.AllowedMethods([]string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"})
 
 	// Define the Routes
+	gorillaRouter.Path("/api/health/").Handler(promhttp.Handler())
 	gorillaRouter.HandleFunc("/api/person/", personHandler.AddPerson).Methods("POST")
 	gorillaRouter.HandleFunc("/api/person/", personHandler.GetPeople).Methods("GET")
 	gorillaRouter.HandleFunc("/api/person/{id}", personHandler.GetPerson).Methods("GET")
