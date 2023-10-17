@@ -13,13 +13,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type VersionInfo struct {
-	ID          primitive.ObjectID `bson:"_id,omitempty"`
-	Name        string             `json:"name,omitempty"`
-	Description string             `json:"description,omitempty"`
-	Version     string             `json:"version,omitempty"`
-}
-
 // Define the PersonStoreInterface interface
 type PersonStoreInterface interface {
 	FindOne(id string) (*Person, error)
@@ -66,12 +59,7 @@ func NewPersonStore(cfg *config.Config) (PersonStoreInterface, error) {
 	this.collection = this.database.Collection(this.config.GetPeopleCollectionName())
 
 	// Put the database Version in the Config
-	version, err := this.GetDatabaseVersion()
-	if err != nil {
-		cancel()
-		return nil, err
-	}
-	this.config.SetDbVersion(version)
+	this.ReportVersion()
 
 	return this, err
 }
@@ -200,7 +188,7 @@ func (this *PersonStore) FindOneAndUpdate(id string, request []byte, crumb *Brea
 	return &thePerson, nil
 }
 
-func (this *PersonStore) GetDatabaseVersion() (string, error) {
+func (this *PersonStore) ReportVersion() {
 	var theVersion VersionInfo
 	var err error
 
@@ -209,8 +197,7 @@ func (this *PersonStore) GetDatabaseVersion() (string, error) {
 	defer cancel()
 	err = this.collection.FindOne(context, query).Decode(&theVersion)
 	if err != nil {
-		// throw the error up the call stack
-		return "", err
+		this.config.SetPeopleVersion(err.Error())
 	}
-	return theVersion.Version, nil
+	this.config.SetPeopleVersion(theVersion.Version)
 }

@@ -19,9 +19,16 @@ func main() {
 	// Setup the ConfigHandler
 	config := config.NewConfig()
 
+	// Setup the EnumeratorStore
+	var enumStore *models.EnumeratorStore
+	var err error
+	enumStore, err = models.NewEnumeratorStore(config)
+	if err != nil {
+		log.Fatal("PersonStore Construction Error:", err)
+	}
+
 	// Setup the PersonStore
 	var personStore models.PersonStoreInterface
-	var err error
 	personStore, err = models.NewPersonStore(config)
 	defer personStore.Disconnect()
 	if err != nil {
@@ -31,6 +38,7 @@ func main() {
 	// Setup the Handlers
 	personHandler := handlers.NewPersonHandler(personStore)
 	configHandler := handlers.NewConfigHandler(config)
+	enumHandler := handlers.NewEnumHandler(enumStore)
 
 	// Setup the HttpServer Router
 	gorillaRouter := mux.NewRouter()
@@ -51,10 +59,11 @@ func main() {
 	gorillaRouter.HandleFunc("/api/person/{id}", personHandler.GetPerson).Methods("GET")
 	gorillaRouter.HandleFunc("/api/person/{id}", personHandler.UpdatePerson).Methods("PATCH")
 	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
+	gorillaRouter.HandleFunc("/api/enums/", enumHandler.GetEnums).Methods("GET")
 
 	// Start the server with Cors handler
 	port := config.GetPort()
-	log.Printf("INFO: Server Version %s", config.Version)
+	log.Printf("INFO: API Server Version %s", config.ApiVersion)
 	log.Printf("INFO: Server Listening at %s", port)
 	err = http.ListenAndServe(port, gorillaHandlers.CORS(originsOk, headersOk, methodsOk)(gorillaRouter))
 	if err != nil {

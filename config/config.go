@@ -14,16 +14,18 @@ type ConfigItem struct {
 }
 
 type Config struct {
-	ConfigItems          []*ConfigItem
-	Version              string
-	DBVersion            string
-	port                 string
-	patch                string
-	configFolder         string
-	databaseName         string
-	peopleCollectionName string
-	databaseTimeout      int
-	connectionString     string
+	ConfigItems              []*ConfigItem
+	ApiVersion               string
+	PeopleVersion            string
+	EnumVersion              string
+	port                     string
+	patch                    string
+	configFolder             string
+	peopleCollectionName     string
+	enumeratorCollectionName string
+	databaseName             string
+	databaseTimeout          int
+	connectionString         string
 }
 
 const (
@@ -33,6 +35,7 @@ const (
 	DefaultConnectionString     = "mongodb://root:example@localhost:27017/?tls=false&directConnection=true"
 	DefaultDatabaseName         = "agile-learning-institute"
 	DefaultPeopleCollectionName = "people"
+	DefaultEnumCollectionName   = "enumerators"
 	DefaultPort                 = ":8080"
 	DefaultTimeout              = 10
 )
@@ -47,10 +50,12 @@ func NewConfig() *Config {
 	this.connectionString = this.findStringValue("CONNECTION_STRING", DefaultConnectionString, true)
 	this.databaseName = this.findStringValue("DATABASE_NAME", DefaultDatabaseName, false)
 	this.peopleCollectionName = this.findStringValue("PEOPLE_COLLECTION_NAME", DefaultPeopleCollectionName, false)
+	this.enumeratorCollectionName = this.findStringValue("ENUM_COLLECTION_NAME", DefaultEnumCollectionName, false)
 	this.databaseTimeout = this.findIntValue("CONNECTION_TIMEOUT", DefaultTimeout, false)
 	this.port = this.findStringValue("PORT", DefaultPort, false)
-	this.Version = VersionMajor + "." + VersionMinor + "." + this.patch
-	this.DBVersion = "Pending"
+	this.ApiVersion = VersionMajor + "." + VersionMinor + "." + this.patch
+	this.PeopleVersion = "Pending"
+	this.EnumVersion = "Pending"
 	return this
 }
 
@@ -81,15 +86,20 @@ func (cfg *Config) GetPeopleCollectionName() string {
 	return cfg.peopleCollectionName
 }
 
+func (cfg *Config) GetEnumeratorCollectionName() string {
+	return cfg.enumeratorCollectionName
+}
+
 func (cfg *Config) GetPort() string {
 	return cfg.port
 }
 
-/**
-* the one and only Setter
- */
-func (cfg *Config) SetDbVersion(theVersion string) {
-	cfg.DBVersion = theVersion
+func (cfg *Config) SetPeopleVersion(theVersion string) {
+	cfg.PeopleVersion = theVersion
+}
+
+func (cfg *Config) SetEnumVersion(theVersion string) {
+	cfg.EnumVersion = theVersion
 }
 
 /**

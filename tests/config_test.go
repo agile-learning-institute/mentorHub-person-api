@@ -19,7 +19,7 @@ func TestNewConfig(t *testing.T) {
 	assert.Equal(t, config.DefaultTimeout, cfg.GetDatabaseTimeout())
 	assert.Equal(t, config.DefaultPort, cfg.GetPort())
 	assert.Equal(t, "LocalDev", cfg.GetPatch())
-	assert.Equal(t, "1.1.LocalDev", cfg.Version)
+	assert.Equal(t, "1.1.LocalDev", cfg.ApiVersion)
 
 	assert.Equal(t, 7, len(cfg.ConfigItems))
 	assert.Equal(t, "PATCH_LEVEL", cfg.ConfigItems[0].Name)
