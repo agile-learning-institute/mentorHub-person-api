@@ -59,8 +59,8 @@ go run main.go
 If you make substantial changes to the interfaces, you may need to regenerate gomock mocks used in unit testing.
 
 ```bash
-mockgen -source=models/person.go -destination=mocks/mock_person.go -package=mocks
-mockgen -source=models/person_store.go -destination=mocks/mock_person_store.go -package=mocks
+mockgen -source=src/models/person.go -destination=src/mocks/mock_person.go -package=mocks
+mockgen -source=src/models/person_store.go -destination=src/mocks/mock_person_store.go -package=mocks
 ```
 
 ## Getting Started for UI Engineers
