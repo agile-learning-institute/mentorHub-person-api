@@ -6,4 +6,4 @@ cd ../institute-person-api
 
 docker image prune -f
 
-docker compose up --detach
+docker-compose up --detach
