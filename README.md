@@ -43,7 +43,7 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 
 ### Building the Database Container
 
-To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-mongodb) and follow the instructions to build the container. Once that container is built you can run it independently using the database docker compose option.
+To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-mongodb) and follow the instructions to build the container. Once that container is built you can run it independently using the database cd src/docker docker composedocker compose docker compose option.
 
 ### Install dependencies and run the API locally
 
@@ -51,7 +51,7 @@ If you have started the database separatly, you can run the API locally
 
 ```bash
 go get -u
-go run main.go
+go run src/main.go
 ```
 
 ### Generate fresh mocks
@@ -65,34 +65,34 @@ mockgen -source=src/models/person_store.go -destination=src/mocks/mock_person_st
 
 ## Getting Started for UI Engineers
 
-If you want to run both the API and Database containers you can build the database container as described [above](#building-the-database-container), and then build the API container, and then use the docker compose command below to run both of them together.
+If you want to run both the API and Database containers you can build the database container as described [above](#building-the-database-container), and then build the API container, and then use the cd src/docker docker composedocker compose docker compose command below to run both of them together.
 
 ### Bulid and Run in one step
 
 To build and run both of the containers, first clone [data](https://github.com/agile-learning-institute/institute-mongodb) repo as a sibling to this repo, then you can run this script to build both the database and api containers and start the stack.
 
 ```bash
-./src/docker/docker-build-all-and-run.sh
+cd src/docker ./src/docker/docker-build-all-and-run.sh./src/docker/docker-build-all-and-run.sh ./docker-build-all-and-run.sh
 ```
 
 ### Start the Containers without rebuilding
 
 ```bash
-docker compose up --detach
+cd src/docker docker composedocker compose docker compose up --detach
 ```
 
 ### Stoping and Starting the containers without loosing data
 
 ```bash
-docker compose stop
-docker compose start
+cd src/docker docker composedocker compose docker compose stop
+cd src/docker docker composedocker compose docker compose start
 ```
 
 ### Restart the containers and Reseting the database
 
 ```bash
-docker compose down
-docker compose up --deatch
+cd src/docker docker composedocker compose docker compose down
+cd src/docker docker composedocker compose docker compose up --deatch
 ```
 
 ### Building the API Container
@@ -111,7 +111,7 @@ docker build . --tag institute-person-api
 
 ### A word on ports
 
-NOTE: If you are running the API from the command line with ```go run main.go``` the API will be served at port 8080, if you run the API in containers with ```docker compose up``` then it will be served at port 8081.
+NOTE: If you are running the API from the command line with ```go run src/main.go``` the API will be served at port 8080, if you run the API in containers with ```cd src/docker docker composedocker compose docker compose up``` then it will be served at port 8081.
 Adjust the following URI's accordingly.
 
 ### Test Config Endpoint
