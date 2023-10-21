@@ -61,7 +61,7 @@ require (
 	github.com/spf13/cast v1.5.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/spf13/viper v1.17.0 // indirect
+	github.com/spf13/viper v1.16.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/toqueteos/webbrowser v1.2.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
@@ -80,7 +80,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/gorilla/handlers v1.5.1
-	github.com/klauspost/compress v1.17.0 // indirect
+	github.com/klauspost/compress v1.16.0 // indirect
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
 	github.com/stretchr/testify v1.8.4
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect

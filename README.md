@@ -72,27 +72,35 @@ If you want to run both the API and Database containers you can build the databa
 To build and run both of the containers, first clone [data](https://github.com/agile-learning-institute/institute-mongodb) repo as a sibling to this repo, then you can run this script to build both the database and api containers and start the stack.
 
 ```bash
-cd src/docker ./src/docker/docker-build-all-and-run.sh./src/docker/docker-build-all-and-run.sh ./docker-build-all-and-run.sh
+cd "$(find ~ -name "institute-person-api" | head -n 1)"
+cd src/docker
+./docker-build-all-and-run.sh
 ```
 
 ### Start the Containers without rebuilding
 
 ```bash
-cd src/docker docker composedocker compose docker compose up --detach
+cd "$(find ~ -name "institute-person-api" | head -n 1)"
+cd src/docker
+docker compose up --detach
 ```
 
 ### Stoping and Starting the containers without loosing data
 
 ```bash
-cd src/docker docker composedocker compose docker compose stop
-cd src/docker docker composedocker compose docker compose start
+cd "$(find ~ -name "institute-person-api" | head -n 1)"
+cd src/docker 
+docker compose stop
+docker compose start
 ```
 
 ### Restart the containers and Reseting the database
 
 ```bash
-cd src/docker docker composedocker compose docker compose down
-cd src/docker docker composedocker compose docker compose up --deatch
+cd "$(find ~ -name "institute-person-api" | head -n 1)"
+cd src/docker 
+docker compose down
+docker compose up --deatch
 ```
 
 ### Building the API Container
@@ -111,8 +119,7 @@ docker build . --tag institute-person-api
 
 ### A word on ports
 
-NOTE: If you are running the API from the command line with ```go run src/main.go``` the API will be served at port 8080, if you run the API in containers with ```cd src/docker docker composedocker compose docker compose up``` then it will be served at port 8081.
-Adjust the following URI's accordingly.
+NOTE: If you are running the API from the command line with ```cd "$(find ~ -name "institute-person-api" | head -n 1)" && go run src/main.go``` the API will be served at port 8080, if you run the API in containers with ```cd "$(find ~ -name "institute-person-api" | head -n 1)" && cd src/docker && docker compose up``` then it will be served at port 8081.
 
 ### Test Config Endpoint
 
