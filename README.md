@@ -186,3 +186,17 @@ The PATCH_LEVEL file that is located in the same folder as the executable should
 - [ ] Add beter unit testing of breadcrumbs
 - [ ] Fix unit testing that uses byte[] for string comparisons
 - [ ] Add JWT authentication
+
+- [ ] Implement Store interfaces (Store(Collection), ReadStore, PostStore, PatchStore, ReadOnlyStore)
+  - [ ] Refactor config to use list of collection objects {name, version, *Store}
+  - [ ] Store Constructor with config & Collection name
+  - [ ] ReadOnlyStore constructor with filter, projection - calls Store constructor
+  - [ ] ReadStore, PostStore, PatchStore call Store(collection) constructor
+  - [ ] Refactor person_store to implement ReadStore, PostStore, PatchStore and use new config
+  - [ ] Move person_store GetNames, GetFiltered, GetOne, Patch, Post methods to XxxStore Interfaces
+  - [ ] Refactor enum_handlers into ReadHandler with a config & collectionName injected.
+  - [ ] Refactor-replace enumerator_store with ReadStore
+  
+- [ ] Implement readOnlyHandler with ReadOnlyStore getFiltered
+  - [ ] Add get/mentors endpoint with readOnlyHandler
+  - [ ] Add get/partners endpoint with readOnlyHandler
