@@ -27,7 +27,7 @@
 
 This is a simple GoLang API that was written by a polyglot software engineer with the help of ChatGPT, with only a cursory understaqnding of the Go language and MongoDB. See [here](https://chat.openai.com/share/dcb8b738-7e73-40da-8b08-38024f1c9997) for the chat that was used to start.
 
-[Here](./product-api-openapi.yaml) is the Swagger for the API
+[Here](./docs/openapi-spec.yaml) is the Swagger for the API
 
 [Here](https://github.com/orgs/agile-learning-institute/repositories?q=institute-person&type=all&sort=name) are the repositories in the person microservice.
 
@@ -72,7 +72,7 @@ If you want to run both the API and Database containers you can build the databa
 To build and run both of the containers, first clone [data](https://github.com/agile-learning-institute/institute-mongodb) repo as a sibling to this repo, then you can run this script to build both the database and api containers and start the stack.
 
 ```bash
-./docker-build-all.sh
+./src/docker/docker-build-all-and-run.sh
 ```
 
 ### Start the Containers without rebuilding
