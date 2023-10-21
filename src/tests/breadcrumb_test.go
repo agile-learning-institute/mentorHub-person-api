@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"institute-person-api/models"
+	 "institute-person-api/src/models"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

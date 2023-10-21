@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"institute-person-api/config"
-	"institute-person-api/handlers"
-	"institute-person-api/models"
+	 "institute-person-api/src/config"
+	 "institute-person-api/src/handlers"
+	 "institute-person-api/src/models"
 
 	gorillaHandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"

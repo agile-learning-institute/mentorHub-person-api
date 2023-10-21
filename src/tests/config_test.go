@@ -2,7 +2,7 @@ package tests
 
 import (
 	"context"
-	"institute-person-api/config"
+	 "institute-person-api/src/config"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

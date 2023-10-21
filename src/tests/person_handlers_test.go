@@ -1,9 +1,9 @@
 package tests
 
 import (
-	"institute-person-api/handlers"
-	"institute-person-api/mocks"
-	"institute-person-api/models"
+	 "institute-person-api/src/handlers"
+	 "institute-person-api/src/mocks"
+	 "institute-person-api/src/models"
 	"net/http"
 	"net/http/httptest"
 	"strings"

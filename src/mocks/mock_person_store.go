@@ -5,7 +5,7 @@
 package mocks
 
 import (
-	models "institute-person-api/models"
+	models  "institute-person-api/src/models"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"

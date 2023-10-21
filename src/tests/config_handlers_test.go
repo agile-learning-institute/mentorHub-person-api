@@ -1,8 +1,8 @@
 package tests
 
 import (
-	"institute-person-api/config"
-	"institute-person-api/handlers"
+	 "institute-person-api/src/config"
+	 "institute-person-api/src/handlers"
 	"net/http"
 	"net/http/httptest"
 	"testing"

@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"institute-person-api/config"
+	 "institute-person-api/src/config"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"

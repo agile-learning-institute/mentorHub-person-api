@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"institute-person-api/models"
+	 "institute-person-api/src/models"
 
 	"github.com/google/uuid"
 )
