@@ -100,7 +100,7 @@ docker compose start
 cd "$(find ~ -name "institute-person-api" | head -n 1)"
 cd src/docker 
 docker compose down
-docker compose up --deatch
+docker compose up --detach
 ```
 
 ### Building the API Container
