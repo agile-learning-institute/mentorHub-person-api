@@ -1,0 +1,162 @@
+openapi: 3.0.3
+info:
+  title: person API
+  description: |-
+    This is a super simple API for managing persons
+  contact:
+    email: devs@agile-learning.institute
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+paths:
+  /api/person/{id}:
+    patch:
+      summary: Update an existing person
+      description: Update an existing person by Id
+      operationId: updatePerson
+      parameters:
+        - name: id
+          in: path
+          description: ID of person to update
+          required: true
+          schema:
+            type: string
+            format: GUID
+      requestBody:
+        description: Updated field
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'          
+        '404':
+          description: person not found
+        '405':
+          description: Validation exception
+    get:
+      summary: Get an existing person
+      description: Get an existing person by Id
+      operationId: gettPerson
+      parameters:
+        - name: id
+          in: path
+          description: ID of person to return
+          required: true
+          schema:
+            type: string
+            format: GUID
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'          
+        '404':
+          description: person not found
+        '405':
+          description: Validation exception
+  /api/person/:
+    post:
+      description: Add a new person
+      operationId: addperson
+      requestBody:
+        description: Prodcut Name
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'          
+        '405':
+          description: Invalid input
+    get:
+      summary: Get a list of people names and ids
+      description: Get list of people names
+      operationId: getNames
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/People'          
+        '404':
+          description: not found
+        '405':
+          description: Validation exception
+  /api/config/:
+    get:
+      description: Get API Configuration Information
+      operationId: getConfig
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'          
+
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        ID:
+          type: string
+          format: GUID
+        name:
+          type: string
+        description:
+          type: string
+    People: 
+      type: array
+      items:
+        type: object
+        properties: 
+          ID:
+            description: MongoDB _id
+            type: string
+            format: uuid
+          name:
+            description: Person Name
+            type: string      
+    Config:
+      type: object
+      properties:
+        apiVersion:
+          type: string
+        dataVersion:
+          type: string
+        ConfigItems:
+          type: array
+          items:
+            type: object
+            properties: 
+              name:
+                description: Conf Item Name (Env Var Name, File Name)
+                type: string
+              value:
+                description: The value for that config item
+                type: string
+              from:
+                description: Where the value was found
+                type: string
+                enum:
+                  - default
+                  - environment
+                  - file
