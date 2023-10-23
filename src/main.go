@@ -52,14 +52,14 @@ func main() {
 	methodsOk := gorillaHandlers.AllowedMethods([]string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"})
 
 	// Define the Routes
-	gorillaRouter.HandleFunc("/api/person/", readPersonHandler.GetNames).Methods("GET")
 	gorillaRouter.HandleFunc("/api/person/", personHandler.AddPerson).Methods("POST")
-	gorillaRouter.HandleFunc("/api/person/{id}", readPersonHandler.GetOne).Methods("GET")
+	gorillaRouter.HandleFunc("/api/person/", readPersonHandler.GetNames).Methods("GET")
 	gorillaRouter.HandleFunc("/api/person/{id}", personHandler.UpdatePerson).Methods("PATCH")
-	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
+	gorillaRouter.HandleFunc("/api/person/{id}", readPersonHandler.GetOne).Methods("GET")
 	gorillaRouter.HandleFunc("/api/enums/", enumHandler.GetAll).Methods("GET")
 	gorillaRouter.HandleFunc("/api/partners/", partnerHandler.GetNames).Methods("GET")
 	gorillaRouter.HandleFunc("/api/mentors/", mentorHandler.GetNames).Methods("GET")
+	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
 	gorillaRouter.Path("/api/health/").Handler(promhttp.Handler())
 
 	// Start the server with Cors handler
