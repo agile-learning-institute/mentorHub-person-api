@@ -10,6 +10,40 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.11
 paths:
+  /api/person/:
+    post:
+      summary: Add a new person
+      operationId: addperson
+      requestBody:
+        description: Prodcut Name
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'          
+        '405':
+          description: Invalid input
+    get:
+      summary: Get a list of people names and ids
+      operationId: getNames
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Names'          
+        '404':
+          description: not found
+        '405':
+          description: Validation exception
   /api/person/{id}:
     patch:
       summary: Update an existing person
@@ -64,44 +98,42 @@ paths:
           description: person not found
         '405':
           description: Validation exception
-  /api/person/:
-    post:
-      description: Add a new person
-      operationId: addperson
-      requestBody:
-        description: Prodcut Name
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Person'
-        required: true
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Person'          
-        '405':
-          description: Invalid input
+  /api/partners/:
     get:
-      summary: Get a list of people names and ids
-      description: Get list of people names
-      operationId: getNames
+      summary: Get Partner Names
+      operationId: getPartners
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/People'          
-        '404':
-          description: not found
-        '405':
-          description: Validation exception
+                $ref: '#/components/schemas/Names'          
+  /api/mentors/:
+    get:
+      summary: Get Mentor Names
+      operationId: getMentors
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Names'          
+  /api/enums/:
+    get:
+      summary: Get Enumerator Values
+      operationId: getEnums
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enums'          
   /api/config/:
     get:
-      description: Get API Configuration Information
+      summary: Get API Configuration Information
       operationId: getConfig
       responses:
         '200':
@@ -123,7 +155,17 @@ components:
           type: string
         description:
           type: string
-    People: 
+    Enums:
+      type: object
+      properties:
+        ID:
+          type: string
+          format: GUID
+        name:
+          type: string
+        enumrators:
+          type: string
+    Names: 
       type: array
       items:
         type: object
@@ -133,7 +175,7 @@ components:
             type: string
             format: uuid
           name:
-            description: Person Name
+            description: Name
             type: string      
     Config:
       type: object

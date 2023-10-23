@@ -27,7 +27,7 @@
 
 This is a simple GoLang API that was written by a polyglot software engineer with the help of ChatGPT, with only a cursory understaqnding of the Go language and MongoDB. See [here](https://chat.openai.com/share/dcb8b738-7e73-40da-8b08-38024f1c9997) for the chat that was used to start.
 
-[Here](./product-api-openapi.yaml) is the Swagger for the API
+[Here](./docs/openapi-spec.yaml) is the Swagger for the API
 
 [Here](https://github.com/orgs/agile-learning-institute/repositories?q=institute-person&type=all&sort=name) are the repositories in the person microservice.
 
@@ -43,14 +43,14 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 
 ### Building the Database Container
 
-To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-mongodb) and follow the instructions to build the container. Once that container is built you can run it independently using the database docker compose option.
+To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-mongodb) and follow the instructions to build the container. Once that container is built you can run it independently using the database cd src/docker docker composedocker compose docker compose option.
 
 ### Install dependencies and run the API locally
 
 If you have started the database separatly, you can run the API locally
 
 ```bash
-go get -u
+go get 
 go run main.go
 ```
 
@@ -59,31 +59,34 @@ go run main.go
 If you make substantial changes to the interfaces, you may need to regenerate gomock mocks used in unit testing.
 
 ```bash
-mockgen -source=models/person.go -destination=mocks/mock_person.go -package=mocks
-mockgen -source=models/person_store.go -destination=mocks/mock_person_store.go -package=mocks
+mockgen -source=src/models/person.go -destination=src/mocks/mock_person.go -package=mocks
+mockgen -source=src/models/person_store.go -destination=src/mocks/mock_person_store.go -package=mocks
 ```
 
 ## Getting Started for UI Engineers
 
-If you want to run both the API and Database containers you can build the database container as described [above](#building-the-database-container), and then build the API container, and then use the docker compose command below to run both of them together.
+If you want to run both the API and Database containers you can build the database container as described [above](#building-the-database-container), and then build the API container, and then use the cd src/docker docker composedocker compose docker compose command below to run both of them together.
 
-### Bulid and Run in one step
+### Build and Run in one step
 
 To build and run both of the containers, first clone [data](https://github.com/agile-learning-institute/institute-mongodb) repo as a sibling to this repo, then you can run this script to build both the database and api containers and start the stack.
 
 ```bash
-./docker-build-all.sh
+cd ./src/docker
+./docker-build-all-and-run.sh
 ```
 
 ### Start the Containers without rebuilding
 
 ```bash
+cd ./src/docker
 docker compose up --detach
 ```
 
 ### Stoping and Starting the containers without loosing data
 
 ```bash
+cd ./src/docker
 docker compose stop
 docker compose start
 ```
@@ -91,8 +94,9 @@ docker compose start
 ### Restart the containers and Reseting the database
 
 ```bash
+cd ./src/docker 
 docker compose down
-docker compose up --deatch
+docker compose up --detach
 ```
 
 ### Building the API Container
@@ -111,15 +115,7 @@ docker build . --tag institute-person-api
 
 ### A word on ports
 
-NOTE: If you are running the API from the command line with ```go run main.go``` the API will be served at port 8080, if you run the API in containers with ```docker compose up``` then it will be served at port 8081.
-Adjust the following URI's accordingly.
-
-### Test Config Endpoint
-
-```bash
-curl http://localhost:8081/api/config/
-
-```
+NOTE: If you are running the API from the command line with ```go run src/main.go``` the API will be served at port 8080, if you run the API in containers with ```cd ./src/docker && docker compose up``` then it will be served at port 8081.
 
 ### Test Health Endpoint
 
@@ -127,6 +123,33 @@ This endpoint supports the promethius monitoring standards for a healthcheck end
 
 ```bash
 curl http://localhost:8081/api/health/
+
+```
+
+### Test Config Endpoint
+
+```bash
+curl http://localhost:8081/api/config/
+```
+
+### Get Enumerators
+
+```bash
+curl http://localhost:8081/api/enums/
+
+```
+
+### Get Partner Names
+
+```bash
+curl http://localhost:8081/api/partners/
+
+```
+
+### Get Mentor Names
+
+```bash
+curl http://localhost:8081/api/mentors/
 
 ```
 
@@ -183,20 +206,15 @@ The PATCH_LEVEL file that is located in the same folder as the executable should
 - [x] Gorilla Promethius Health endpoint
 - [x] Add breadcrumbs
 - [x] Refactor Person as Simple Class, PersonStore to abstract mongo specific dependencies
-- [ ] Add beter unit testing of breadcrumbs
-- [ ] Fix unit testing that uses byte[] for string comparisons
-- [ ] Add JWT authentication
 
-- [ ] Implement Store interfaces (Store(Collection), ReadStore, PostStore, PatchStore, ReadOnlyStore)
-  - [ ] Refactor config to use list of collection objects {name, version, *Store}
-  - [ ] Store Constructor with config & Collection name
-  - [ ] ReadOnlyStore constructor with filter, projection - calls Store constructor
-  - [ ] ReadStore, PostStore, PatchStore call Store(collection) constructor
-  - [ ] Refactor person_store to implement ReadStore, PostStore, PatchStore and use new config
-  - [ ] Move person_store GetNames, GetFiltered, GetOne, Patch, Post methods to XxxStore Interfaces
-  - [ ] Refactor enum_handlers into ReadHandler with a config & collectionName injected.
-  - [ ] Refactor-replace enumerator_store with ReadStore
-  
-- [ ] Implement readOnlyHandler with ReadOnlyStore getFiltered
-  - [ ] Add get/mentors endpoint with readOnlyHandler
-  - [ ] Add get/partners endpoint with readOnlyHandler
+- [x] Implement MongoStore
+  - [x] Refactor config to use list of Store references objects {name, version, *Store}
+  - [x] Refactor enum_store to mongo_store - move mongo-calls to mongo_store
+  - [x] Refactor person_store to contain mongo_store
+  - [x] Refactor enum_handlers into mongo_handler
+  - [x] Add get/mentors endpoint with readOnlyHandler
+  - [x] Add get/partners endpoint with readOnlyHandler
+  - [x] Refactor Get /person and Get /people to use MongoStore and MongoHandler
+
+- [ ] Add unit testing
+- [ ] Add JWT authentication, update Breadcrumbs

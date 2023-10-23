@@ -1,8 +1,12 @@
-package tests
+package handlers
 
 import (
-	"institute-person-api/config"
-	"institute-person-api/handlers"
+<<<<<<<< HEAD:src/tests/config_handlers_test.go
+	 "institute-person-api/src/config"
+	 "institute-person-api/src/handlers"
+========
+	"institute-person-api/src/config"
+>>>>>>>> store-refactor:src/handlers/config_handlers_test.go
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -13,7 +17,7 @@ import (
 func TestNewConfigHandler(t *testing.T) {
 	// Setup a config
 	config := config.NewConfig()
-	configHandler := handlers.NewConfigHandler(config)
+	configHandler := NewConfigHandler(config)
 
 	// Examine the result
 	assert.NotNil(t, configHandler)
@@ -22,7 +26,7 @@ func TestNewConfigHandler(t *testing.T) {
 func TestGetConfig(t *testing.T) {
 	// Setup
 	config := config.NewConfig()
-	configHandler := handlers.NewConfigHandler(config)
+	configHandler := NewConfigHandler(config)
 	request := httptest.NewRequest("GET", "/config/", nil)
 	responseRecorder := httptest.NewRecorder()
 	// jsonString, _ := json.Marshal(config)
