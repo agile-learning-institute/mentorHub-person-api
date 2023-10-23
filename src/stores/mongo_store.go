@@ -11,12 +11,11 @@ import (
 )
 
 type MongoStore struct {
-	CollectionName    string `json:"name"`
-	Version           string `json:"value"`
-	DefaultQuery      bson.M `json:"defaultQuery"`
-	DefaultProjection bson.D `json:"defaultProjection"`
-	config            *config.Config
-	collection        mongo.Collection
+	CollectionName string `json:"name"`
+	Version        string `json:"value"`
+	DefaultQuery   bson.M `json:"defaultQuery"`
+	config         *config.Config
+	collection     mongo.Collection
 }
 
 /**
@@ -27,26 +26,24 @@ func MongoQueryNotVersion() bson.M {
 }
 
 func MongoShortNameProjection() bson.D {
-	return bson.D{{Key: "name", Value: 1}}
+	return bson.D{{Key: "ID", Value: "$_id"}, {Key: "name", Value: 1}}
 }
 
 /**
 * Construct a PersonStore to handle person database io
  */
-func NewMongoStore(cfg *config.Config, collectionName string, query bson.M, projection bson.D) *MongoStore {
+func NewMongoStore(cfg *config.Config, collectionName string, query bson.M) *MongoStore {
 	this := &MongoStore{}
 
 	// Initilize Store
 	this.config = cfg
 	this.CollectionName = collectionName
 	this.DefaultQuery = query
-	this.DefaultProjection = projection
 	this.collection = cfg.GetCollection(collectionName)
 	this.Version = this.GetVersion()
 
 	// Put the database Version in the Config
 	this.config.AddConfigStore(this.AsStoreItem())
-
 	return this
 }
 
@@ -89,12 +86,12 @@ func (this *MongoStore) FindOneAndUpdate(query bson.M, update bson.M, options *o
 /**
 * Default Query by ID
  */
-func (this *MongoStore) FindId(id string) (*interface{}, error) {
+func (this *MongoStore) FindId(id string) (*map[string]interface{}, error) {
 	// get the bson ID
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	query := bson.M{"_id": objectID}
 
-	var result interface{}
+	var result map[string]interface{}
 	var err error
 	err = this.FindOne(query).Decode(&result)
 	if err != nil {
@@ -106,15 +103,38 @@ func (this *MongoStore) FindId(id string) (*interface{}, error) {
 /**
 * Default FindMany Query
  */
-func (this *MongoStore) FindDocuments() ([]interface{}, error) {
-	var results []interface{}
+func (this *MongoStore) FindDocuments() ([]map[string]interface{}, error) {
+	var results []map[string]interface{}
 	var err error
 
-	// Put the default projection into options
-	options := options.Find().SetProjection(this.DefaultProjection)
+	// Query the database
+	opts := options.Find()
+	cursor, err := this.FindMany(this.DefaultQuery, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	// Fetch all the results
+	context, cancel := this.config.GetTimeoutContext()
+	defer cancel()
+	err = cursor.All(context, &results)
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}
+
+/**
+* Default FindMany Query
+ */
+func (this *MongoStore) FindNames() ([]models.ShortName, error) {
+	var results []models.ShortName
+	var err error
 
 	// Query the database
-	cursor, err := this.FindMany(this.DefaultQuery, options)
+	opts := options.Find().SetProjection(MongoShortNameProjection())
+	cursor, err := this.FindMany(this.DefaultQuery, opts)
 	if err != nil {
 		return nil, err
 	}

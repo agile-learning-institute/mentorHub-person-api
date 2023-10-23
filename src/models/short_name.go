@@ -5,6 +5,6 @@ import (
 )
 
 type ShortName struct {
-	ID   primitive.ObjectID `bson:"_id,omitempty"`
+	ID   primitive.ObjectID `bson:"ID,omitempty"`
 	Name string             `json:"name,omitempty"`
 }

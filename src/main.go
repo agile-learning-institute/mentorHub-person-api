@@ -25,10 +25,10 @@ func main() {
 	defer config.Disconnect()
 
 	// Setup the Stores
-	enumStore := stores.NewMongoStore(config, "enumerators", stores.MongoQueryNotVersion(), nil)
-	mentorStore := stores.NewMongoStore(config, "person", bson.M{"mentor": true}, stores.MongoShortNameProjection())
-	partnerStore := stores.NewMongoStore(config, "partners", stores.MongoQueryNotVersion(), stores.MongoShortNameProjection())
-	readPersonStore := stores.NewMongoStore(config, "person", stores.MongoQueryNotVersion(), stores.MongoShortNameProjection())
+	enumStore := stores.NewMongoStore(config, "enumerators", stores.MongoQueryNotVersion())
+	mentorStore := stores.NewMongoStore(config, "people", bson.M{"mentor": true})
+	partnerStore := stores.NewMongoStore(config, "partners", stores.MongoQueryNotVersion())
+	readPersonStore := stores.NewMongoStore(config, "people", stores.MongoQueryNotVersion())
 	personStore := stores.NewPersonStore(config)
 
 	// Setup the Handlers
@@ -52,14 +52,14 @@ func main() {
 	methodsOk := gorillaHandlers.AllowedMethods([]string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"})
 
 	// Define the Routes
-	gorillaRouter.HandleFunc("/api/person/", readPersonHandler.GetAll).Methods("GET")
+	gorillaRouter.HandleFunc("/api/person/", readPersonHandler.GetNames).Methods("GET")
 	gorillaRouter.HandleFunc("/api/person/", personHandler.AddPerson).Methods("POST")
 	gorillaRouter.HandleFunc("/api/person/{id}", readPersonHandler.GetOne).Methods("GET")
 	gorillaRouter.HandleFunc("/api/person/{id}", personHandler.UpdatePerson).Methods("PATCH")
 	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
 	gorillaRouter.HandleFunc("/api/enums/", enumHandler.GetAll).Methods("GET")
-	gorillaRouter.HandleFunc("/api/partners/", partnerHandler.GetAll).Methods("GET")
-	gorillaRouter.HandleFunc("/api/mentors/", mentorHandler.GetAll).Methods("GET")
+	gorillaRouter.HandleFunc("/api/partners/", partnerHandler.GetNames).Methods("GET")
+	gorillaRouter.HandleFunc("/api/mentors/", mentorHandler.GetNames).Methods("GET")
 	gorillaRouter.Path("/api/health/").Handler(promhttp.Handler())
 
 	// Start the server with Cors handler

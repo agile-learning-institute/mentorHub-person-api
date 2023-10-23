@@ -34,6 +34,12 @@ func TestNewConfig(t *testing.T) {
 	assert.Equal(t, ":8080", cfg.ConfigItems[5].Value)
 }
 
+func TestConnect(t *testing.T) {
+	config := NewConfig()
+	config.Connect()
+	assert.NotNil(t, config)
+}
+
 func TestDisconnect(t *testing.T) {
 	config := NewConfig()
 	assert.NotNil(t, config)

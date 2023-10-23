@@ -26,14 +26,14 @@ const (
 func NewPersonStore(cfg *config.Config) *PersonStore {
 	this := &PersonStore{}
 	this.config = cfg
-	this.Store = NewMongoStore(cfg, CollectionName, MongoQueryNotVersion(), MongoShortNameProjection())
+	this.Store = NewMongoStore(cfg, CollectionName, MongoQueryNotVersion())
 	return this
 }
 
 /**
 * Insert a new person with the information provided
  */
-func (this *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (*interface{}, error) {
+func (this *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (*map[string]interface{}, error) {
 	// Get the document values
 	var insertValues bson.M
 	err := json.Unmarshal(information, &insertValues)
