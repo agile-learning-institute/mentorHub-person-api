@@ -17,8 +17,11 @@ import (
 )
 
 func main() {
-	// Setup the Config (With Database Connection)
+	// Setup the Config
 	config := config.NewConfig()
+
+	// Connect to the database
+	config.Connect()
 	defer config.Disconnect()
 
 	// Setup the Stores

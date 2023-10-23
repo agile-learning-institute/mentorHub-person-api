@@ -62,26 +62,34 @@ func NewConfig() *Config {
 	this.port = this.findStringValue("PORT", DefaultPort, false)
 	this.ApiVersion = VersionMajor + "." + VersionMinor + "." + this.patch
 
-	// Connect to the database
-	ctx, cancel := this.GetTimeoutContext()
-	this.cancel = cancel
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(this.connectionString))
-	if err != nil {
-		cancel()
-		log.Fatal("Database Connection Failed:", err)
-	}
-
-	// Get the database and collection objects
-	this.client = client
-	this.database = this.client.Database(this.databaseName)
-
 	return this
 }
 
 /**
 * Disconnect fromthe Database
  */
+func (cfg *Config) Connect() {
+	// Connect to the database
+	ctx, cancel := cfg.GetTimeoutContext()
+	cfg.cancel = cancel
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(cfg.connectionString))
+	if err != nil {
+		cancel()
+		log.Fatal("Database Connection Failed:", err)
+	}
+
+	// Get the database and collection objects
+	cfg.client = client
+	cfg.database = cfg.client.Database(cfg.databaseName)
+}
+
+/**
+* Disconnect fromthe Database
+ */
 func (cfg *Config) Disconnect() {
+	ctx, cancel := cfg.GetTimeoutContext()
+	defer cancel()
+	cfg.client.Disconnect(ctx)
 	cfg.cancel()
 }
 
