@@ -1,10 +1,17 @@
-cd "$(find ~ -name "institute-mongodb" | head -n 1)"
+#!/bin/bash
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [[ "$PWD" != *"$script_dir"* ]]; then
+  cd $script_dir
+fi
+
+cd ../../../institute-mongodb
 ./docker-build.sh
 
-cd "$(find ~ -name "institute-person-api" | head -n 1)"
-cd src/docker
+cd ../institute-person-api/src/docker
 ./docker-build.sh
 
 docker image prune -f
 
-docker-compose up --detach
+docker compose up --detach

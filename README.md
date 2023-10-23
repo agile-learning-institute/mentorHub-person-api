@@ -67,29 +67,26 @@ mockgen -source=src/models/person_store.go -destination=src/mocks/mock_person_st
 
 If you want to run both the API and Database containers you can build the database container as described [above](#building-the-database-container), and then build the API container, and then use the cd src/docker docker composedocker compose docker compose command below to run both of them together.
 
-### Bulid and Run in one step
+### Build and Run in one step
 
 To build and run both of the containers, first clone [data](https://github.com/agile-learning-institute/institute-mongodb) repo as a sibling to this repo, then you can run this script to build both the database and api containers and start the stack.
 
 ```bash
-cd "$(find ~ -name "institute-person-api" | head -n 1)"
-cd src/docker
+cd ./src/docker
 ./docker-build-all-and-run.sh
 ```
 
 ### Start the Containers without rebuilding
 
 ```bash
-cd "$(find ~ -name "institute-person-api" | head -n 1)"
-cd src/docker
+cd ./src/docker
 docker compose up --detach
 ```
 
 ### Stoping and Starting the containers without loosing data
 
 ```bash
-cd "$(find ~ -name "institute-person-api" | head -n 1)"
-cd src/docker 
+cd ./src/docker
 docker compose stop
 docker compose start
 ```
@@ -97,8 +94,7 @@ docker compose start
 ### Restart the containers and Reseting the database
 
 ```bash
-cd "$(find ~ -name "institute-person-api" | head -n 1)"
-cd src/docker 
+cd ./src/docker 
 docker compose down
 docker compose up --detach
 ```
@@ -119,13 +115,12 @@ docker build . --tag institute-person-api
 
 ### A word on ports
 
-NOTE: If you are running the API from the command line with ```cd "$(find ~ -name "institute-person-api" | head -n 1)" && go run src/main.go``` the API will be served at port 8080, if you run the API in containers with ```cd "$(find ~ -name "institute-person-api" | head -n 1)" && cd src/docker && docker compose up``` then it will be served at port 8081.
+NOTE: If you are running the API from the command line with ```go run src/main.go``` the API will be served at port 8080, if you run the API in containers with ```cd ./src/docker && docker compose up``` then it will be served at port 8081.
 
 ### Test Config Endpoint
 
 ```bash
 curl http://localhost:8081/api/config/
-
 ```
 
 ### Test Health Endpoint
