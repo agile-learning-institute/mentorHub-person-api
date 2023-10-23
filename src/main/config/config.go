@@ -2,9 +2,13 @@ package config
 
 import (
 	"context"
+	"log"
 	"os"
 	"strconv"
 	"time"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type ConfigItem struct {
@@ -13,31 +17,34 @@ type ConfigItem struct {
 	From  string `json:"from"`
 }
 
+type StoreItem struct {
+	CollectionName string `json:"collectionName"`
+	Version        string `json:"version"`
+}
+
 type Config struct {
-	ConfigItems              []*ConfigItem
-	ApiVersion               string
-	PeopleVersion            string
-	EnumVersion              string
-	port                     string
-	patch                    string
-	configFolder             string
-	peopleCollectionName     string
-	enumeratorCollectionName string
-	databaseName             string
-	databaseTimeout          int
-	connectionString         string
+	ConfigItems      []*ConfigItem
+	Stores           []*StoreItem
+	ApiVersion       string
+	port             string
+	patch            string
+	configFolder     string
+	databaseName     string
+	databaseTimeout  int
+	connectionString string
+	client           *mongo.Client
+	database         *mongo.Database
+	cancel           context.CancelFunc
 }
 
 const (
-	VersionMajor                = "1"
-	VersionMinor                = "1"
-	DefaultConfigFolder         = "./"
-	DefaultConnectionString     = "mongodb://root:example@localhost:27017/?tls=false&directConnection=true"
-	DefaultDatabaseName         = "agile-learning-institute"
-	DefaultPeopleCollectionName = "people"
-	DefaultEnumCollectionName   = "enumerators"
-	DefaultPort                 = ":8080"
-	DefaultTimeout              = 10
+	VersionMajor            = "1"
+	VersionMinor            = "1"
+	DefaultConfigFolder     = "./"
+	DefaultConnectionString = "mongodb://root:example@localhost:27017/?tls=false&directConnection=true"
+	DefaultDatabaseName     = "agile-learning-institute"
+	DefaultPort             = ":8080"
+	DefaultTimeout          = 10
 )
 
 /**
@@ -45,61 +52,58 @@ const (
  */
 func NewConfig() *Config {
 	this := &Config{}
+
+	// Load Confiuration Values
 	this.patch = this.findStringValue("PATCH_LEVEL", "LocalDev", false)
 	this.configFolder = this.findStringValue("CONFIG_FOLDER", DefaultConfigFolder, false)
 	this.connectionString = this.findStringValue("CONNECTION_STRING", DefaultConnectionString, true)
 	this.databaseName = this.findStringValue("DATABASE_NAME", DefaultDatabaseName, false)
-	this.peopleCollectionName = this.findStringValue("PEOPLE_COLLECTION_NAME", DefaultPeopleCollectionName, false)
-	this.enumeratorCollectionName = this.findStringValue("ENUM_COLLECTION_NAME", DefaultEnumCollectionName, false)
 	this.databaseTimeout = this.findIntValue("CONNECTION_TIMEOUT", DefaultTimeout, false)
 	this.port = this.findStringValue("PORT", DefaultPort, false)
 	this.ApiVersion = VersionMajor + "." + VersionMinor + "." + this.patch
-	this.PeopleVersion = "Pending"
-	this.EnumVersion = "Pending"
+
+	// Connect to the database
+	ctx, cancel := this.GetTimeoutContext()
+	this.cancel = cancel
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(this.connectionString))
+	if err != nil {
+		cancel()
+		log.Fatal("Database Connection Failed:", err)
+	}
+
+	// Get the database and collection objects
+	this.client = client
+	this.database = this.client.Database(this.databaseName)
+
 	return this
 }
 
 /**
-* Simple Getters - Read Only attributes
+* Disconnect fromthe Database
  */
-func (cfg *Config) GetConfigFolder() string {
-	return cfg.configFolder
+func (cfg *Config) Disconnect() {
+	cfg.cancel()
 }
 
-func (cfg *Config) GetConnectionString() string {
-	return cfg.connectionString
-}
-
-func (cfg *Config) GetDatabaseName() string {
-	return cfg.databaseName
-}
-
-func (cfg *Config) GetDatabaseTimeout() int {
-	return cfg.databaseTimeout
-}
-
-func (cfg *Config) GetPatch() string {
-	return cfg.patch
-}
-
-func (cfg *Config) GetPeopleCollectionName() string {
-	return cfg.peopleCollectionName
-}
-
-func (cfg *Config) GetEnumeratorCollectionName() string {
-	return cfg.enumeratorCollectionName
-}
-
+/**
+* Get the port config value
+ */
 func (cfg *Config) GetPort() string {
 	return cfg.port
 }
 
-func (cfg *Config) SetPeopleVersion(theVersion string) {
-	cfg.PeopleVersion = theVersion
+/**
+* Get mongo Collection
+ */
+func (cfg *Config) GetCollection(name string) mongo.Collection {
+	return *cfg.database.Collection(name)
 }
 
-func (cfg *Config) SetEnumVersion(theVersion string) {
-	cfg.EnumVersion = theVersion
+/**
+* Register a Config Store
+ */
+func (cfg *Config) AddConfigStore(theStore *StoreItem) {
+	cfg.Stores = append(cfg.Stores, theStore)
 }
 
 /**

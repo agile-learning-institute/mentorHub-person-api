@@ -50,7 +50,7 @@ To run locally, you need to build the database container. Clone [this repo](http
 If you have started the database separatly, you can run the API locally
 
 ```bash
-go get -u
+go get 
 go run main.go
 ```
 
