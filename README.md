@@ -114,6 +114,15 @@ docker build . --tag institute-person-api
 NOTE: If you are running the API from the command line with ```go run main.go``` the API will be served at port 8080, if you run the API in containers with ```docker compose up``` then it will be served at port 8081.
 Adjust the following URI's accordingly.
 
+### Test Health Endpoint
+
+This endpoint supports the promethius monitoring standards for a healthcheck endpoint
+
+```bash
+curl http://localhost:8081/api/health/
+
+```
+
 ### Test Config Endpoint
 
 ```bash
@@ -121,12 +130,24 @@ curl http://localhost:8081/api/config/
 
 ```
 
-### Test Health Endpoint
-
-This endpoint supports the promethius monitoring standards for a healthcheck endpoint
+### Get Enumerators
 
 ```bash
-curl http://localhost:8081/api/health/
+curl http://localhost:8081/api/enums/
+
+```
+
+### Get Partner Names
+
+```bash
+curl http://localhost:8081/api/partners/
+
+```
+
+### Get Mentor Names
+
+```bash
+curl http://localhost:8081/api/mentors/
 
 ```
 
