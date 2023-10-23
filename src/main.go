@@ -4,41 +4,38 @@ package main
 import (
 	"log"
 	"net/http"
-
-	 "institute-person-api/src/config"
-	 "institute-person-api/src/handlers"
-	 "institute-person-api/src/models"
-
+	"institute-person-api/src/config"
+	"institute-person-api/src/handlers"
+	"institute-person-api/src/stores"
 	gorillaHandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	muxprom "gitlab.com/msvechla/mux-prometheus/pkg/middleware"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func main() {
-	// Setup the ConfigHandler
+	// Setup the Config
 	config := config.NewConfig()
 
-	// Setup the EnumeratorStore
-	var enumStore *models.EnumeratorStore
-	var err error
-	enumStore, err = models.NewEnumeratorStore(config)
-	if err != nil {
-		log.Fatal("PersonStore Construction Error:", err)
-	}
+	// Connect to the database
+	config.Connect()
+	defer config.Disconnect()
 
-	// Setup the PersonStore
-	var personStore models.PersonStoreInterface
-	personStore, err = models.NewPersonStore(config)
-	defer personStore.Disconnect()
-	if err != nil {
-		log.Fatal("PersonStore Construction Error:", err)
-	}
+	// Setup the Stores
+	enumStore := stores.NewMongoStore(config, "enumerators", stores.MongoQueryNotVersion())
+	mentorStore := stores.NewMongoStore(config, "people", bson.M{"mentor": true})
+	partnerStore := stores.NewMongoStore(config, "partners", stores.MongoQueryNotVersion())
+	readPersonStore := stores.NewMongoStore(config, "people", stores.MongoQueryNotVersion())
+	personStore := stores.NewPersonStore(config)
 
 	// Setup the Handlers
-	personHandler := handlers.NewPersonHandler(personStore)
 	configHandler := handlers.NewConfigHandler(config)
-	enumHandler := handlers.NewEnumHandler(enumStore)
+	enumHandler := handlers.NewMongoHandler(enumStore)
+	mentorHandler := handlers.NewMongoHandler(mentorStore)
+	partnerHandler := handlers.NewMongoHandler(partnerStore)
+	readPersonHandler := handlers.NewMongoHandler(readPersonStore)
+	personHandler := handlers.NewPersonHandler(personStore)
 
 	// Setup the HttpServer Router
 	gorillaRouter := mux.NewRouter()
@@ -53,19 +50,21 @@ func main() {
 	methodsOk := gorillaHandlers.AllowedMethods([]string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"})
 
 	// Define the Routes
-	gorillaRouter.Path("/api/health/").Handler(promhttp.Handler())
 	gorillaRouter.HandleFunc("/api/person/", personHandler.AddPerson).Methods("POST")
-	gorillaRouter.HandleFunc("/api/person/", personHandler.GetPeople).Methods("GET")
-	gorillaRouter.HandleFunc("/api/person/{id}", personHandler.GetPerson).Methods("GET")
+	gorillaRouter.HandleFunc("/api/person/", readPersonHandler.GetNames).Methods("GET")
 	gorillaRouter.HandleFunc("/api/person/{id}", personHandler.UpdatePerson).Methods("PATCH")
+	gorillaRouter.HandleFunc("/api/person/{id}", readPersonHandler.GetOne).Methods("GET")
+	gorillaRouter.HandleFunc("/api/enums/", enumHandler.GetAll).Methods("GET")
+	gorillaRouter.HandleFunc("/api/partners/", partnerHandler.GetNames).Methods("GET")
+	gorillaRouter.HandleFunc("/api/mentors/", mentorHandler.GetNames).Methods("GET")
 	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
-	gorillaRouter.HandleFunc("/api/enums/", enumHandler.GetEnums).Methods("GET")
+	gorillaRouter.Path("/api/health/").Handler(promhttp.Handler())
 
 	// Start the server with Cors handler
 	port := config.GetPort()
 	log.Printf("INFO: API Server Version %s", config.ApiVersion)
 	log.Printf("INFO: Server Listening at %s", port)
-	err = http.ListenAndServe(port, gorillaHandlers.CORS(originsOk, headersOk, methodsOk)(gorillaRouter))
+	err := http.ListenAndServe(port, gorillaHandlers.CORS(originsOk, headersOk, methodsOk)(gorillaRouter))
 	if err != nil {
 		log.Println("ERROR: Server Ending with error", err)
 	}

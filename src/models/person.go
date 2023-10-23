@@ -4,10 +4,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type PersonShort struct {
-	ID   primitive.ObjectID `bson:"_id,omitempty"`
-	Name string             `json:"name,omitempty"`
-}
 type Person struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
 	Name        string             `json:"name,omitempty"`
@@ -26,9 +22,4 @@ type Person struct {
 	MentorName  string             `json:"mentorName,omitempty"`
 	PartnerName string             `json:"partnerName,omitempty"`
 	LastSaved   *BreadCrumb        `json:"lastSaved,omitempty"`
-}
-
-func NewPerson(theStore PersonStoreInterface) *Person {
-	this := &Person{}
-	return this
 }

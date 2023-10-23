@@ -50,8 +50,8 @@ To run locally, you need to build the database container. Clone [this repo](http
 If you have started the database separatly, you can run the API locally
 
 ```bash
-go get -u
-go run src/main.go
+go get 
+go run main.go
 ```
 
 ### Generate fresh mocks
@@ -117,18 +117,39 @@ docker build . --tag institute-person-api
 
 NOTE: If you are running the API from the command line with ```go run src/main.go``` the API will be served at port 8080, if you run the API in containers with ```cd ./src/docker && docker compose up``` then it will be served at port 8081.
 
-### Test Config Endpoint
-
-```bash
-curl http://localhost:8081/api/config/
-```
-
 ### Test Health Endpoint
 
 This endpoint supports the promethius monitoring standards for a healthcheck endpoint
 
 ```bash
 curl http://localhost:8081/api/health/
+
+```
+
+### Test Config Endpoint
+
+```bash
+curl http://localhost:8081/api/config/
+```
+
+### Get Enumerators
+
+```bash
+curl http://localhost:8081/api/enums/
+
+```
+
+### Get Partner Names
+
+```bash
+curl http://localhost:8081/api/partners/
+
+```
+
+### Get Mentor Names
+
+```bash
+curl http://localhost:8081/api/mentors/
 
 ```
 
@@ -185,6 +206,15 @@ The PATCH_LEVEL file that is located in the same folder as the executable should
 - [x] Gorilla Promethius Health endpoint
 - [x] Add breadcrumbs
 - [x] Refactor Person as Simple Class, PersonStore to abstract mongo specific dependencies
-- [ ] Add beter unit testing of breadcrumbs
-- [ ] Fix unit testing that uses byte[] for string comparisons
-- [ ] Add JWT authentication
+
+- [x] Implement MongoStore
+  - [x] Refactor config to use list of Store references objects {name, version, *Store}
+  - [x] Refactor enum_store to mongo_store - move mongo-calls to mongo_store
+  - [x] Refactor person_store to contain mongo_store
+  - [x] Refactor enum_handlers into mongo_handler
+  - [x] Add get/mentors endpoint with readOnlyHandler
+  - [x] Add get/partners endpoint with readOnlyHandler
+  - [x] Refactor Get /person and Get /people to use MongoStore and MongoHandler
+
+- [ ] Add unit testing
+- [ ] Add JWT authentication, update Breadcrumbs
