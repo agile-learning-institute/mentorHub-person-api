@@ -3,8 +3,8 @@ package stores
 import (
 	"encoding/json"
 
-	"institute-person-api/src/main/config"
-	"institute-person-api/src/main/models"
+	"institute-person-api/src/config"
+	"institute-person-api/src/models"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

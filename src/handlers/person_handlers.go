@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	"institute-person-api/src/main/models"
-	"institute-person-api/src/main/stores"
+	"institute-person-api/src/models"
+	"institute-person-api/src/stores"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
