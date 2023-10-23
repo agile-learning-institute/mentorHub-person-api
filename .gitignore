@@ -23,6 +23,3 @@ PATCH_LEVEL
 
 # Go workspace file
 go.work
-
-# Go workspace file
-go.work
