@@ -1,12 +1,7 @@
 package models
 
 import (
-<<<<<<<< HEAD:src/tests/breadcrumb_test.go
-	 "institute-person-api/src/models"
-========
->>>>>>>> store-refactor:src/models/breadcrumb_test.go
 	"testing"
-
 	"github.com/stretchr/testify/assert"
 )
 

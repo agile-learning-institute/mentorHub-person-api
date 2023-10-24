@@ -1,16 +1,10 @@
 package handlers
 
 import (
-<<<<<<<< HEAD:src/tests/config_handlers_test.go
-	 "institute-person-api/src/config"
-	 "institute-person-api/src/handlers"
-========
 	"institute-person-api/src/config"
->>>>>>>> store-refactor:src/handlers/config_handlers_test.go
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
 	"github.com/stretchr/testify/assert"
 )
 
