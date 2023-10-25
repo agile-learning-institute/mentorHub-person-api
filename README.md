@@ -36,7 +36,11 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 ## Prerequisits
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+  - For Mac ```brew install docker```
 - [Go Language](https://go.dev/doc/install)
+
+### Optional
+
 - [Mongo Compass](https://www.mongodb.com/try/download/compass) - if you want a way to look into the database
 
 ## Getting Started for API Engineers
