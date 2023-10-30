@@ -12,8 +12,8 @@ import (
 )
 
 type PersonStore struct {
-	config *config.Config
-	Store  *MongoStore
+	config     *config.Config
+	MongoStore *MongoStore
 }
 
 const (
@@ -26,7 +26,7 @@ const (
 func NewPersonStore(cfg *config.Config) *PersonStore {
 	this := &PersonStore{}
 	this.config = cfg
-	this.Store = NewMongoStore(cfg, CollectionName, MongoQueryNotVersion())
+	this.MongoStore = NewMongoStore(cfg, "people", MongoQueryNotVersion())
 	return this
 }
 
@@ -45,7 +45,7 @@ func (this *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (*
 	insertValues["lastSaved"] = crumb
 
 	// Insert the document
-	result, err := this.Store.InsertOne(insertValues)
+	result, err := this.MongoStore.InsertOne(insertValues)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func (this *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (*
 	id := result.InsertedID.(primitive.ObjectID).Hex()
 
 	// Get the new document
-	return this.Store.FindId(id)
+	return this.MongoStore.FindId(id)
 }
 
 /**
@@ -83,7 +83,7 @@ func (this *PersonStore) FindOneAndUpdate(id string, request []byte, crumb *mode
 	options := options.FindOneAndUpdate().SetReturnDocument(options.After)
 
 	// Update the document
-	err = this.Store.FindOneAndUpdate(query, update, options).Decode(&thePerson)
+	err = this.MongoStore.FindOneAndUpdate(query, update, options).Decode(&thePerson)
 	if err != nil {
 		// throw the error up the call stack
 		return nil, err

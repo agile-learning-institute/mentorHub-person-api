@@ -84,6 +84,35 @@ func (this *MongoStore) FindOneAndUpdate(query bson.M, update bson.M, options *o
 }
 
 /**
+* Get the collection schema version
+ */
+func (this *MongoStore) GetVersion() string {
+	var theVersion models.VersionInfo
+	var err error
+
+	query := bson.M{"name": "VERSION"}
+	context, cancel := this.config.GetTimeoutContext()
+	defer cancel()
+	err = this.collection.FindOne(context, query).Decode(&theVersion)
+	if err != nil {
+		return err.Error()
+	}
+	return theVersion.Version
+}
+
+/**
+* Describe this Store as a ConfigStore
+ */
+func (this *MongoStore) AsStoreItem() *config.StoreItem {
+	var storeItem config.StoreItem
+	storeItem = config.StoreItem{
+		CollectionName: this.CollectionName,
+		Version:        this.Version,
+	}
+	return &storeItem
+}
+
+/**
 * Default Query by ID
  */
 func (this *MongoStore) FindId(id string) (*map[string]interface{}, error) {
@@ -126,7 +155,7 @@ func (this *MongoStore) FindDocuments() ([]map[string]interface{}, error) {
 }
 
 /**
-* Default FindMany Query
+* Default Find Names Query
  */
 func (this *MongoStore) FindNames() ([]models.ShortName, error) {
 	var results []models.ShortName
@@ -148,33 +177,4 @@ func (this *MongoStore) FindNames() ([]models.ShortName, error) {
 	}
 
 	return results, nil
-}
-
-/**
-* Get the collection schema version
- */
-func (this *MongoStore) GetVersion() string {
-	var theVersion models.VersionInfo
-	var err error
-
-	query := bson.M{"name": "VERSION"}
-	context, cancel := this.config.GetTimeoutContext()
-	defer cancel()
-	err = this.collection.FindOne(context, query).Decode(&theVersion)
-	if err != nil {
-		return err.Error()
-	}
-	return theVersion.Version
-}
-
-/**
-* Describe this Store as a ConfigStore
- */
-func (this *MongoStore) AsStoreItem() *config.StoreItem {
-	var storeItem config.StoreItem
-	storeItem = config.StoreItem{
-		CollectionName: this.CollectionName,
-		Version:        this.Version,
-	}
-	return &storeItem
 }
