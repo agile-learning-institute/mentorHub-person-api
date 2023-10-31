@@ -24,7 +24,7 @@ fi
 echo $BRANCH.$PATCH > PATCH_LEVEL
 
 # Build Docker image
-docker build ./src/docker --tag ghcr.io/agile-learning-institute/institute-person-api:latest --tag ghcr.io/agile-learning-institute/institute-person-api:$BRANCH.$PATCH
+docker build . --tag ghcr.io/agile-learning-institute/institute-person-api:latest
 if [ $? -ne 0 ]; then
     echo "Docker build failed"
     exit 1
