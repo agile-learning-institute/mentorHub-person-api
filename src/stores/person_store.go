@@ -26,7 +26,7 @@ const (
 func NewPersonStore(cfg *config.Config) *PersonStore {
 	this := &PersonStore{}
 	this.config = cfg
-	this.MongoStore = NewMongoStore(cfg, "people", MongoQueryNotVersion())
+	this.MongoStore = NewMongoStore(cfg, "people", nil)
 	return this
 }
 

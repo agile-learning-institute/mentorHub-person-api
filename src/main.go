@@ -2,11 +2,12 @@
 package main
 
 import (
-	"log"
-	"net/http"
 	"institute-person-api/src/config"
 	"institute-person-api/src/handlers"
 	"institute-person-api/src/stores"
+	"log"
+	"net/http"
+
 	gorillaHandlers "github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -24,8 +25,8 @@ func main() {
 
 	// Setup the Stores
 	personStore := stores.NewPersonStore(config)
-	enumStore := stores.NewMongoStore(config, "enumerators", stores.MongoQueryNotVersion())
-	partnerStore := stores.NewMongoStore(config, "partners", stores.MongoQueryNotVersion())
+	enumStore := stores.NewMongoStore(config, "enumerators", nil)
+	partnerStore := stores.NewMongoStore(config, "partners", nil)
 	mentorStore := stores.NewMongoStore(config, "people", bson.M{"mentor": true})
 
 	// Setup the Handlers

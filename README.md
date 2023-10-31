@@ -4,32 +4,18 @@
 
 - [Overview](#overview)
 - [Prerequisits](#prerequisits)
-- Getting Started [for API Engineers](#getting-started-for-api-engineers)
-  - [Building the Database Container](#building-the-database-container)
+- [Run Containers for UI Development](#run-the-database-and-api-containers-locally-for-ui-development)
+- [for API Engineers](#for-api-engineers)
+  - [Using the Database Container](#using-the-database-container)
   - [Install dependencies and run the API locally](#install-dependencies-and-run-the-api-locally)
-- Getting Started [for UI Engineers](#getting-started-for-ui-engineers)
-  - [Building and Run the API in one step](#bulid-and-run-in-one-step)
-  - [Start the Containers without rebuilding](#start-the-containers-without-rebuilding)
-  - [Stoping and Starting the containers without loosing data](#stoping-and-starting-the-containers-without-loosing-data)
-  - [Restart the containers and Reseting the database](#restart-the-containers-and-reseting-the-database)
-- Local API Testing with [CURL](#local-api-testing-with-curl)
-  - [A word on ports](#a-word-on-ports)
-  - [Test Config Endpoint](#test-config-endpoint)
-  - [Test Health Endpoint](#test-health-endpoint)
-  - [Test find all people with IDs](#test-find-all-people-with-ids)
-  - [Test get a person](#test-get-a-person)
-  - [Test add a person](#test-add-a-person)
-  - [Test update a person](#test-update-a-person)
+  - [Building and testing containers locally](#building-and-testing-the-container-locally)
+- [Local API Testing with CURL](#local-api-testing-with-curl)
 - [Observability and Configuration](#observability-and-configuration)
 - [Backlog and Feature Branch info](#backlog-and-feature-branch-info)
 
 ## Overview
 
 This is a simple GoLang API that was written by a polyglot software engineer with the help of ChatGPT, with only a cursory understaqnding of the Go language and MongoDB. See [here](https://chat.openai.com/share/dcb8b738-7e73-40da-8b08-38024f1c9997) for the chat that was used to start.
-
-[Here](./docs/openapi-spec.yaml) is the Swagger for the API
-
-[Here](https://github.com/orgs/agile-learning-institute/repositories?q=institute-person&type=all&sort=name) are the repositories in the person microservice.
 
 [Here](https://github.com/orgs/agile-learning-institute/repositories?q=institute&type=all&sort=name) are all of the repositories in the [Institute](https://github.com/agile-learning-institute/institute/tree/main) system
 
@@ -43,11 +29,19 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 
 - [Mongo Compass](https://www.mongodb.com/try/download/compass) - if you want a way to look into the database
 
-## Getting Started for API Engineers
+## Run the Database and API Containers locally for UI Development
 
-### Building the Database Container
+```bash
+curl https://raw.githubusercontent.com/agile-learning-institute/institute-person-api/main/src/docker/run-local-api.sh | /bin/bash
+```
 
-To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-mongodb) and follow the instructions to build the container. Once that container is built you can run it independently using the database cd src/docker docker composedocker compose docker compose option.
+You can review the script at ./src/docker/run-local-api.sh
+
+## For API Engineers
+
+### Using the Database Container
+
+If you want a local database, with test data preloaded, you can run the database containers independently. See [this repo](https://github.com/agile-learning-institute/institute-mongodb) for instructions on how to run the database containers.
 
 ### Install dependencies and run the API locally
 
@@ -58,29 +52,23 @@ go get
 go run main.go
 ```
 
-### Generate fresh mocks
+## Building and Testing the container locally
 
-If you make substantial changes to the interfaces, you may need to regenerate gomock mocks used in unit testing.
-
-```bash
-mockgen -source=src/models/person.go -destination=src/mocks/mock_person.go -package=mocks
-mockgen -source=src/models/person_store.go -destination=src/mocks/mock_person_store.go -package=mocks
-```
-
-## Getting Started for UI Engineers
-
-If you want to run both the API and Database containers you can build the database container as described [above](#building-the-database-container), and then build the API container, and then use the cd src/docker docker composedocker compose docker compose command below to run both of them together.
-
-### Build and Run in one step
-
-To build and run both of the containers, first clone [data](https://github.com/agile-learning-institute/institute-mongodb) repo as a sibling to this repo, then you can run this script to build both the database and api containers and start the stack.
+If you have started the database container seperatly, you will need to stop it before testing this container. Use the following commands to do this.
 
 ```bash
-cd ./src/docker
-./docker-build-all-and-run.sh
+cd db
+docker compose down
+cd ..
 ```
 
-### Start the Containers without rebuilding
+### Build the API container locally
+
+```bash
+./src/docker/docker-build.sh
+```
+
+### Start the Containers
 
 ```bash
 cd ./src/docker
@@ -98,28 +86,17 @@ docker compose start
 ### Restart the containers and Reseting the database
 
 ```bash
-cd ./src/docker 
+cd ./src/docker
 docker compose down
-docker compose up --detach
-```
-
-### Building the API Container
-
-The containerization expects the go API to be compiled to a linux binary, and the PATCH_LEVEL file to contain the build hash. This has not bee tested on Apple silicone, or Windows. If you run ```docker-build.sh``` will run the following commands:
-
-```bash
-GOOS=linux GOARCH=amd64 go build -o "institute-person-api" main.go
-export BRANCH=$(git branch --show-current)
-export PATCH=$(git rev-parse $BRANCH)
-echo $BRANCH.$PATCH > PATCH_LEVEL
-docker build . --tag institute-person-api
+docker compose up --deatch
 ```
 
 ## Local API Testing with CURL
 
 ### A word on ports
 
-NOTE: If you are running the API from the command line with ```go run src/main.go``` the API will be served at port 8080, if you run the API in containers with ```cd ./src/docker && docker compose up``` then it will be served at port 8081.
+NOTE: If you are running the API from the command line with ```go run main.go``` the API will be served at port 8080, if you run the API in containers with ```docker compose up``` then it will be served at port 8081.
+Adjust the following URI's accordingly.
 
 ### Test Health Endpoint
 
@@ -134,6 +111,7 @@ curl http://localhost:8081/api/health/
 
 ```bash
 curl http://localhost:8081/api/config/
+
 ```
 
 ### Get Enumerators
@@ -190,7 +168,7 @@ curl -X PATCH http://localhost:8081/api/person/[ID] \
 
 The ```api/config/``` endpoint will return a list of configuration values. These values are either "defaults" or loaded from an Environment Variable, or found in a singleton configuration file of the same name. Environment Variables take precidence. The variable "CONFIG_FOLDER" will change the location of configuration files from the default of ```./```
 
-The docker build expects a linux native binary, and a text file called PATCH_LEVEL to exist, I was unable to get the git commands to work in a 2-stage build, so I created [docker-build.sh](./docker-build.sh)
+The Dockerfile at the root of the project is a single-stage build that expects a linux native binary, and a text file called PATCH_LEVEL to exist, see [docker-build.sh](./docker-build.sh). The Dockerfile in /src/docker is a two stage build used for CI.  
 
 The PATCH_LEVEL file that is located in the same folder as the executable should be populated by CI with the hash of the commit-to-main that triggers CI. This will be used on the Version number reported by the /api/config/ endpoint.
 
@@ -220,13 +198,14 @@ The PATCH_LEVEL file that is located in the same folder as the executable should
   - [x] Add get/partners endpoint with readOnlyHandler
   - [x] Refactor Get /person and Get /people to use MongoStore and MongoHandler
 
-- branch: [```MongoReadStore-refactor```](http:to-merge.github.com)
+- branch: ```store-housekeeping```
   - [x] Refactor database connect into a method and remove from constuctor
   - [x] Incorporate default query in MongoStore
-  - [ ] Defult {$and: {$ne: {name: "VERSION"}, {$ne: {status: "Archived"}}}}
-  - [ ] $and to the parameters passed in constructor (i.e. mentor:ture)
-  - [ ] used on getMany() $and with the getMany parms
-  - [ ] Container store (People) can over-ride the default
+
+- branch: ```store-default-query```
+  - [x] refactor mongo_store FindMany
+  - [x] Defult {$and: {$ne: {name: "VERSION"}, {$ne: {status: "Archived"}}}}
+  - [x] $and to the parameters passed in constructor (i.e. mentor:ture)
   
 - branch: ```Add-Unit-Testing```
   - [ ] Test config without connect/disconnect
