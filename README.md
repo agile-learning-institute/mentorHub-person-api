@@ -36,6 +36,14 @@ curl https://raw.githubusercontent.com/agile-learning-institute/institute-person
 ```
 
 You can review the script at ./src/docker/run-local-api.sh
+After a few seconds that command you should see something like this
+
+```bash
+ ✔ Network institute-person-ui_default                   Created
+ ✔ Container institute-person-ui-institute-mongodb-1     Healthy
+ ✔ Container institute-person-ui-institute-mongosh-1     Exited
+ ✔ Container institute-person-ui-institute-person-api-1  Started
+ ```
 
 ## For API Engineers
 
