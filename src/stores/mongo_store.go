@@ -21,8 +21,11 @@ type MongoStore struct {
 /**
 * Constants for common Bson Query and Projection values
  */
-func MongoQueryNotVersion() bson.M {
-	return bson.M{"name": bson.M{"$ne": "VERSION"}}
+func CollectionDefaultQuery() bson.M {
+	return bson.M{"$and": []bson.M{
+		{"name": bson.M{"$ne": "VERSION"}},
+		{"status": bson.M{"$ne": "Archived"}},
+	}}
 }
 
 func MongoShortNameProjection() bson.D {
@@ -38,9 +41,16 @@ func NewMongoStore(cfg *config.Config, collectionName string, query bson.M) *Mon
 	// Initilize Store
 	this.config = cfg
 	this.CollectionName = collectionName
-	this.DefaultQuery = query
 	this.collection = cfg.GetCollection(collectionName)
 	this.Version = this.GetVersion()
+	if query != nil {
+		this.DefaultQuery = bson.M{"$and": []bson.M{
+			CollectionDefaultQuery(),
+			query,
+		}}
+	} else {
+		this.DefaultQuery = CollectionDefaultQuery()
+	}
 
 	// Put the database Version in the Config
 	this.config.AddConfigStore(this.AsStoreItem())
@@ -69,9 +79,14 @@ func (this *MongoStore) FindOne(query bson.M) *mongo.SingleResult {
 * Simple wrapper for mongo Find Many
  */
 func (this *MongoStore) FindMany(query bson.M, options *options.FindOptions) (*mongo.Cursor, error) {
+	fullQuery := bson.M{"$and": []bson.M{
+		this.DefaultQuery,
+		query,
+	}}
+
 	context, cancel := this.config.GetTimeoutContext()
 	defer cancel()
-	return this.collection.Find(context, query, options)
+	return this.collection.Find(context, fullQuery, options)
 }
 
 /**

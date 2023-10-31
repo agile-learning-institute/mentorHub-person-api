@@ -27,7 +27,7 @@
 
 This is a simple GoLang API that was written by a polyglot software engineer with the help of ChatGPT, with only a cursory understaqnding of the Go language and MongoDB. See [here](https://chat.openai.com/share/dcb8b738-7e73-40da-8b08-38024f1c9997) for the chat that was used to start.
 
-[Here](./docs/openapi-spec.yaml) is the Swagger for the API
+[Here](./product-api-openapi.yaml) is the Swagger for the API
 
 [Here](https://github.com/orgs/agile-learning-institute/repositories?q=institute-person&type=all&sort=name) are the repositories in the person microservice.
 
@@ -47,7 +47,7 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 
 ### Building the Database Container
 
-To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-mongodb) and follow the instructions to build the container. Once that container is built you can run it independently using the database cd src/docker docker composedocker compose docker compose option.
+To run locally, you need to build the database container. Clone [this repo](https://github.com/agile-learning-institute/institute-mongodb) and follow the instructions to build the container. Once that container is built you can run it independently using the database docker compose option.
 
 ### Install dependencies and run the API locally
 
@@ -63,34 +63,31 @@ go run main.go
 If you make substantial changes to the interfaces, you may need to regenerate gomock mocks used in unit testing.
 
 ```bash
-mockgen -source=src/models/person.go -destination=src/mocks/mock_person.go -package=mocks
-mockgen -source=src/models/person_store.go -destination=src/mocks/mock_person_store.go -package=mocks
+mockgen -source=models/person.go -destination=mocks/mock_person.go -package=mocks
+mockgen -source=models/person_store.go -destination=mocks/mock_person_store.go -package=mocks
 ```
 
 ## Getting Started for UI Engineers
 
-If you want to run both the API and Database containers you can build the database container as described [above](#building-the-database-container), and then build the API container, and then use the cd src/docker docker composedocker compose docker compose command below to run both of them together.
+If you want to run both the API and Database containers you can build the database container as described [above](#building-the-database-container), and then build the API container, and then use the docker compose command below to run both of them together.
 
-### Build and Run in one step
+### Bulid and Run in one step
 
 To build and run both of the containers, first clone [data](https://github.com/agile-learning-institute/institute-mongodb) repo as a sibling to this repo, then you can run this script to build both the database and api containers and start the stack.
 
 ```bash
-cd ./src/docker
-./docker-build-all-and-run.sh
+./docker-build-all.sh
 ```
 
 ### Start the Containers without rebuilding
 
 ```bash
-cd ./src/docker
 docker compose up --detach
 ```
 
 ### Stoping and Starting the containers without loosing data
 
 ```bash
-cd ./src/docker
 docker compose stop
 docker compose start
 ```
@@ -98,9 +95,8 @@ docker compose start
 ### Restart the containers and Reseting the database
 
 ```bash
-cd ./src/docker 
 docker compose down
-docker compose up --detach
+docker compose up --deatch
 ```
 
 ### Building the API Container
@@ -119,7 +115,8 @@ docker build . --tag institute-person-api
 
 ### A word on ports
 
-NOTE: If you are running the API from the command line with ```go run src/main.go``` the API will be served at port 8080, if you run the API in containers with ```cd ./src/docker && docker compose up``` then it will be served at port 8081.
+NOTE: If you are running the API from the command line with ```go run main.go``` the API will be served at port 8080, if you run the API in containers with ```docker compose up``` then it will be served at port 8081.
+Adjust the following URI's accordingly.
 
 ### Test Health Endpoint
 
@@ -134,6 +131,7 @@ curl http://localhost:8081/api/health/
 
 ```bash
 curl http://localhost:8081/api/config/
+
 ```
 
 ### Get Enumerators
@@ -220,13 +218,14 @@ The PATCH_LEVEL file that is located in the same folder as the executable should
   - [x] Add get/partners endpoint with readOnlyHandler
   - [x] Refactor Get /person and Get /people to use MongoStore and MongoHandler
 
-- branch: [```MongoReadStore-refactor```](http:to-merge.github.com)
+- branch: ```store-housekeeping```
   - [x] Refactor database connect into a method and remove from constuctor
   - [x] Incorporate default query in MongoStore
-  - [ ] Defult {$and: {$ne: {name: "VERSION"}, {$ne: {status: "Archived"}}}}
-  - [ ] $and to the parameters passed in constructor (i.e. mentor:ture)
-  - [ ] used on getMany() $and with the getMany parms
-  - [ ] Container store (People) can over-ride the default
+
+- branch: ```store-default-query```
+  - [x] refactor mongo_store FindMany
+  - [x] Defult {$and: {$ne: {name: "VERSION"}, {$ne: {status: "Archived"}}}}
+  - [x] $and to the parameters passed in constructor (i.e. mentor:ture)
   
 - branch: ```Add-Unit-Testing```
   - [ ] Test config without connect/disconnect
