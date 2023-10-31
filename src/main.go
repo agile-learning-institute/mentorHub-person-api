@@ -23,18 +23,17 @@ func main() {
 	defer config.Disconnect()
 
 	// Setup the Stores
-	enumStore := stores.NewMongoStore(config, "enumerators", stores.MongoQueryNotVersion())
-	mentorStore := stores.NewMongoStore(config, "people", bson.M{"mentor": true})
-	partnerStore := stores.NewMongoStore(config, "partners", stores.MongoQueryNotVersion())
-	readPersonStore := stores.NewMongoStore(config, "people", stores.MongoQueryNotVersion())
 	personStore := stores.NewPersonStore(config)
+	enumStore := stores.NewMongoStore(config, "enumerators", stores.MongoQueryNotVersion())
+	partnerStore := stores.NewMongoStore(config, "partners", stores.MongoQueryNotVersion())
+	mentorStore := stores.NewMongoStore(config, "people", bson.M{"mentor": true})
 
 	// Setup the Handlers
 	configHandler := handlers.NewConfigHandler(config)
 	enumHandler := handlers.NewMongoHandler(enumStore)
 	mentorHandler := handlers.NewMongoHandler(mentorStore)
 	partnerHandler := handlers.NewMongoHandler(partnerStore)
-	readPersonHandler := handlers.NewMongoHandler(readPersonStore)
+	readPersonHandler := handlers.NewMongoHandler(personStore.MongoStore)
 	personHandler := handlers.NewPersonHandler(personStore)
 
 	// Setup the HttpServer Router

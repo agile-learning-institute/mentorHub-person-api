@@ -15,17 +15,18 @@ type MongoHandler struct {
 	MongoStore *stores.MongoStore
 }
 
-func NewMongoHandler(mongoStore *stores.MongoStore) *MongoHandler {
+func NewMongoHandler(mongoReadStore *stores.MongoStore) *MongoHandler {
 	this := &MongoHandler{}
-	this.MongoStore = mongoStore
+	this.MongoStore = mongoReadStore
 	return this
 }
 
 func (this *MongoHandler) GetAll(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
+	collection := this.MongoStore.CollectionName
 	correltionId, _ := uuid.NewRandom()
-	log.Printf("Begin CID: %s Get All from %s", correltionId, this.MongoStore.CollectionName)
-	defer log.Printf("End CID: %s Get All from %s", correltionId, this.MongoStore.CollectionName)
+	log.Printf("Begin CID: %s Get All from %s", correltionId, collection)
+	defer log.Printf("End CID: %s Get All from %s", correltionId, collection)
 
 	// Get all the people
 	results, err := this.MongoStore.FindDocuments()
@@ -43,9 +44,10 @@ func (this *MongoHandler) GetAll(responseWriter http.ResponseWriter, request *ht
 
 func (this *MongoHandler) GetNames(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
+	collection := this.MongoStore.CollectionName
 	correltionId, _ := uuid.NewRandom()
-	log.Printf("Begin CID: %s Get All from %s", correltionId, this.MongoStore.CollectionName)
-	defer log.Printf("End CID: %s Get All from %s", correltionId, this.MongoStore.CollectionName)
+	log.Printf("Begin CID: %s Get All from %s", correltionId, collection)
+	defer log.Printf("End CID: %s Get All from %s", correltionId, collection)
 
 	// Get all the people
 	results, err := this.MongoStore.FindNames()
@@ -63,9 +65,10 @@ func (this *MongoHandler) GetNames(responseWriter http.ResponseWriter, request *
 
 func (this *MongoHandler) GetOne(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
+	collection := this.MongoStore.CollectionName
 	correltionId, _ := uuid.NewRandom()
-	log.Printf("Begin CID: %s Get %s by ID", correltionId, this.MongoStore.CollectionName)
-	defer log.Printf("End CID: %s Get %s by ID", correltionId, this.MongoStore.CollectionName)
+	log.Printf("Begin CID: %s Get %s by ID", correltionId, collection)
+	defer log.Printf("End CID: %s Get %s by ID", correltionId, collection)
 
 	// Get the Document ID from the path
 	id := mux.Vars(request)["id"]

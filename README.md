@@ -36,7 +36,11 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 ## Prerequisits
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+  - For Mac ```brew install docker```
 - [Go Language](https://go.dev/doc/install)
+
+### Optional
+
 - [Mongo Compass](https://www.mongodb.com/try/download/compass) - if you want a way to look into the database
 
 ## Getting Started for API Engineers
@@ -216,5 +220,33 @@ The PATCH_LEVEL file that is located in the same folder as the executable should
   - [x] Add get/partners endpoint with readOnlyHandler
   - [x] Refactor Get /person and Get /people to use MongoStore and MongoHandler
 
-- [ ] Add unit testing
-- [ ] Add JWT authentication, update Breadcrumbs
+- branch: [```MongoReadStore-refactor```](http:to-merge.github.com)
+  - [x] Refactor database connect into a method and remove from constuctor
+  - [x] Incorporate default query in MongoStore
+  - [ ] Defult {$and: {$ne: {name: "VERSION"}, {$ne: {status: "Archived"}}}}
+  - [ ] $and to the parameters passed in constructor (i.e. mentor:ture)
+  - [ ] used on getMany() $and with the getMany parms
+  - [ ] Container store (People) can over-ride the default
+  
+- branch: ```Add-Unit-Testing```
+  - [ ] Test config without connect/disconnect
+  - [ ] Mock MongoStore for Unit Testing
+  - [ ] Separate test of connect/disconnect with database
+  - [ ] Build Tests (with ProfSynapse)
+
+- branch: ```Post-Patch-Validation```
+  - [ ] Person.IsValidPatch(id, bsonM) reflect hasSetter(signature, parmtype)
+  - [ ] State Change Rules enforcement
+    - Pending to Active or Drip
+    - Active to Drip
+    - Drip to Active
+    - Anything to Archived
+    - Prepend Name on Archive to avoid mystery dups
+  - [ ] Referential Integrety enforcement??? (Research first)
+  - [ ] NewPerson with BreadCrumb construction parameter
+  - [ ] NewPerson with Default Values
+  - [ ] Use NewPerson in Post processing
+
+- branch: ```JWT-Authentication```
+  - [ ] Add JWT authentication
+  - [ ] update Breadcrumb constructor calls

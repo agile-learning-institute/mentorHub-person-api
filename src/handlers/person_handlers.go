@@ -43,7 +43,6 @@ func (this *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request
 	newPerson, err := this.PersonStore.Insert(body, crumb)
 	if err != nil {
 		log.Printf("ERROR CID: %s PostPerson %s", correltionId, err.Error())
-		log.Println("body:", body)
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
