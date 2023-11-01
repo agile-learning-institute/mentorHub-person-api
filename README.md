@@ -29,13 +29,23 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 
 - [Mongo Compass](https://www.mongodb.com/try/download/compass) - if you want a way to look into the database
 
+### Setup an environment variable for project navigation
+
+Navigate to your institue-mongodb folder. Setup an environment variable to save this location. Use the environment variable to ensure you are in the proper pwd for each set of commands.
+
+```bash
+cd PATH_TO_REPO/institute-mongodb
+ROOT=$PWD
+echo $ROOT
+```
+
 ## Run the Database and API Containers locally for UI Development
 
 ```bash
 curl https://raw.githubusercontent.com/agile-learning-institute/institute-person-api/main/src/docker/run-local-api.sh | /bin/bash
 ```
 
-You can review the script at ./src/docker/run-local-api.sh
+You can review the script at $ROOT/src/docker/run-local-api.sh
 After a few seconds that command you should see something like this
 
 ```bash
@@ -56,8 +66,8 @@ If you want a local database, with test data preloaded, you can run the database
 If you have started the database separatly, you can run the API locally
 
 ```bash
-go get 
-go run main.go
+go $ROOT/get 
+go run $ROOT/src/main.go
 ```
 
 ## Building and Testing the container locally
@@ -65,28 +75,28 @@ go run main.go
 If you have started the database container seperatly, you will need to stop it before testing this container. Use the following commands to do this.
 
 ```bash
-cd db
+cd $ROOT/db
 docker compose down
-cd ..
+cd $ROOT
 ```
 
 ### Build the API container locally
 
 ```bash
-./src/docker/docker-build.sh
+$ROOT/src/docker/docker-build.sh
 ```
 
 ### Start the Containers
 
 ```bash
-cd ./src/docker
+cd $ROOT/src/docker
 docker compose up --detach
 ```
 
 ### Stoping and Starting the containers without loosing data
 
 ```bash
-cd ./src/docker
+cd $ROOT/src/docker
 docker compose stop
 docker compose start
 ```
@@ -94,7 +104,7 @@ docker compose start
 ### Restart the containers and Reseting the database
 
 ```bash
-cd ./src/docker
+cd $ROOT/src/docker
 docker compose down
 docker compose up --deatch
 ```
@@ -176,7 +186,7 @@ curl -X PATCH http://localhost:8081/api/person/[ID] \
 
 The ```api/config/``` endpoint will return a list of configuration values. These values are either "defaults" or loaded from an Environment Variable, or found in a singleton configuration file of the same name. Environment Variables take precidence. The variable "CONFIG_FOLDER" will change the location of configuration files from the default of ```./```
 
-The Dockerfile at the root of the project is a single-stage build that expects a linux native binary, and a text file called PATCH_LEVEL to exist, see [docker-build.sh](./docker-build.sh). The Dockerfile in /src/docker is a two stage build used for CI.  
+The Dockerfile at the root of the project is a single-stage build that expects a linux native binary, and a text file called PATCH_LEVEL to exist, see [docker-build.sh]($ROOT/docker-build.sh). The Dockerfile in /src/docker is a two stage build used for CI.  
 
 The PATCH_LEVEL file that is located in the same folder as the executable should be populated by CI with the hash of the commit-to-main that triggers CI. This will be used on the Version number reported by the /api/config/ endpoint.
 
