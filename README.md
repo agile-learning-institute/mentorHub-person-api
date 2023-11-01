@@ -34,7 +34,7 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 Navigate to your institue-mongodb folder. Setup an environment variable to save this location. Use the environment variable to ensure you are in the proper pwd for each set of commands.
 
 ```bash
-cd PATH_TO_REPO/institute-mongodb
+cd PATH_TO_REPO/institute-person-api
 ROOT=$PWD
 echo $ROOT
 ```
