@@ -4,11 +4,7 @@
 
 - [Overview](#overview)
 - [Prerequisits](#prerequisits)
-- [Run Containers for UI Development](#run-the-database-and-api-containers-locally-for-ui-development)
 - [for API Engineers](#for-api-engineers)
-  - [Using the Database Container](#using-the-database-container)
-  - [Install dependencies and run the API locally](#install-dependencies-and-run-the-api-locally)
-  - [Building and testing containers locally](#building-and-testing-the-container-locally)
 - [Local API Testing with CURL](#local-api-testing-with-curl)
 - [Observability and Configuration](#observability-and-configuration)
 - [Backlog and Feature Branch info](#backlog-and-feature-branch-info)
@@ -45,8 +41,6 @@ go run main.go
 ```
 
 ## Building and Testing the container locally
-
-## Run the Database and API Containers locally for UI Development
 
 You should build the container and test changes locally before making a pull request. You can use the build script below, and then [start the API and Database containers](https://github.com/agile-learning-institute/institute/blob/main/docker-compose/README.md#run-the-person-api-and-backing-database).
 
