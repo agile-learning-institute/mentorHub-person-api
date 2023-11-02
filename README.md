@@ -29,27 +29,11 @@ This is a simple GoLang API that was written by a polyglot software engineer wit
 
 - [Mongo Compass](https://www.mongodb.com/try/download/compass) - if you want a way to look into the database
 
-## Run the Database and API Containers locally for UI Development
-
-```bash
-curl https://raw.githubusercontent.com/agile-learning-institute/institute-person-api/main/src/docker/run-local-api.sh | /bin/bash
-```
-
-You can review the script at ./src/docker/run-local-api.sh
-After a few seconds that command you should see something like this
-
-```bash
- ✔ Network institute-person-ui_default                   Created
- ✔ Container institute-person-ui-institute-mongodb-1     Healthy
- ✔ Container institute-person-ui-institute-mongosh-1     Exited
- ✔ Container institute-person-ui-institute-person-api-1  Started
- ```
-
 ## For API Engineers
 
 ### Using the Database Container
 
-If you want a local database, with test data preloaded, you can run the database containers independently. See [this repo](https://github.com/agile-learning-institute/institute-mongodb) for instructions on how to run the database containers.
+If you want a local database, with test data preloaded, you can run the database containers independently. See [here for details](https://github.com/agile-learning-institute/institute/blob/main/docker-compose/README.md#run-the-mongodb-backing-database) for instructions on how to run the database containers.
 
 ### Install dependencies and run the API locally
 
@@ -62,13 +46,9 @@ go run main.go
 
 ## Building and Testing the container locally
 
-If you have started the database container seperatly, you will need to stop it before testing this container. Use the following commands to do this.
+## Run the Database and API Containers locally for UI Development
 
-```bash
-cd db
-docker compose down
-cd ..
-```
+You should build the container and test changes locally before making a pull request. You can use the build script below, and then [start the API and Database containers](https://github.com/agile-learning-institute/institute/blob/main/docker-compose/README.md#run-the-person-api-and-backing-database).
 
 ### Build the API container locally
 
@@ -76,35 +56,11 @@ cd ..
 ./src/docker/docker-build.sh
 ```
 
-### Start the Containers
-
-```bash
-cd ./src/docker
-docker compose up --detach
-```
-
-### Stoping and Starting the containers without loosing data
-
-```bash
-cd ./src/docker
-docker compose stop
-docker compose start
-```
-
-### Restart the containers and Reseting the database
-
-```bash
-cd ./src/docker
-docker compose down
-docker compose up --deatch
-```
-
 ## Local API Testing with CURL
 
 ### A word on ports
 
-NOTE: If you are running the API from the command line with ```go run main.go``` the API will be served at port 8080, if you run the API in containers with ```docker compose up``` then it will be served at port 8081.
-Adjust the following URI's accordingly.
+NOTE: If you are running the API from the command line with ```go run main.go``` the API will be served at port 8080, if you run the API in local containers then it will be served at port 8081. Adjust the following URI's accordingly.
 
 ### Test Health Endpoint
 
