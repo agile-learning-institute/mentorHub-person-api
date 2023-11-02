@@ -31,14 +31,13 @@ if [ $? -ne 0 ]; then
 fi
 
 # Push Docker image
-#docker push ghcr.io/agile-learning-institute/institute-person-api:latest
-#if [ $? -ne 0 ]; then
-#    echo "Docker push failed"
-#    exit 1
-#fi
-#
-#docker push ghcr.io/agile-learning-institute/institute-person-api:$BRANCH.$PATCH
-#if [ $? -ne 0 ]; then
-#    echo "Docker push failed"
-#    exit 1
-#fi
+if [ $1 -eq '--push' ]; then
+    docker push ghcr.io/agile-learning-institute/institute-person-api:latest
+    if [ $? -ne 0 ]; then
+    echo "Docker build failed"
+    exit 1
+        echo "Docker push failed"
+        exit 1
+    fi
+    echo "image pushed"
+fi
