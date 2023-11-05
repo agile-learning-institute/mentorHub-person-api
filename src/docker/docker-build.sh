@@ -1,37 +1,19 @@
 #!/bin/bash
 
-# Build Go binary
-GOOS=linux GOARCH=amd64 go build -o "institute-person-api" src/main.go
-if [ $? -ne 0 ]; then
-    echo "Go build failed"
-    exit 1
-fi
-
-# Get branch and patch level
-BRANCH=$(git branch --show-current)
-if [ $? -ne 0 ]; then
-    echo "Failed to get git branch"
-    exit 1
-fi
-
-PATCH=$(git rev-parse $BRANCH)
-if [ $? -ne 0 ]; then
-    echo "Failed to get git commit hash"
-    exit 1
-fi
-
-# Create PATCH_LEVEL file
-echo $BRANCH.$PATCH > PATCH_LEVEL
-
-# Build Docker image
-docker build . --tag ghcr.io/agile-learning-institute/institute-person-api:latest
+# Build Docker Image
+docker build --file src/docker/Dockerfile --tag ghcr.io/agile-learning-institute/institute-person-api:latest .
 if [ $? -ne 0 ]; then
     echo "Docker build failed"
     exit 1
 fi
 
-# Push Docker image
-if [ $1 -eq '--push' ]; then
+# Run the Database and API containers
+if [ "$1" = '--run' ]; then
+    curl https://raw.githubusercontent.com/agile-learning-institute/institute/main/docker-compose/run-local-person-api.sh | /bin/bash
+fi
+
+# Push Docker image (To be removed when CI works)
+if [ "$1" = '--push' ]; then
     docker push ghcr.io/agile-learning-institute/institute-person-api:latest
     if [ $? -ne 0 ]; then
     echo "Docker build failed"
