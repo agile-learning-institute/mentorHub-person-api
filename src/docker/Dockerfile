@@ -18,7 +18,7 @@ RUN BRANCH=$(git rev-parse --abbrev-ref HEAD) && \
     echo $BRANCH.$PATCH > PATCH_LEVEL
 
 # Deployment stage
-FROM alpine
+FROM ubuntu
 COPY --from=builder /app/institute-person-api-amd64 /institute-person-api-amd64
 COPY --from=builder /app/institute-person-api-arm64 /institute-person-api-arm64
 COPY --from=builder /app/PATCH_LEVEL /PATCH_LEVEL

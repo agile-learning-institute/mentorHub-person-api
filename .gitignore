@@ -1,5 +1,5 @@
 *.DS_Store
-institute-person-api
+institute-person-api-a*
 PATCH_LEVEL
 
 ## db and api directories used to run database or api containers
