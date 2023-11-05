@@ -4,32 +4,35 @@
 
 - [Overview](#overview)
 - [Prerequisits](#prerequisits)
-- [for API Engineers](#for-api-engineers)
+- [Using the Database Container](#using-the-database-container)
+- [Install Dependencies and Run](#install-dependencies-and-run-the-api-locally)
+- [Build and Test the container](#building-and-testing-the-container-locally)
 - [Local API Testing with CURL](#local-api-testing-with-curl)
 - [Observability and Configuration](#observability-and-configuration)
 - [Backlog and Feature Branch info](#backlog-and-feature-branch-info)
 
 ## Overview
 
-This is a simple GoLang API that was written by a polyglot software engineer with the help of ChatGPT, with only a cursory understaqnding of the Go language and MongoDB. See [here](https://chat.openai.com/share/dcb8b738-7e73-40da-8b08-38024f1c9997) for the chat that was used to start.
+This is a simple GoLang API that provides Get/Post/Patch services for docuements in the People collection, as well as Get services for a number of related collections. This API uses data from a [backing Mongo Database](https://github.com/agile-learning-institute/institute-mongodb), and supports a [VueJS Single Page Appliaction.](https://github.com/agile-learning-institute/institute-person-ui)
 
 [Here](https://github.com/orgs/agile-learning-institute/repositories?q=institute&type=all&sort=name) are all of the repositories in the [Institute](https://github.com/agile-learning-institute/institute/tree/main) system
 
 ## Prerequisits
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-  - For Mac ```brew install docker```
 - [Go Language](https://go.dev/doc/install)
 
 ### Optional
 
 - [Mongo Compass](https://www.mongodb.com/try/download/compass) - if you want a way to look into the database
 
-## For API Engineers
-
 ### Using the Database Container
 
-If you want a local database, with test data preloaded, you can run the database containers independently. See [here for details](https://github.com/agile-learning-institute/institute/blob/main/docker-compose/README.md#run-the-mongodb-backing-database) for instructions on how to run the database containers.
+If you want a local database, with test data preloaded, you can run the database containers locally with the following command. See [here for details](https://github.com/agile-learning-institute/institute/blob/main/docker-compose/README.md) on how to stop/start the database.
+
+```bash
+curl https://raw.githubusercontent.com/agile-learning-institute/institute/main/docker-compose/run-local-db.sh | /bin/bash
+```
 
 ### Install dependencies and run the API locally
 
@@ -40,14 +43,18 @@ go get
 go run main.go
 ```
 
-## Building and Testing the container locally
+### Building and Testing the container locally
 
-You should build the container and test changes locally before making a pull request. You can use the build script below, and then [start the API and Database containers](https://github.com/agile-learning-institute/institute/blob/main/docker-compose/README.md#run-the-person-api-and-backing-database).
-
-### Build the API container locally
+You should build the container and test changes locally before making a pull request. You can use the build script below, and then [run curl tests](#local-api-testing-with-curl) to confirm the build.
 
 ```bash
 ./src/docker/docker-build.sh
+```
+
+You can use the ```--run``` option to start the containers after they are built.
+
+```bash
+./src/docker/docker-build.sh --run
 ```
 
 ## Local API Testing with CURL
@@ -126,9 +133,7 @@ curl -X PATCH http://localhost:8081/api/person/[ID] \
 
 The ```api/config/``` endpoint will return a list of configuration values. These values are either "defaults" or loaded from an Environment Variable, or found in a singleton configuration file of the same name. Environment Variables take precidence. The variable "CONFIG_FOLDER" will change the location of configuration files from the default of ```./```
 
-The Dockerfile at the root of the project is a single-stage build that expects a linux native binary, and a text file called PATCH_LEVEL to exist, see [docker-build.sh](./docker-build.sh). The Dockerfile in /src/docker is a two stage build used for CI.  
-
-The PATCH_LEVEL file that is located in the same folder as the executable should be populated by CI with the hash of the commit-to-main that triggers CI. This will be used on the Version number reported by the /api/config/ endpoint.
+The ```api/health/``` endpoint is a Promethius Healthcheck endpoint.
 
 ## Backlog and Feature Branch info
 
