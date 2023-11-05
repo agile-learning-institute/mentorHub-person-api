@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y git
 COPY . .
 
 # Build Go binary
-RUN GOOS=linux GOARCH=amd64 go build -o institute-person-api ./src/main.go
+RUN GOOS=linux GOARCH=amd64 go build -o institute-person-api-amd64 ./src/main.go
+RUN GOOS=linux GOARCH=arm64 go build -o institute-person-api-arm64 ./src/main.go
 
 # Get branch and patch level, then create PATCH_LEVEL file
 RUN BRANCH=$(git rev-parse --abbrev-ref HEAD) && \
@@ -17,9 +18,12 @@ RUN BRANCH=$(git rev-parse --abbrev-ref HEAD) && \
     echo $BRANCH.$PATCH > PATCH_LEVEL
 
 # Deployment stage
-FROM amd64/ubuntu:latest
-COPY --from=builder /app/institute-person-api /institute-person-api
+FROM alpine
+COPY --from=builder /app/institute-person-api-amd64 /institute-person-api-amd64
+COPY --from=builder /app/institute-person-api-arm64 /institute-person-api-arm64
 COPY --from=builder /app/PATCH_LEVEL /PATCH_LEVEL
+COPY --from=builder /app/src/docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 8081
-CMD ["/institute-person-api"]
+CMD ["/entrypoint.sh"]
