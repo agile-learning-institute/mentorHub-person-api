@@ -51,12 +51,6 @@ You should build the container and test changes locally before making a pull req
 ./src/docker/docker-build.sh
 ```
 
-You can use the ```--run``` option to start the containers after they are built.
-
-```bash
-./src/docker/docker-build.sh --run
-```
-
 ## Local API Testing with CURL
 
 ### A word on ports
