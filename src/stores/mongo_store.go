@@ -14,6 +14,7 @@ type MongoStore struct {
 	CollectionName string `json:"name"`
 	Version        string `json:"value"`
 	DefaultQuery   bson.M `json:"defaultQuery"`
+	FilterQuery    bson.M `json:"filterQuery"`
 	config         *config.Config
 	collection     mongo.Collection
 }
@@ -43,6 +44,7 @@ func NewMongoStore(cfg *config.Config, collectionName string, query bson.M) *Mon
 	this.CollectionName = collectionName
 	this.collection = cfg.GetCollection(collectionName)
 	this.Version = this.GetVersion()
+	this.FilterQuery = query
 	if query != nil {
 		this.DefaultQuery = bson.M{"$and": []bson.M{
 			CollectionDefaultQuery(),
@@ -123,6 +125,7 @@ func (this *MongoStore) AsStoreItem() *config.StoreItem {
 	storeItem = config.StoreItem{
 		CollectionName: this.CollectionName,
 		Version:        this.Version,
+		Filter:         this.FilterQuery,
 	}
 	return &storeItem
 }
