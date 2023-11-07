@@ -129,6 +129,8 @@ The ```api/config/``` endpoint will return a list of configuration values. These
 
 The ```api/health/``` endpoint is a Promethius Healthcheck endpoint.
 
+The [Dockerfile](./src/docker/Dockerfile) uses a 2-stage build, and supports both amd64 and arm64 architectures. See [docker-build.sh](./src/docker/docker-build.sh) for details about how to build in the local architecture for testing, and [docker-push.sh] for details about how to build and push multi-architecture images.
+
 ## Backlog and Feature Branch info
 
 - [X] Shift dependency injection to Config object Bad Idea!
