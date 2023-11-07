@@ -25,9 +25,9 @@ func main() {
 
 	// Setup the Stores
 	personStore := stores.NewPersonStore(config)
+	mentorStore := stores.NewMongoStore(config, "people", bson.M{"mentor": true})
 	enumStore := stores.NewMongoStore(config, "enumerators", nil)
 	partnerStore := stores.NewMongoStore(config, "partners", nil)
-	mentorStore := stores.NewMongoStore(config, "people", bson.M{"mentor": true})
 
 	// Setup the Handlers
 	configHandler := handlers.NewConfigHandler(config)
