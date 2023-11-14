@@ -39,6 +39,7 @@ curl https://raw.githubusercontent.com/agile-learning-institute/institute/main/d
 If you have started the database separatly, you can run the API locally
 
 ```bash
+cd ./src
 go get 
 go run main.go
 ```
