@@ -13,9 +13,9 @@
 
 ## Overview
 
-This is a simple GoLang API that provides Get/Post/Patch services for docuements in the People collection, as well as Get services for a number of related collections. This API uses data from a [backing Mongo Database](https://github.com/agile-learning-institute/institute-mongodb), and supports a [VueJS Single Page Appliaction.](https://github.com/agile-learning-institute/institute-person-ui)
+This is a simple GoLang API that provides Get/Post/Patch services for docuements in the People collection, as well as Get services for a number of related collections. This API uses data from a [backing Mongo Database](https://github.com/agile-learning-institute/mentorHub-mongodb), and supports a [VueJS Single Page Appliaction.](https://github.com/agile-learning-institute/mentorHub-person-ui)
 
-[Here](https://github.com/orgs/agile-learning-institute/repositories?q=institute&type=all&sort=name) are all of the repositories in the [Institute](https://github.com/agile-learning-institute/institute/tree/main) system
+[Here](https://github.com/orgs/agile-learning-institute/repositories?q=mentorHub-&type=all&sort=name) are all of the repositories in the [MentorHub](https://github.com/agile-learning-institute/mentorHub/tree/main) system
 
 ## Prerequisits
 
@@ -28,11 +28,7 @@ This is a simple GoLang API that provides Get/Post/Patch services for docuements
 
 ### Using the Database Container
 
-If you want a local database, with test data preloaded, you can run the database containers locally with the following command. See [here for details](https://github.com/agile-learning-institute/institute/blob/main/docker-compose/README.md) on how to stop/start the database.
-
-```bash
-curl https://raw.githubusercontent.com/agile-learning-institute/institute/main/docker-compose/run-local-db.sh | /bin/bash
-```
+If you want a local database, with test data preloaded, you can find instructions in the [mentorHub repository - docker configurations](https://github.com/agile-learning-institute/mentorHub/blob/main/docker-configurations/README.md#run-the-mongodb-backing-database)
 
 ### Install dependencies and run the API locally
 
@@ -131,61 +127,3 @@ The ```api/config/``` endpoint will return a list of configuration values. These
 The ```api/health/``` endpoint is a Promethius Healthcheck endpoint.
 
 The [Dockerfile](./src/docker/Dockerfile) uses a 2-stage build, and supports both amd64 and arm64 architectures. See [docker-build.sh](./src/docker/docker-build.sh) for details about how to build in the local architecture for testing, and [docker-push.sh] for details about how to build and push multi-architecture images.
-
-## Backlog and Feature Branch info
-
-- [X] Shift dependency injection to Config object Bad Idea!
-  - injection-refactor branch
-  - [X] Person-store delivers DB Version to Config
-  - [X] ConfigHandler injects config
-  - [X] Add unit testing of config-handler
-- [x] Improved Error Handling & testing (data dependency)
-  - [x] All PersonStore timeout and errors logged and thrown
-  - [x] Handlers to catch and return errors
-- [x] Add attributes from database v1.1.Test
-- [x] Add CID to HTTP Error Responses
-- [x] Return full document after patch
-- [x] Gorilla Promethius Health endpoint
-- [x] Add breadcrumbs
-- [x] Refactor Person as Simple Class, PersonStore to abstract mongo specific dependencies
-
-- [x] Implement MongoStore
-  - [x] Refactor config to use list of Store references objects {name, version, *Store}
-  - [x] Refactor enum_store to mongo_store - move mongo-calls to mongo_store
-  - [x] Refactor person_store to contain mongo_store
-  - [x] Refactor enum_handlers into mongo_handler
-  - [x] Add get/mentors endpoint with readOnlyHandler
-  - [x] Add get/partners endpoint with readOnlyHandler
-  - [x] Refactor Get /person and Get /people to use MongoStore and MongoHandler
-
-- branch: ```store-housekeeping```
-  - [x] Refactor database connect into a method and remove from constuctor
-  - [x] Incorporate default query in MongoStore
-
-- branch: ```store-default-query```
-  - [x] refactor mongo_store FindMany
-  - [x] Defult {$and: {$ne: {name: "VERSION"}, {$ne: {status: "Archived"}}}}
-  - [x] $and to the parameters passed in constructor (i.e. mentor:ture)
-  
-- branch: ```Add-Unit-Testing```
-  - [ ] Test config without connect/disconnect
-  - [ ] Mock MongoStore for Unit Testing
-  - [ ] Separate test of connect/disconnect with database
-  - [ ] Build Tests (with ProfSynapse)
-
-- branch: ```Post-Patch-Validation```
-  - [ ] Person.IsValidPatch(id, bsonM) reflect hasSetter(signature, parmtype)
-  - [ ] State Change Rules enforcement
-    - Pending to Active or Drip
-    - Active to Drip
-    - Drip to Active
-    - Anything to Archived
-    - Prepend Name on Archive to avoid mystery dups
-  - [ ] Referential Integrety enforcement??? (Research first)
-  - [ ] NewPerson with BreadCrumb construction parameter
-  - [ ] NewPerson with Default Values
-  - [ ] Use NewPerson in Post processing
-
-- branch: ```JWT-Authentication```
-  - [ ] Add JWT authentication
-  - [ ] update Breadcrumb constructor calls
