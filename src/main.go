@@ -1,4 +1,4 @@
-// This application implements a simple Person API
+// This application implements a simple Person API.
 package main
 
 import (
