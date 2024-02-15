@@ -9,13 +9,12 @@
 - [Build and Test the container](#building-and-testing-the-container-locally)
 - [Local API Testing with CURL](#local-api-testing-with-curl)
 - [Observability and Configuration](#observability-and-configuration)
-- [Backlog and Feature Branch info](#backlog-and-feature-branch-info)
 
 ## Overview
 
 This is a simple GoLang API that provides Get/Post/Patch services for docuements in the People collection, as well as Get services for a number of related collections. This API uses data from a [backing Mongo Database](https://github.com/agile-learning-institute/mentorHub-mongodb), and supports a [VueJS Single Page Appliaction.](https://github.com/agile-learning-institute/mentorHub-person-ui)
 
-[Here](https://github.com/orgs/agile-learning-institute/repositories?q=mentorHub-&type=all&sort=name) are all of the repositories in the [MentorHub](https://github.com/agile-learning-institute/mentorHub/tree/main) system
+The OpenAPI specifications for the api can be found in the ``docs`` folder, and are served [here](https://agile-learning-institute.github.io/mentorHub-person-api/)
 
 ## Prerequisits
 
