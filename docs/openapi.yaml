@@ -152,26 +152,8 @@ paths:
 
 components:
   schemas:
-    Person:
-      type: object
-      properties:
-        ID:
-          type: string
-          format: GUID
-        name:
-          type: string
-        description:
-          type: string
     Enums:
       type: object
-      properties:
-        ID:
-          type: string
-          format: GUID
-        name:
-          type: string
-        enumrators:
-          type: string
     Names: 
       type: array
       items:
@@ -189,8 +171,21 @@ components:
       properties:
         apiVersion:
           type: string
-        dataVersion:
-          type: string
+          description: Symantic Version Number
+        Stores: 
+          type: array
+          items:
+            type: object
+            properties:
+              CollectionName: 
+                description: Mongodb Collection name
+                type: string
+              Version:
+                description: Schema Version for the collection
+                type: string
+              Filter:
+                description: special Filter applied to collection
+                type: string
         ConfigItems:
           type: array
           items:
@@ -209,3 +204,101 @@ components:
                   - default
                   - environment
                   - file
+    Person:
+      type: object
+      required:
+      - name
+      properties:
+        _id:
+          description: The unique identifier for a person
+          type: string
+          format: UUID
+        name:
+          description: The persons name, first and last, or VERSION for the Schema Version
+            document
+          type: string
+          maxLength: 32
+        description:
+          description: Notes or other descriptive text
+          type: string
+          maxLength: 256
+        status:
+          description: The status of this member
+          type: string
+          enum:
+          - Pending
+          - Active
+          - Inactive
+          - Archived
+        member:
+          description: Is this person a Member
+          type: boolean
+        mentor:
+          description: Is this person a Mentor
+          type: boolean
+        donor:
+          description: Is this person a Donor
+          type: boolean
+        contact:
+          description: Is this person a Partner Contact
+          type: boolean
+        mentorId:
+          description: the _id of this persons Mentor if they have one
+          type: string
+          format: UUID
+        partnerId:
+          description: the _id of this persons partner (contacts and members)
+          type: string
+          format: UUID
+        title:
+          description: The person's title in the career path
+          type: string
+          enum:
+          - Apprentice Candidate
+          - Apprentice
+          - Resident
+          - Associate
+          - Senior
+          - Distinguished
+          - N/A
+        eMail:
+          description: The person's eMail address
+          type: string
+          maxLength: 256
+          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+        gitHub:
+          description: The person's gitHub User ID
+          type: string
+          maxLength: 32
+        phone:
+          description: The person's phone number
+          type: string
+          pattern: "^\\d{3}[-.\\s]?\\d{3}[-.\\s]?\\d{4}$"
+        device:
+          description: The type of PC this person is using
+          type: string
+          enum:
+          - Mac Intel
+          - Mac Apple
+          - Linux
+          - Windows / WSL
+        location:
+          description: The location where this person lives
+          type: string
+          maxLength: 64
+        lastSaved:
+          description: The location where this person lives
+          type: object
+          properties:
+            fromIp:
+              description: Http Request remote IP address
+              type: string
+            byUser:
+              description: UUID Of User
+              type: string
+            atTime:
+              description: The date-time when last updated
+              type: string
+            correlationId:
+              description: The logging correlation ID of the update transaction
+              type: string
