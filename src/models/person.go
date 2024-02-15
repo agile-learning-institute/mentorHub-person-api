@@ -19,7 +19,7 @@ type Person struct {
 	Phone       string             `json:"phone,omitempty"`
 	Device      string             `json:"device,omitempty"`
 	Location    string             `json:"location,omitempty"`
-	MentorName  string             `json:"mentorName,omitempty"`
-	PartnerName string             `json:"partnerName,omitempty"`
+	MentorId    primitive.ObjectID `json:"mentorId,omitempty"`
+	PartnerId   primitive.ObjectID `json:"partnerId,omitempty"`
 	LastSaved   *BreadCrumb        `json:"lastSaved,omitempty"`
 }

@@ -22,11 +22,11 @@ func NewBreadCrumb(ip string, user string, corrId string) *BreadCrumb {
 	return this
 }
 
-func (this *BreadCrumb) AsBson() bson.M {
+func (crumb *BreadCrumb) AsBson() bson.M {
 	return bson.M{
-		"fromIp":        this.FromIp,
-		"byUser":        this.ByUser,
-		"atTime":        this.AtTime,
-		"correlationId": this.CorrelationId,
+		"fromIp":        crumb.FromIp,
+		"byUser":        crumb.ByUser,
+		"atTime":        crumb.AtTime,
+		"correlationId": crumb.CorrelationId,
 	}
 }

@@ -142,6 +142,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Config'          
+  /api/health/:
+    get:
+      summary: Promethius Healthcheck endpoint
+      operationId: getHealth
+      responses:
+        '200':
+          description: Successful operation
 
 components:
   schemas:
