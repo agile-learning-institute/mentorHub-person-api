@@ -12,9 +12,8 @@ env:
   ECR_REPOSITORY: mentorhub           # set this to your Amazon ECR repository name
                                           
 jobs:
-  Explore-GitHub-Actions:
-  # if_merged:
-  #   if: github.event.pull_request.merged == true
+  if_merged:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
