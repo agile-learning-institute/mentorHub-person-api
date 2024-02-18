@@ -3,8 +3,9 @@ package handlers
 import (
 	"encoding/json"
 	"log"
+	"mentorhub-person-api/src/config"
 	"net/http"
-	"institute-person-api/src/config"
+
 	"github.com/google/uuid"
 )
 

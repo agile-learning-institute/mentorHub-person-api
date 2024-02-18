@@ -1,7 +1,7 @@
 package stores
 
 import (
-	"institute-person-api/src/config"
+	"mentorhub-person-api/src/config"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
