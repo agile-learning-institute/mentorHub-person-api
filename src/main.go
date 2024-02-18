@@ -2,10 +2,10 @@
 package main
 
 import (
-	"institute-person-api/src/config"
-	"institute-person-api/src/handlers"
-	"institute-person-api/src/stores"
 	"log"
+	"mentorhub-person-api/src/config"
+	"mentorhub-person-api/src/handlers"
+	"mentorhub-person-api/src/stores"
 	"net/http"
 
 	gorillaHandlers "github.com/gorilla/handlers"

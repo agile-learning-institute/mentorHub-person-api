@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"institute-person-api/src/stores"
+	"mentorhub-person-api/src/stores"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -16,20 +16,20 @@ type MongoHandler struct {
 }
 
 func NewMongoHandler(mongoReadStore *stores.MongoStore) *MongoHandler {
-	this := &MongoHandler{}
-	this.MongoStore = mongoReadStore
-	return this
+	handler := &MongoHandler{}
+	handler.MongoStore = mongoReadStore
+	return handler
 }
 
-func (this *MongoHandler) GetAll(responseWriter http.ResponseWriter, request *http.Request) {
+func (handler *MongoHandler) GetAll(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
-	collection := this.MongoStore.CollectionName
+	collection := handler.MongoStore.CollectionName
 	correltionId, _ := uuid.NewRandom()
 	log.Printf("Begin CID: %s Get All from %s", correltionId, collection)
 	defer log.Printf("End CID: %s Get All from %s", correltionId, collection)
 
 	// Get all the people
-	results, err := this.MongoStore.FindDocuments()
+	results, err := handler.MongoStore.FindDocuments()
 	if err != nil {
 		log.Printf("ERROR CID: %s GetAllNames %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
@@ -42,15 +42,15 @@ func (this *MongoHandler) GetAll(responseWriter http.ResponseWriter, request *ht
 	json.NewEncoder(responseWriter).Encode(results)
 }
 
-func (this *MongoHandler) GetNames(responseWriter http.ResponseWriter, request *http.Request) {
+func (handler *MongoHandler) GetNames(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
-	collection := this.MongoStore.CollectionName
+	collection := handler.MongoStore.CollectionName
 	correltionId, _ := uuid.NewRandom()
 	log.Printf("Begin CID: %s Get All from %s", correltionId, collection)
 	defer log.Printf("End CID: %s Get All from %s", correltionId, collection)
 
 	// Get all the people
-	results, err := this.MongoStore.FindNames()
+	results, err := handler.MongoStore.FindNames()
 	if err != nil {
 		log.Printf("ERROR CID: %s GetAllNames %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
@@ -63,9 +63,9 @@ func (this *MongoHandler) GetNames(responseWriter http.ResponseWriter, request *
 	json.NewEncoder(responseWriter).Encode(results)
 }
 
-func (this *MongoHandler) GetOne(responseWriter http.ResponseWriter, request *http.Request) {
+func (handler *MongoHandler) GetOne(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
-	collection := this.MongoStore.CollectionName
+	collection := handler.MongoStore.CollectionName
 	correltionId, _ := uuid.NewRandom()
 	log.Printf("Begin CID: %s Get %s by ID", correltionId, collection)
 	defer log.Printf("End CID: %s Get %s by ID", correltionId, collection)
@@ -74,7 +74,7 @@ func (this *MongoHandler) GetOne(responseWriter http.ResponseWriter, request *ht
 	id := mux.Vars(request)["id"]
 
 	// Get the Document from the database
-	results, err := this.MongoStore.FindId(id)
+	results, err := handler.MongoStore.FindId(id)
 	if err != nil {
 		log.Printf("ERROR CID: %s ERROR %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())

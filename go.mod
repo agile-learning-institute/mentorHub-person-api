@@ -1,4 +1,4 @@
-module institute-person-api
+module mentorhub-person-api
 
 go 1.19
 

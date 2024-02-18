@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"io"
 	"log"
+	"mentorhub-person-api/src/models"
+	"mentorhub-person-api/src/stores"
 	"net/http"
-	"institute-person-api/src/models"
-	"institute-person-api/src/stores"
+
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
@@ -16,12 +17,12 @@ type PersonHandler struct {
 }
 
 func NewPersonHandler(personStore *stores.PersonStore) *PersonHandler {
-	this := &PersonHandler{}
-	this.PersonStore = personStore
-	return this
+	handler := &PersonHandler{}
+	handler.PersonStore = personStore
+	return handler
 }
 
-func (this *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request *http.Request) {
+func (handler *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
 	correltionId, _ := uuid.NewRandom()
 	log.Printf("Begin CID: %s Add Person", correltionId)
@@ -40,7 +41,7 @@ func (this *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request
 	crumb := models.NewBreadCrumb(request.RemoteAddr, "SOME-USER-ID", correltionId.String())
 
 	// Insert the new person document
-	newPerson, err := this.PersonStore.Insert(body, crumb)
+	newPerson, err := handler.PersonStore.Insert(body, crumb)
 	if err != nil {
 		log.Printf("ERROR CID: %s PostPerson %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
@@ -53,7 +54,7 @@ func (this *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request
 	json.NewEncoder(responseWriter).Encode(newPerson)
 }
 
-func (this *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request *http.Request) {
+func (handler *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
 	correltionId, _ := uuid.NewRandom()
 	log.Printf("Begin CID: %s Update Person", correltionId)
@@ -75,7 +76,7 @@ func (this *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, requ
 	crumb := models.NewBreadCrumb(request.RemoteAddr, "SOME-USER-ID", correltionId.String())
 
 	// Update the person
-	updatedPerson, err := this.PersonStore.FindOneAndUpdate(id, body, crumb)
+	updatedPerson, err := handler.PersonStore.FindOneAndUpdate(id, body, crumb)
 	if err != nil {
 		log.Printf("ERROR CID: %s Bad PatchPerson %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
