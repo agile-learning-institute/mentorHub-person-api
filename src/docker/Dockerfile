@@ -13,8 +13,8 @@ RUN GOOS=linux GOARCH=$TARGETARCH go build -o /src/entrypoint ./src/main.go
 RUN BRANCH=$(git rev-parse --abbrev-ref HEAD) && \
     PATCH=$(git rev-parse HEAD) && \
     DATE=$(date "+%Y-%m-%d:%H:%M:%S") && \
-    echo $DATE.$BRANCH.$PATCH > ./dist/patch.txt
-    
+    echo $DATE.$BRANCH.$PATCH > /src/PATCH_LEVEL
+
 # Final stage
 FROM ubuntu
 ARG TARGETARCH
