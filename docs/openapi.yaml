@@ -261,6 +261,16 @@ components:
           - Senior
           - Distinguished
           - N/A
+        cadence:
+          description: This person's preferred meeting cadence
+          type: string
+          enum:
+          - As Needed
+          - Monthly
+          - Every 2 Weeks
+          - Weekly
+          - Twice a Week
+          - Daily
         eMail:
           description: The person's eMail address
           type: string
