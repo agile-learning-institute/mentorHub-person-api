@@ -14,6 +14,7 @@ type Person struct {
 	Donor       bool               `json:"donor,omitempty"`
 	Contact     bool               `json:"contact,omitempty"`
 	Title       string             `json:"title,omitempty"`
+	Cadence		string			   `json:"cadence,omitempty"`
 	Email       string             `json:"eMail,omitempty"`
 	GitHub      string             `json:"gitHub,omitempty"`
 	Phone       string             `json:"phone,omitempty"`
