@@ -47,7 +47,7 @@ jobs:
         uses: docker/build-push-action@v5
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: mentorHub-person-api:DEV-${{ github.sha }}
+          IMAGE_TAG: latest
         with:
           context: .
           platforms: linux/amd64,linux/arm64
