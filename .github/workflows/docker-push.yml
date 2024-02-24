@@ -53,5 +53,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: ./src/docker/Dockerfile 
           push: true
-          tags: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          tags: |
+            $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-amd64
+            $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-arm64
   
