@@ -47,13 +47,13 @@ jobs:
         uses: docker/build-push-action@v5
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: latest
+        #  IMAGE_TAG: latest
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           file: ./src/docker/Dockerfile 
           push: true
           tags: |
-            $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-amd64
-            $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-arm64
+            $ECR_REGISTRY/$ECR_REPOSITORY:latest-amd64
+            $ECR_REGISTRY/$ECR_REPOSITORY:latest-arm64
   
