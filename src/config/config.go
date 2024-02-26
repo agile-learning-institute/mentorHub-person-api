@@ -41,7 +41,7 @@ type Config struct {
 
 const (
 	VersionMajor            = "1"
-	VersionMinor            = "2"
+	VersionMinor            = "3"
 	DefaultConfigFolder     = "./"
 	DefaultConnectionString = "mongodb://root:example@localhost:27017/?tls=false&directConnection=true"
 	DefaultDatabaseName     = "agile-learning-institute"
