@@ -58,7 +58,8 @@ jobs:
         run: |
           docker buildx create --use
           docker buildx inspect --bootstrap
-          docker buildx build --platform linux/amd64,linux/arm64 -t public.ecr.aws/k4m2e4q5/mentorhub:latest . -f /home/runner/work/mentorHub-person-api/mentorHub-person-api/src/docker/Dockerfile
+          docker buildx build --platform linux/amd64,linux/arm64 -t public.ecr.aws/k4m2e4q5/mentorhub:latest -t public.ecr.aws/k4m2e4q5/mentorhub:${{ github.sha }} . -f /home/runner/work/mentorHub-person-api/mentorHub-person-api/src/docker/Dockerfile
           docker push public.ecr.aws/k4m2e4q5/mentorhub:latest
+          docker push public.ecr.aws/k4m2e4q5/mentorhub:${{ github.sha }}
   
         
