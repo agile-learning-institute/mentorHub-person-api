@@ -51,15 +51,18 @@ jobs:
 
       - name: Build and push Multi-Platform Image
         id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: latest
         run: |
           docker buildx create --use
           docker buildx inspect --bootstrap
-          ECR_IMAGE="public.ecr.aws/k4m2e4q5/mentorhub"
+          ECR_IMAGE="105886329607.dkr.ecr.us-east-1.amazonaws.com/your-repo-name"
           docker buildx build --platform linux/amd64,linux/arm64 -t $ECR_IMAGE:latest -t $ECR_IMAGE:${{ github.sha }} . -f /home/runner/work/mentorHub-person-api/mentorHub-person-api/src/docker/Dockerfile
+          PUBLIC_ECR_IMAGE="public.ecr.aws/$ECR_IMAGE"
+          docker tag $ECR_IMAGE:latest $PUBLIC_ECR_IMAGE:latest
+          docker tag $ECR_IMAGE:${{ github.sha }} $PUBLIC_ECR_IMAGE:${{ github.sha }}
+
           docker push $ECR_IMAGE:latest
           docker push $ECR_IMAGE:${{ github.sha }}
+          docker push $PUBLIC_ECR_IMAGE:latest
+          docker push $PUBLIC_ECR_IMAGE:${{ github.sha }}
   
         
