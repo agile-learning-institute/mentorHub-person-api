@@ -58,7 +58,7 @@ jobs:
         run: |
           docker buildx create --use
           docker buildx inspect --bootstrap
-          docker buildx build --platform linux/amd64,linux/arm64 -t ${{ secrets.AWS_ECR_REGISTRY_URI }}:latest .
+          docker buildx build --platform linux/amd64,linux/arm64 -t ${{ secrets.AWS_ECR_REGISTRY_URI }}:latest . -f -f /home/runner/work/mentorHub-person-api/mentorHub-person-api/src/docker/Dockerfile
           docker login -u AWS -p ${{ secrets.AWS_SESSION_TOKEN }} ${{ secrets.AWS_ECR_REGISTRY_URI }}
           docker push ${{ secrets.AWS_ECR_REGISTRY_URI }}:latest
   
