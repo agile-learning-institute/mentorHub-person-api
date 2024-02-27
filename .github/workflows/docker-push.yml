@@ -54,14 +54,9 @@ jobs:
         run: |
           docker buildx create --use
           docker buildx inspect --bootstrap
-          ECR_IMAGE="105886329607.dkr.ecr.us-east-1.amazonaws.com/mentorhub"
-          docker buildx build --platform linux/amd64,linux/arm64 -t $ECR_IMAGE:latest -t $ECR_IMAGE:${{ github.sha }} . -f /home/runner/work/mentorHub-person-api/mentorHub-person-api/src/docker/Dockerfile
-          PUBLIC_ECR_IMAGE="public.ecr.aws/$ECR_IMAGE"
-          docker tag $ECR_IMAGE:latest $PUBLIC_ECR_IMAGE:latest
-          docker tag $ECR_IMAGE:${{ github.sha }} $PUBLIC_ECR_IMAGE:${{ github.sha }}
-
-          docker push $ECR_IMAGE:latest
-          docker push $ECR_IMAGE:${{ github.sha }}
+          EPUBLIC_ECR_IMAGE="public.ecr.aws/mentorhub"
+          docker buildx build --platform linux/amd64,linux/arm64 -t $PUBLIC_ECR_IMAGE:latest -t $PUBLIC_ECR_IMAGE:${{ github.sha }} . -f /home/runner/work/mentorHub-person-api/mentorHub-person-api/src/docker/Dockerfile
+          
           docker push $PUBLIC_ECR_IMAGE:latest
           docker push $PUBLIC_ECR_IMAGE:${{ github.sha }}
   
