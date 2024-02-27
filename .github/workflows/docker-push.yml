@@ -46,7 +46,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to AWS ECR
-        run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin $public.ecr.aws/k4m2e4q5/mentorhub
+        run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/k4m2e4q5/mentorhub
 
 
       - name: Build and push Multi-Platform Image
