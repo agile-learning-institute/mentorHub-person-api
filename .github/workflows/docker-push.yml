@@ -54,6 +54,6 @@ jobs:
           file: ./src/docker/Dockerfile 
           push: true
           tags: |
-            public.ecr.aws/k4m2e4q5/mentorhub:latest
+            105886329607.dkr.ecr.us-east-1.amazonaws.com/mentorhub:latest
   #          $ECR_REGISTRY/$ECR_REPOSITORY:latest-arm64
   
