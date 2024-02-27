@@ -37,10 +37,6 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -48,6 +44,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to AWS ECR
+        run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin $public.ecr.aws/k4m2e4q5/mentorhub
 
 
       - name: Build and push Multi-Platform Image
@@ -58,8 +57,9 @@ jobs:
         run: |
           docker buildx create --use
           docker buildx inspect --bootstrap
-          docker buildx build --platform linux/amd64,linux/arm64 -t public.ecr.aws/k4m2e4q5/mentorhub/personapi:latest -t public.ecr.aws/k4m2e4q5/mentorhub/personapi:${{ github.sha }} . -f /home/runner/work/mentorHub-person-api/mentorHub-person-api/src/docker/Dockerfile
-          docker push public.ecr.aws/k4m2e4q5/mentorhub/personapi:latest
-          docker push public.ecr.aws/k4m2e4q5/mentorhub/personapi:${{ github.sha }}
+          ECR_IMAGE="public.ecr.aws/k4m2e4q5/mentorhub"
+          docker buildx build --platform linux/amd64,linux/arm64 -t $ECR_IMAGE:latest -t $ECR_IMAGE:${{ github.sha }} . -f /home/runner/work/mentorHub-person-api/mentorHub-person-api/src/docker/Dockerfile
+          docker push $ECR_IMAGE:latest
+          docker push $ECR_IMAGE:${{ github.sha }}
   
         
