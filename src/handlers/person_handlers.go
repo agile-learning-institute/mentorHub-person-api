@@ -79,6 +79,7 @@ func (handler *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, r
 	updatedPerson, err := handler.PersonStore.FindOneAndUpdate(id, body, crumb)
 	if err != nil {
 		log.Printf("ERROR CID: %s Bad PatchPerson %s", correltionId, err.Error())
+		log.Printf("Request Body: %s ", body)
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
