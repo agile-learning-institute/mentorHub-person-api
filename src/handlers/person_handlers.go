@@ -38,7 +38,13 @@ func (handler *PersonHandler) AddPerson(responseWriter http.ResponseWriter, requ
 	}
 
 	// Build the breadcrumb
-	crumb := models.NewBreadCrumb(request.RemoteAddr, "SOME-USER-ID", correltionId.String())
+	crumb, err := models.NewBreadCrumb(request.RemoteAddr, "000000000000000000000000", correltionId.String())
+	if err != nil {
+		log.Printf("ERROR CID: %s Breadcrumb Constructuor failed %s", correltionId, err.Error())
+		responseWriter.Header().Add("CorrelationId", correltionId.String())
+		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	// Insert the new person document
 	newPerson, err := handler.PersonStore.Insert(body, crumb)
@@ -73,7 +79,13 @@ func (handler *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, r
 	}
 
 	// Build the breadcrumb
-	crumb := models.NewBreadCrumb(request.RemoteAddr, "SOME-USER-ID", correltionId.String())
+	crumb, err := models.NewBreadCrumb(request.RemoteAddr, "000000000000000000000000", correltionId.String())
+	if err != nil {
+		log.Printf("ERROR CID: %s Breadcrumb Constructuor failed %s", correltionId, err.Error())
+		responseWriter.Header().Add("CorrelationId", correltionId.String())
+		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	// Update the person
 	updatedPerson, err := handler.PersonStore.FindOneAndUpdate(id, body, crumb)
