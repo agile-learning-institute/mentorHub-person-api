@@ -4,22 +4,29 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type BreadCrumb struct {
-	FromIp        string `json:"fromIp,omitempty"`
-	ByUser        string `json:"byUser,omitempty"`
-	AtTime        string `json:"atTime,omitempty"`
-	CorrelationId string `json:"correlationId,omitempty"`
+	FromIp        string             `json:"fromIp,omitempty"`
+	ByUser        primitive.ObjectID `json:"byUser,omitempty"`
+	AtTime        primitive.DateTime `json:"atTime,omitempty"`
+	CorrelationId string             `json:"correlationId,omitempty"`
 }
 
-func NewBreadCrumb(ip string, user string, corrId string) *BreadCrumb {
+func NewBreadCrumb(ip string, userIdHex string, corrId string) (*BreadCrumb, error) {
 	this := &BreadCrumb{}
+	// Create oid for User ID
+	userId, err := primitive.ObjectIDFromHex(userIdHex)
+	if err != nil {
+		return nil, err
+	}
+
 	this.FromIp = ip
-	this.ByUser = user
+	this.ByUser = userId
 	this.CorrelationId = corrId
-	this.AtTime = time.Now().Format("2006-01-02 15:04:05")
-	return this
+	this.AtTime = primitive.NewDateTimeFromTime(time.Now())
+	return this, nil
 }
 
 func (crumb *BreadCrumb) AsBson() bson.M {
