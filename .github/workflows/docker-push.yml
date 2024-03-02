@@ -23,41 +23,15 @@ jobs:
         uses: docker/setup-qemu-action@v3
       -
         name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        env:
-          AWS_ACCESS_KEY_ID:
-          AWS_SECRET_ACCESS_KEY:
-          AWS_SESSION_TOKEN:
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Login to AWS ECR
-        run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/k4m2e4q5/mentorhub
-
-
-      - name: Build and push Multi-Platform Image
-        id: build-image
-        run: |
-          docker buildx create --use
-          docker buildx inspect --bootstrap
-          EPUBLIC_ECR_IMAGE="public.ecr.aws/mentorhub"
-          docker buildx build --platform linux/amd64,linux/arm64 -t $PUBLIC_ECR_IMAGE:latest -t $PUBLIC_ECR_IMAGE:${{ github.sha }} . -f /home/runner/work/mentorHub-person-api/mentorHub-person-api/src/docker/Dockerfile
-          
-          docker push $PUBLIC_ECR_IMAGE:latest
-          docker push $PUBLIC_ECR_IMAGE:${{ github.sha }}
-  
+        uses: docker/setup-buildx-action@v1
         
+      - name: Build and push Docker image to public ECR
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./path/to/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: public.ecr.aws/mentorhub:latest
+
+
