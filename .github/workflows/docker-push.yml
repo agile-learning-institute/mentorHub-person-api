@@ -26,16 +26,6 @@ jobs:
         uses: docker/setup-buildx-action@v1
         with:
           version: latest
-
-      - 
-        name: Docker Login to ECR (if needed)
-        run: docker login --username AWS --password public.ecr.aws/k4m2e4q5
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-
-
       - 
         name: Set AWS credentials
         run: |
@@ -55,6 +45,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: public.ecr.aws/k4m2e4q5/mentorhub:latest
-          registry: public.ecr.aws
+          registry: public.ecr.aws/k4m2e4q5
 
 
