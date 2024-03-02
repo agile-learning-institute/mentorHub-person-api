@@ -29,7 +29,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./path/to/Dockerfile
+          file: ./src/docker/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: public.ecr.aws/mentorhub:latest
