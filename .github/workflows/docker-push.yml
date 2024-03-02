@@ -44,5 +44,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: public.ecr.aws/k4m2e4q5/mentorhub:latest
+          registry-login: true
 
 
