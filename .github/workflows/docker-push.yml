@@ -26,6 +26,12 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - 
+        name: Set AWS credentials
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+
+      - 
         name: Login to ECR 
         uses: aws-actions/amazon-ecr-login@v1
         
