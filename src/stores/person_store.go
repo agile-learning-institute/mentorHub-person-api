@@ -73,6 +73,20 @@ func (store *PersonStore) FindOneAndUpdate(id string, request []byte, crumb *mod
 		return nil, err
 	}
 
+	// Convert MentorId string to ObjectId if present
+	if _, mentorIdExists := updateValues["mentorId"]; mentorIdExists {
+		mentorId := updateValues["mentorId"].(string)
+		mentorObjectID, _ := primitive.ObjectIDFromHex(mentorId)
+		updateValues["mentorId"] = mentorObjectID
+	}
+
+	// Convert PartnerID to ObjectId if present
+	if _, partnerIdExists := updateValues["partnerId"]; partnerIdExists {
+		partnerId := updateValues["partnerId"].(string)
+		partnerObjectID, _ := primitive.ObjectIDFromHex(partnerId)
+		updateValues["partnerId"] = partnerObjectID
+	}
+
 	// add breadcrumb to update object
 	updateValues["lastSaved"] = crumb.AsBson()
 
