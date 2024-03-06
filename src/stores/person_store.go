@@ -31,6 +31,17 @@ func NewPersonStore(cfg *config.Config) *PersonStore {
 }
 
 /**
+* Convert Id string to ObjectId if present
+ */
+func ConvertToOid(values bson.M, fieldName string) {
+	if _, idExists := values[fieldName]; idExists {
+		idValue := values[fieldName].(string)
+		newObjectID, _ := primitive.ObjectIDFromHex(idValue)
+		values[fieldName] = newObjectID
+	}
+}
+
+/**
 * Insert a new person with the information provided
  */
 func (store *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (*map[string]interface{}, error) {
@@ -40,6 +51,9 @@ func (store *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (
 	if err != nil {
 		return nil, err
 	}
+
+	ConvertToOid(insertValues, "mentorId")
+	ConvertToOid(insertValues, "partnerId")
 
 	// Add the breadcrumb
 	insertValues["lastSaved"] = crumb
@@ -72,6 +86,9 @@ func (store *PersonStore) FindOneAndUpdate(id string, request []byte, crumb *mod
 	if err != nil {
 		return nil, err
 	}
+
+	ConvertToOid(updateValues, "mentorId")
+	ConvertToOid(updateValues, "partnerId")
 
 	// add breadcrumb to update object
 	updateValues["lastSaved"] = crumb.AsBson()
