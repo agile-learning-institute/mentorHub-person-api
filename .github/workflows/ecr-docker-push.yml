@@ -10,8 +10,8 @@ on:
 
 jobs:
   if_merged:
-    if: false # disabled workflow
-    # if: github.event.pull_request.merged == true
+    # if: false # disabled workflow
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       -
