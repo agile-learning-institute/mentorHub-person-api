@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image to ECR
 run-name: ${{ github.actor }} ran Build and Push
 
 on:
