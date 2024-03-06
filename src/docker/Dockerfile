@@ -23,5 +23,5 @@ ARG TARGETARCH
 COPY --from=base /src/entrypoint /entrypoint
 COPY --from=base /src/PATCH_LEVEL /PATCH_LEVEL
 
-EXPOSE 8081
+EXPOSE 8082
 CMD ["/entrypoint"]

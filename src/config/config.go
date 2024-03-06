@@ -45,7 +45,7 @@ const (
 	DefaultConfigFolder     = "./"
 	DefaultConnectionString = "mongodb://root:example@localhost:27017/?tls=false&directConnection=true"
 	DefaultDatabaseName     = "agile-learning-institute"
-	DefaultPort             = ":8080"
+	DefaultPort             = ":8082"
 	DefaultTimeout          = 10
 )
 
