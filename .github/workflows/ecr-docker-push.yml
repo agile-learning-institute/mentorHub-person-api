@@ -1,5 +1,5 @@
-name: Build and Push Docker Image to ECR
-run-name: ${{ github.actor }} ran Build and Push
+name: ECR Build and Push Docker Image
+run-name: ${{ github.actor }} ran ECR Build and Push
 
 on:
   pull_request:
@@ -10,7 +10,8 @@ on:
 
 jobs:
   if_merged:
-    if: github.event.pull_request.merged == true
+    if: false # disabled workflow
+    # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       -
