@@ -49,51 +49,47 @@ You should build the container and test changes locally before making a pull req
 
 ## Local API Testing with CURL
 
-### A word on ports
-
-NOTE: If you are running the API from the command line with ```go run main.go``` the API will be served at port 8080, if you run the API in local containers then it will be served at port 8081. Adjust the following URI's accordingly.
-
 ### Test Health Endpoint
 
 This endpoint supports the promethius monitoring standards for a healthcheck endpoint
 
 ```bash
-curl http://localhost:8081/api/health/
+curl http://localhost:8082/api/health/
 
 ```
 
 ### Test Config Endpoint
 
 ```bash
-curl http://localhost:8081/api/config/
+curl http://localhost:8082/api/config/
 
 ```
 
 ### Get Enumerators
 
 ```bash
-curl http://localhost:8081/api/enums/
+curl http://localhost:8082/api/enums/
 
 ```
 
 ### Get Partner Names
 
 ```bash
-curl http://localhost:8081/api/partners/
+curl http://localhost:8082/api/partners/
 
 ```
 
 ### Get Mentor Names
 
 ```bash
-curl http://localhost:8081/api/mentors/
+curl http://localhost:8082/api/mentors/
 
 ```
 
 ### Test find all people with IDs
 
 ```bash
-curl http://localhost:8081/api/person/
+curl http://localhost:8082/api/person/
 ```
 
 ### Test get a person
@@ -114,7 +110,7 @@ curl -X POST http://localhost:8081/api/person/ \
 ### Test update a person
 
 ```bash
-curl -X PATCH http://localhost:8081/api/person/[ID] \
+curl -X PATCH http://localhost:8081/api/person/aaaa00000000000000000021 \
      -d '{"description":"Some long description"}'
 
 ```
