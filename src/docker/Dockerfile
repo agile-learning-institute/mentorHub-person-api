@@ -12,7 +12,7 @@ RUN GOOS=linux GOARCH=$TARGETARCH go build -o /src/entrypoint ./src/main.go
 # Get branch and patch level, then create PATCH_LEVEL file
 RUN BRANCH=$(git rev-parse --abbrev-ref HEAD) && \
     DATE=$(date "+%Y-%m-%d:%H:%M:%S") && \
-    echo $DATE.$PATCH > /src/PATCH_LEVEL
+    echo $DATE.$BRANCH > /src/PATCH_LEVEL
 
 # Final stage
 FROM ubuntu
