@@ -132,7 +132,9 @@ func (store *PersonStore) FindNames(query bson.M) ([]models.ShortName, error) {
 		{Key: "ID", Value: "_id"},
 		{Key: "name", Value: bson.M{"$concat": bson.A{"$firstName", " ", "$lastName"}}},
 	}
-	opts := options.Find().SetProjection(mentorProjection)
+	opts := options.Find().
+		SetProjection(mentorProjection).
+		SetSort(bson.D{{Key: "name", Value: 1}})
 
 	fullQuery := bson.M{"$and": []bson.M{
 		{"name": bson.M{"$ne": "VERSION"}},
