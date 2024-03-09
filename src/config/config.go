@@ -99,7 +99,7 @@ func NewConfig() *Config {
 }
 
 /**
-* Disconnect fromthe Database
+* Connect fromthe Database
  */
 func (cfg *Config) Connect() {
 	// Connect to the database
@@ -125,7 +125,7 @@ func (cfg *Config) Connect() {
 }
 
 /**
-* Register a Config Store
+* Register a Collection Store
  */
 func (cfg *Config) registerCollection(collectionName string) *mongo.Collection {
 	collection := cfg.database.Collection(collectionName)
@@ -137,38 +137,6 @@ func (cfg *Config) registerCollection(collectionName string) *mongo.Collection {
 	cfg.Stores = append(cfg.Stores, &storeItem)
 
 	return collection
-}
-
-/**
-* Disconnect fromthe Database
- */
-func (cfg *Config) Disconnect() {
-	ctx, cancel := cfg.GetTimeoutContext()
-	defer cancel()
-	cfg.client.Disconnect(ctx)
-	cfg.cancel()
-}
-
-/**
-* Get the port config value
- */
-func (cfg *Config) GetPort() string {
-	return cfg.port
-}
-
-/**
-* Get the person mongo collection
- */
-func (cfg *Config) GetPersonCollection() *mongo.Collection {
-	return cfg.peopleCollection
-}
-
-/**
-* Get a Timeout Context using the configured defalut wait
- */
-func (cfg *Config) GetTimeoutContext() (context.Context, context.CancelFunc) {
-	timeout := time.Duration(cfg.databaseTimeout) * time.Second
-	return context.WithTimeout(context.Background(), timeout)
 }
 
 /**
@@ -213,7 +181,39 @@ func (cfg *Config) getEnumerators() {
 }
 
 /**
-* Simple Loaders for Mentors, Partners
+* Disconnect fromthe Database
+ */
+func (cfg *Config) Disconnect() {
+	ctx, cancel := cfg.GetTimeoutContext()
+	defer cancel()
+	cfg.client.Disconnect(ctx)
+	cfg.cancel()
+}
+
+/**
+* Get the port config value
+ */
+func (cfg *Config) GetPort() string {
+	return cfg.port
+}
+
+/**
+* Get the person mongo collection
+ */
+func (cfg *Config) GetPersonCollection() *mongo.Collection {
+	return cfg.peopleCollection
+}
+
+/**
+* Get a Timeout Context using the configured defalut wait
+ */
+func (cfg *Config) GetTimeoutContext() (context.Context, context.CancelFunc) {
+	timeout := time.Duration(cfg.databaseTimeout) * time.Second
+	return context.WithTimeout(context.Background(), timeout)
+}
+
+/**
+* Simple mongoDb Loaders for Mentors, Partners
  */
 func (cfg *Config) LoadLists() error {
 
