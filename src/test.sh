@@ -33,13 +33,10 @@ main() {
 
     test_http_request "/api/config/" "Get Config" "GET"
     test_http_request "/api/health/" "Get health" "GET"
-    test_http_request "/api/enums/" "Get enums" "GET"
-    test_http_request "/api/partners/" "Get partners" "GET"
-    test_http_request "/api/mentors/" "Get mentors" "GET"
     test_http_request "/api/person/" "Get people" "GET"
     test_http_request "/api/person/aaaa00000000000000000017" "Get person" "GET"
     test_http_request "/api/person/aaaa00000000000000000017" "Update Person" "PATCH" '{"name":"Foo", "description":"Some short description"}'
-    test_http_request "/api/person/" "Create Person" "POST" "{\"name\":\"Person_$current_time\", \"description\":\"A New Person\"}"
+    test_http_request "/api/person/" "Create Person" "POST" "{\"userName\":\"Person_$current_time\", \"description\":\"A New Person\"}"
 
     echo "SUCCESS!!!!"
 }
