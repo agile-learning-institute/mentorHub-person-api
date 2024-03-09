@@ -7,6 +7,10 @@ import (
 type Person struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
 	Name        string             `json:"name,omitempty"`
+	UserName    string             `json:"userName,omitempty"`
+	FirstName   string             `json:"firstName,omitempty"`
+	LastName    string             `json:"lastName,omitempty"`
+	Rolls       []string           `json:"rolls,omitempty"`
 	Description string             `json:"description,omitempty"`
 	Status      string             `json:"status,omitempty"`
 	Member      bool               `json:"member,omitempty"`
@@ -14,7 +18,7 @@ type Person struct {
 	Donor       bool               `json:"donor,omitempty"`
 	Contact     bool               `json:"contact,omitempty"`
 	Title       string             `json:"title,omitempty"`
-	Cadence		string			   `json:"cadence,omitempty"`
+	Cadence     string             `json:"cadence,omitempty"`
 	Email       string             `json:"eMail,omitempty"`
 	GitHub      string             `json:"gitHub,omitempty"`
 	Phone       string             `json:"phone,omitempty"`

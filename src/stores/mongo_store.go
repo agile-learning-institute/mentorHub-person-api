@@ -36,7 +36,7 @@ func MongoShortNameProjection() bson.D {
 /**
 * Construct a PersonStore to handle person database io
  */
-func NewMongoStore(cfg *config.Config, collectionName string, query bson.M) *MongoStore {
+func NewMongoStore(cfg *config.Config, collectionName string) *MongoStore {
 	store := &MongoStore{}
 
 	// Initilize Store
@@ -44,15 +44,7 @@ func NewMongoStore(cfg *config.Config, collectionName string, query bson.M) *Mon
 	store.CollectionName = collectionName
 	store.collection = cfg.GetCollection(collectionName)
 	store.Version = store.GetVersion()
-	store.FilterQuery = query
-	if query != nil {
-		store.DefaultQuery = bson.M{"$and": []bson.M{
-			CollectionDefaultQuery(),
-			query,
-		}}
-	} else {
-		store.DefaultQuery = CollectionDefaultQuery()
-	}
+	store.DefaultQuery = CollectionDefaultQuery()
 
 	// Put the database Version in the Config
 	store.config.AddConfigStore(store.AsStoreItem())
