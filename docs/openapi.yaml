@@ -101,39 +101,6 @@ paths:
           description: person not found
         '405':
           description: Validation exception
-  /api/partners/:
-    get:
-      summary: Get Partner Names
-      operationId: getPartners
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Names'          
-  /api/mentors/:
-    get:
-      summary: Get Mentor Names
-      operationId: getMentors
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Names'          
-  /api/enums/:
-    get:
-      summary: Get Enumerator Values
-      operationId: getEnums
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Enums'          
   /api/config/:
     get:
       summary: Get API Configuration Information
@@ -155,9 +122,7 @@ paths:
 
 components:
   schemas:
-    Enums:
-      type: object
-    Names: 
+    Names:
       type: array
       items:
         type: object
@@ -207,6 +172,32 @@ components:
                   - default
                   - environment
                   - file
+        mentors:
+          type: array
+          items:
+            type: object
+            properties: 
+              ID:
+                description: MongoDB _id
+                type: string
+                format: uuid
+              name:
+                description: Name
+                type: string      
+        partners:
+          type: array
+          items:
+            type: object
+            properties: 
+              ID:
+                description: MongoDB _id
+                type: string
+                format: uuid
+              name:
+                description: Name
+                type: string      
+        enums:
+          type: object
     Person:
       type: object
       required:
