@@ -216,8 +216,18 @@ components:
           description: The unique identifier for a person
           type: string
           format: UUID
-        name:
-          description: The persons name, first and last, or VERSION for the Schema Version
+        userName:
+          description: The persons user name
+            document
+          type: string
+          maxLength: 32
+        firstName:
+          description: The persons first name
+            document
+          type: string
+          maxLength: 32
+        lastName:
+          description: The persons last name
             document
           type: string
           maxLength: 32
