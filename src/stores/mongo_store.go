@@ -116,7 +116,6 @@ func (store *MongoStore) AsStoreItem() *config.StoreItem {
 	var storeItem config.StoreItem = config.StoreItem{
 		CollectionName: store.CollectionName,
 		Version:        store.Version,
-		Filter:         store.FilterQuery,
 	}
 	return &storeItem
 }
