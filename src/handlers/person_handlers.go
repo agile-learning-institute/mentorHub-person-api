@@ -1,3 +1,7 @@
+/********************************************************************************
+** Person Handlers
+**    This class proivdes the implementation for all /person endpoints
+********************************************************************************/
 package handlers
 
 import (

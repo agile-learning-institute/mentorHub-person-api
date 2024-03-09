@@ -1,3 +1,11 @@
+/********************************************************************************
+** Config
+**    This class Manages the mongo database connection for the API
+** 		Configuration values are managed by the config which implements a
+**      environment, file, default heiaracy for configurable values.
+**    This calss also supports a convenience /config endpoint that the person UI
+**    uses to get configuraiton information, enumerators, and needed select values.
+********************************************************************************/
 package config
 
 import (
@@ -80,7 +88,7 @@ func GetMentorsProjection() bson.D {
 	}
 }
 
-/**
+/**********************************************************************
 * Construct a config item by finding all the configuration values
  */
 func NewConfig() *Config {
@@ -98,8 +106,74 @@ func NewConfig() *Config {
 	return this
 }
 
+/********************************************************************************
+* Find a configuration value, and build the ConfigItems array
+* 	If in an Environment Variable exists use it
+* 	If not, and a Config File exists use that
+* 	If all else fails use the default value provided
+ */
+func (cfg *Config) findStringValue(key string, defaultValue string, secret bool) string {
+	var theValue string
+	var from string
+
+	// Start with default values
+	theValue = defaultValue
+	from = "default"
+
+	// Check for a file value
+	fileValue := cfg.fileValue(key)
+	if fileValue != "" {
+		theValue = fileValue
+		from = "file"
+	}
+
+	// Check for Environemt Variable
+	envValue, isSet := os.LookupEnv(key)
+	if isSet {
+		theValue = envValue
+		from = "environment"
+	}
+
+	// Create the CI and add it to the list
+	theItem := &ConfigItem{Name: key, From: from}
+	if secret {
+		theItem.Value = "Secret"
+	} else {
+		theItem.Value = theValue
+	}
+	cfg.ConfigItems = append(cfg.ConfigItems, theItem)
+
+	// Return the config value
+	return theValue
+}
+
 /**
-* Connect fromthe Database
+* Find an Integer configuration value - find the string value and convert it
+ */
+func (cfg *Config) findIntValue(key string, defaultValue int, secret bool) int {
+	theValue := cfg.findStringValue(key, strconv.Itoa(defaultValue), secret)
+	theInteger, _ := strconv.Atoi(theValue)
+	return theInteger
+}
+
+/**
+* Return the contents of a file if it exists, or an empty string otherwise
+ */
+func (cfg *Config) fileValue(key string) string {
+	// Check for Config in a File
+	var theFile = cfg.configFolder + key
+	_, error := os.Stat(theFile)
+	if error == nil {
+		fileContent, err := os.ReadFile(theFile)
+		if err == nil {
+			return string(fileContent)
+		}
+	}
+	return ""
+}
+
+/********************************************************************************
+* Connect to the Database
  */
 func (cfg *Config) Connect() {
 	// Connect to the database
@@ -180,7 +254,7 @@ func (cfg *Config) getEnumerators() {
 	cfg.Enumerators = result[0]
 }
 
-/**
+/********************************************************************************
 * Disconnect fromthe Database
  */
 func (cfg *Config) Disconnect() {
@@ -190,30 +264,24 @@ func (cfg *Config) Disconnect() {
 	cfg.cancel()
 }
 
-/**
-* Get the port config value
+/********************************************************************************
+* Simple Getters
  */
 func (cfg *Config) GetPort() string {
 	return cfg.port
 }
 
-/**
-* Get the person mongo collection
- */
 func (cfg *Config) GetPersonCollection() *mongo.Collection {
 	return cfg.peopleCollection
 }
 
-/**
-* Get a Timeout Context using the configured defalut wait
- */
 func (cfg *Config) GetTimeoutContext() (context.Context, context.CancelFunc) {
 	timeout := time.Duration(cfg.databaseTimeout) * time.Second
 	return context.WithTimeout(context.Background(), timeout)
 }
 
-/**
-* Simple mongoDb Loaders for Mentors, Partners
+/********************************************************************************
+* Load the Mentors and Partners list
  */
 func (cfg *Config) LoadLists() error {
 
@@ -246,6 +314,9 @@ func (cfg *Config) LoadLists() error {
 	return nil
 }
 
+/**
+* Get a list of people names based on the query and options provided
+ */
 func (cfg *Config) findNames(collection *mongo.Collection, opts *options.FindOptions, query bson.M) ([]*models.ShortName, error) {
 	var results []*models.ShortName
 	var err error
@@ -267,70 +338,4 @@ func (cfg *Config) findNames(collection *mongo.Collection, opts *options.FindOpt
 	}
 
 	return results, nil
-}
-
-/**
-* Find a configuration value, and build the ConfigItems array
-* 	If in an Environment Variable exists use it
-* 	If not, and a Config File exists use that
-* 	If all else fails use the default value provided
- */
-func (cfg *Config) findStringValue(key string, defaultValue string, secret bool) string {
-	var theValue string
-	var from string
-
-	// Start with default values
-	theValue = defaultValue
-	from = "default"
-
-	// Check for a file value
-	fileValue := cfg.fileValue(key)
-	if fileValue != "" {
-		theValue = fileValue
-		from = "file"
-	}
-
-	// Check for Environemt Variable
-	envValue, isSet := os.LookupEnv(key)
-	if isSet {
-		theValue = envValue
-		from = "environment"
-	}
-
-	// Create the CI and add it to the list
-	theItem := &ConfigItem{Name: key, From: from}
-	if secret {
-		theItem.Value = "Secret"
-	} else {
-		theItem.Value = theValue
-	}
-	cfg.ConfigItems = append(cfg.ConfigItems, theItem)
-
-	// Return the config value
-	return theValue
-}
-
-/**
-* Find an Integer configuration value - find the string value and convert it
- */
-func (cfg *Config) findIntValue(key string, defaultValue int, secret bool) int {
-	theValue := cfg.findStringValue(key, strconv.Itoa(defaultValue), secret)
-	theInteger, _ := strconv.Atoi(theValue)
-	return theInteger
-}
-
-/**
-* Return the contents of a file if it exists, or an empty string otherwise
- */
-func (cfg *Config) fileValue(key string) string {
-	// Check for Config in a File
-	var theFile = cfg.configFolder + key
-	_, error := os.Stat(theFile)
-	if error == nil {
-		fileContent, err := os.ReadFile(theFile)
-		if err == nil {
-			return string(fileContent)
-		}
-	}
-	return ""
 }

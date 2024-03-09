@@ -1,3 +1,7 @@
+/********************************************************************************
+** Person Store
+**    This class implementes the mongo calls needed by Person Handlers
+********************************************************************************/
 package stores
 
 import (
