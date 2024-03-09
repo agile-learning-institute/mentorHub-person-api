@@ -118,7 +118,7 @@ func (store *PersonStore) FindNames(query bson.M) ([]models.ShortName, error) {
 
 	// Query the database
 	mentorProjection := bson.D{
-		{Key: "_id", Value: "ID"},
+		{Key: "ID", Value: "_id"},
 		{Key: "name", Value: bson.M{"$concat": bson.A{"$firstName", " ", "$lastName"}}},
 	}
 	opts := options.Find().SetProjection(mentorProjection)
