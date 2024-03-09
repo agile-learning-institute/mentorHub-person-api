@@ -105,16 +105,15 @@ func (handler *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, r
 
 func (handler *PersonHandler) GetPerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
-	collection := handler.PersonStore.MongoStore.CollectionName
 	correltionId, _ := uuid.NewRandom()
-	log.Printf("Begin CID: %s Get %s by ID", correltionId, collection)
-	defer log.Printf("End CID: %s Get %s by ID", correltionId, collection)
+	log.Printf("Begin CID: %s Get Person by ID", correltionId)
+	defer log.Printf("End CID: %s Get Person by ID", correltionId)
 
 	// Get the Document ID from the path
 	id := mux.Vars(request)["id"]
 
 	// Get the Document from the database
-	results, err := handler.PersonStore.MongoStore.FindId(id)
+	results, err := handler.PersonStore.FindId(id)
 	if err != nil {
 		log.Printf("ERROR CID: %s ERROR %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
@@ -129,10 +128,9 @@ func (handler *PersonHandler) GetPerson(responseWriter http.ResponseWriter, requ
 
 func (handler *PersonHandler) GetPeople(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
-	collection := handler.PersonStore.MongoStore.CollectionName
 	correltionId, _ := uuid.NewRandom()
-	log.Printf("Begin CID: %s Get All from %s", correltionId, collection)
-	defer log.Printf("End CID: %s Get All from %s", correltionId, collection)
+	log.Printf("Begin CID: %s Get All People", correltionId)
+	defer log.Printf("End CID: %s Get All People", correltionId)
 
 	// Get all the people
 	results, err := handler.PersonStore.FindNames(bson.M{})
@@ -150,12 +148,11 @@ func (handler *PersonHandler) GetPeople(responseWriter http.ResponseWriter, requ
 
 func (handler *PersonHandler) GetMentors(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
-	collection := handler.PersonStore.MongoStore.CollectionName
 	correltionId, _ := uuid.NewRandom()
-	log.Printf("Begin CID: %s Get All from %s", correltionId, collection)
-	defer log.Printf("End CID: %s Get All from %s", correltionId, collection)
+	log.Printf("Begin CID: %s Get Mentors", correltionId)
+	defer log.Printf("End CID: %s Get Mentors", correltionId)
 
-	// Get all the people
+	// Get all the Mentors
 	results, err := handler.PersonStore.FindNames(bson.M{"mentor": true})
 	if err != nil {
 		log.Printf("ERROR CID: %s GetAllNames %s", correltionId, err.Error())
