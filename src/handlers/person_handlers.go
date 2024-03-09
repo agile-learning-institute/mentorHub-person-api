@@ -156,7 +156,7 @@ func (handler *PersonHandler) GetMentors(responseWriter http.ResponseWriter, req
 	defer log.Printf("End CID: %s Get All from %s", correltionId, collection)
 
 	// Get all the people
-	results, err := handler.PersonStore.FindNames(bson.M{"Mentor": true})
+	results, err := handler.PersonStore.FindNames(bson.M{"mentor": true})
 	if err != nil {
 		log.Printf("ERROR CID: %s GetAllNames %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
