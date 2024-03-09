@@ -3,10 +3,12 @@ package config
 import (
 	"context"
 	"log"
+	"mentorhub-person-api/src/models"
 	"os"
 	"strconv"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -25,6 +27,9 @@ type StoreItem struct {
 type Config struct {
 	ConfigItems      []*ConfigItem
 	Stores           []*StoreItem
+	Mentors          []*models.ShortName
+	Partners         []*models.ShortName
+	Enumerators      []map[string]interface{}
 	ApiVersion       string
 	port             string
 	patch            string
@@ -45,7 +50,25 @@ const (
 	DefaultDatabaseName     = "agile-learning-institute"
 	DefaultPort             = ":8082"
 	DefaultTimeout          = 10
+
+	MentorsCollection     = "people"
+	PartnersCollection    = "partners"
+	EnumeratorsCollection = "enumerators"
 )
+
+func GetAllQuery() bson.M {
+	return bson.M{"$and": []bson.M{
+		{"name": bson.M{"$ne": "VERSION"}},
+		{"status": bson.M{"$ne": "Archived"}},
+	}}
+}
+
+func GetMentorsQuery() bson.M {
+	return bson.M{"$and": []bson.M{
+		{"status": bson.M{"$ne": "Archived"}},
+		{"mentor": true},
+	}}
+}
 
 /**
 * Construct a config item by finding all the configuration values
@@ -78,9 +101,26 @@ func (cfg *Config) Connect() {
 		log.Fatal("Database Connection Failed:", err)
 	}
 
-	// Get the database and collection objects
+	// Get the database object
 	cfg.client = client
 	cfg.database = cfg.client.Database(cfg.databaseName)
+
+	// Query Enumerators
+	opts := options.Find()
+	context, cancel := cfg.GetTimeoutContext()
+	defer cancel()
+	cursor, err := cfg.database.Collection(EnumeratorsCollection).Find(context, GetAllQuery(), opts)
+	if err != nil {
+		cancel()
+		log.Fatal("Query Enumerators Failed:", err)
+	}
+
+	// Fetch Enumerators
+	err = cursor.All(context, &cfg.Enumerators)
+	if err != nil {
+		cancel()
+		log.Fatal("Fetch Enumerators Failed:", err)
+	}
 }
 
 /**
@@ -120,6 +160,52 @@ func (cfg *Config) AddConfigStore(theStore *StoreItem) {
 func (cfg *Config) GetTimeoutContext() (context.Context, context.CancelFunc) {
 	timeout := time.Duration(cfg.databaseTimeout) * time.Second
 	return context.WithTimeout(context.Background(), timeout)
+}
+
+/**
+* Simple Loaders for Mentors, Partners
+ */
+
+func (cfg *Config) LoadLists() error {
+	mentors, err := cfg.findNames(MentorsCollection, GetMentorsQuery())
+	if err != nil {
+		log.Printf("ERROR: Load Mentors failed %s", err)
+		return err
+	}
+	cfg.Mentors = mentors
+
+	partners, err := cfg.findNames(PartnersCollection, GetAllQuery())
+	if err != nil {
+		log.Printf("ERROR: Load Partners failed %s", err)
+		return err
+	}
+	cfg.Partners = partners
+
+	return nil
+}
+
+func (cfg *Config) findNames(collection string, query bson.M) ([]*models.ShortName, error) {
+	var results []*models.ShortName
+	var err error
+
+	// Query the database
+	options := options.Find()
+	context, cancel := cfg.GetTimeoutContext()
+	defer cancel()
+	cursor, err := cfg.database.Collection(collection).Find(context, query, options)
+	if err != nil {
+		return nil, err
+	}
+
+	// Fetch all the results
+	context, cancel = cfg.GetTimeoutContext()
+	defer cancel()
+	err = cursor.All(context, &results)
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
 }
 
 /**
