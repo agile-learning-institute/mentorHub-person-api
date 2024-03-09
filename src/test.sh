@@ -36,7 +36,7 @@ main() {
     test_http_request "/api/person/" "Get people" "GET"
     test_http_request "/api/person/aaaa00000000000000000017" "Get person" "GET"
     test_http_request "/api/person/aaaa00000000000000000017" "Update Person" "PATCH" '{"name":"Foo", "description":"Some short description"}'
-    test_http_request "/api/person/" "Create Person" "POST" "{\"userName\":\"Person_$current_time\", \"description\":\"A New Person\"}"
+    test_http_request "/api/person/" "Create Person" "POST" "{\"userName\":\"Person_$current_time\", \"firstName\":\"Zeb\", \"lastName\":\"Zinger\", \"description\":\"A New Test Person\"}"
 
     echo "SUCCESS!!!!"
 }
