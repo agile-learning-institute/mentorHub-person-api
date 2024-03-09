@@ -26,7 +26,7 @@ const (
 func NewPersonStore(cfg *config.Config) *PersonStore {
 	store := &PersonStore{}
 	store.config = cfg
-	store.MongoStore = NewMongoStore(cfg, "people", nil)
+	store.MongoStore = NewMongoStore(cfg, "people")
 	return store
 }
 
@@ -107,4 +107,33 @@ func (store *PersonStore) FindOneAndUpdate(id string, request []byte, crumb *mod
 	}
 
 	return &thePerson, nil
+}
+
+/**
+* Find Names
+ */
+func (store *PersonStore) FindNames(query bson.M) ([]models.ShortName, error) {
+	var results []models.ShortName
+	var err error
+
+	// Query the database
+	mentorProjection := bson.D{
+		{Key: "_id", Value: "ID"},
+		{Key: "name", Value: bson.M{"$concat": bson.A{"$firstName", " ", "$lastName"}}},
+	}
+	opts := options.Find().SetProjection(mentorProjection)
+	cursor, err := store.MongoStore.FindMany(query, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	// Fetch all the results
+	context, cancel := store.config.GetTimeoutContext()
+	defer cancel()
+	err = cursor.All(context, &results)
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
 }

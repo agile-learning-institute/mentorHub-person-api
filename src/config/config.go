@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -21,7 +20,6 @@ type ConfigItem struct {
 type StoreItem struct {
 	CollectionName string `json:"collectionName"`
 	Version        string `json:"version"`
-	Filter         bson.M `json:"filter"`
 }
 
 type Config struct {
