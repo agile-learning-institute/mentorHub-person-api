@@ -25,21 +25,24 @@ type StoreItem struct {
 }
 
 type Config struct {
-	ConfigItems      []*ConfigItem
-	Stores           []*StoreItem
-	Mentors          []*models.ShortName    `json:"mentors"`
-	Partners         []*models.ShortName    `json:"partners"`
-	Enumerators      map[string]interface{} `json:"enums"`
-	ApiVersion       string
-	port             string
-	patch            string
-	configFolder     string
-	databaseName     string
-	databaseTimeout  int
-	connectionString string
-	client           *mongo.Client
-	database         *mongo.Database
-	cancel           context.CancelFunc
+	ConfigItems        []*ConfigItem
+	Stores             []*StoreItem
+	Mentors            []*models.ShortName    `json:"mentors"`
+	Partners           []*models.ShortName    `json:"partners"`
+	Enumerators        map[string]interface{} `json:"enums"`
+	ApiVersion         string
+	port               string
+	patch              string
+	configFolder       string
+	databaseName       string
+	databaseTimeout    int
+	connectionString   string
+	client             *mongo.Client
+	database           *mongo.Database
+	peopleCollection   *mongo.Collection
+	enumsCollection    *mongo.Collection
+	partnersCollection *mongo.Collection
+	cancel             context.CancelFunc
 }
 
 const (
@@ -51,9 +54,9 @@ const (
 	DefaultPort             = ":8082"
 	DefaultTimeout          = 10
 
-	MentorsCollection     = "people"
-	PartnersCollection    = "partners"
-	EnumeratorsCollection = "enumerators"
+	PeoplesCollectionName     = "people"
+	PartnersCollectionName    = "partners"
+	EnumeratorsCollectionName = "enumerators"
 )
 
 func GetAllQuery() bson.M {
@@ -112,24 +115,28 @@ func (cfg *Config) Connect() {
 	cfg.client = client
 	cfg.database = cfg.client.Database(cfg.databaseName)
 
-	// Query Enumerators
-	opts := options.Find()
-	context, cancel := cfg.GetTimeoutContext()
-	defer cancel()
-	cursor, err := cfg.database.Collection(EnumeratorsCollection).Find(context, GetAllQuery(), opts)
-	if err != nil {
-		cancel()
-		log.Fatal("Query Enumerators Failed:", err)
-	}
+	// Initilize Collections
+	cfg.peopleCollection = cfg.registerCollection(PeoplesCollectionName)
+	cfg.partnersCollection = cfg.registerCollection(PartnersCollectionName)
+	cfg.enumsCollection = cfg.registerCollection(EnumeratorsCollectionName)
 
-	// Fetch Enumerators
-	var result []map[string]interface{}
-	err = cursor.All(context, &result)
-	if err != nil {
-		cancel()
-		log.Fatal("Fetch Enumerators Failed:", err)
+	// Load Enumerators
+	cfg.getEnumerators()
+}
+
+/**
+* Register a Config Store
+ */
+func (cfg *Config) registerCollection(collectionName string) *mongo.Collection {
+	collection := cfg.database.Collection(collectionName)
+	version := cfg.GetVersion(collection)
+	var storeItem = StoreItem{
+		CollectionName: collectionName,
+		Version:        version,
 	}
-	cfg.Enumerators = result[0]
+	cfg.Stores = append(cfg.Stores, &storeItem)
+
+	return collection
 }
 
 /**
@@ -150,17 +157,10 @@ func (cfg *Config) GetPort() string {
 }
 
 /**
-* Get mongo Collection
+* Get the person mongo collection
  */
-func (cfg *Config) GetCollection(name string) mongo.Collection {
-	return *cfg.database.Collection(name)
-}
-
-/**
-* Register a Config Store
- */
-func (cfg *Config) AddConfigStore(theStore *StoreItem) {
-	cfg.Stores = append(cfg.Stores, theStore)
+func (cfg *Config) GetPersonCollection() *mongo.Collection {
+	return cfg.peopleCollection
 }
 
 /**
@@ -174,18 +174,42 @@ func (cfg *Config) GetTimeoutContext() (context.Context, context.CancelFunc) {
 /**
 * Get the collection schema version
  */
-func (cfg *Config) GetVersion(collection string) string {
+func (cfg *Config) GetVersion(collection *mongo.Collection) string {
 	var theVersion models.VersionInfo
 	var err error
 
 	query := bson.M{"name": "VERSION"}
 	context, cancel := cfg.GetTimeoutContext()
 	defer cancel()
-	err = cfg.database.Collection(collection).FindOne(context, query).Decode(&theVersion)
+	err = collection.FindOne(context, query).Decode(&theVersion)
 	if err != nil {
 		return err.Error()
 	}
 	return theVersion.Version
+}
+
+/**
+* Load Enumerators
+ */
+func (cfg *Config) getEnumerators() {
+	// Query Enumerators
+	opts := options.Find()
+	context, cancel := cfg.GetTimeoutContext()
+	defer cancel()
+	cursor, err := cfg.enumsCollection.Find(context, GetAllQuery(), opts)
+	if err != nil {
+		cancel()
+		log.Fatal("Query Enumerators Failed:", err)
+	}
+
+	// Fetch Enumerators
+	var result []map[string]interface{}
+	err = cursor.All(context, &result)
+	if err != nil {
+		cancel()
+		log.Fatal("Fetch Enumerators Failed:", err)
+	}
+	cfg.Enumerators = result[0]
 }
 
 /**
@@ -195,7 +219,7 @@ func (cfg *Config) LoadLists() error {
 
 	// Fetch Mentors
 	mentors, err := cfg.findNames(
-		MentorsCollection,
+		cfg.peopleCollection,
 		options.Find().SetProjection(GetMentorsProjection()),
 		GetMentorsQuery(),
 	)
@@ -208,7 +232,7 @@ func (cfg *Config) LoadLists() error {
 
 	// Fetch Partners
 	partners, err := cfg.findNames(
-		PartnersCollection,
+		cfg.partnersCollection,
 		options.Find(),
 		GetAllQuery(),
 	)
@@ -222,14 +246,14 @@ func (cfg *Config) LoadLists() error {
 	return nil
 }
 
-func (cfg *Config) findNames(collection string, opts *options.FindOptions, query bson.M) ([]*models.ShortName, error) {
+func (cfg *Config) findNames(collection *mongo.Collection, opts *options.FindOptions, query bson.M) ([]*models.ShortName, error) {
 	var results []*models.ShortName
 	var err error
 
 	// Query the database
 	context, cancel := cfg.GetTimeoutContext()
 	defer cancel()
-	cursor, err := cfg.database.Collection(collection).Find(context, query, opts)
+	cursor, err := collection.Find(context, query, opts)
 	if err != nil {
 		return nil, err
 	}

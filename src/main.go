@@ -24,13 +24,9 @@ func main() {
 
 	// Setup the Stores
 	personStore := stores.NewPersonStore(config)
-	enumStore := stores.NewMongoStore(config, "enumerators")
-	partnerStore := stores.NewMongoStore(config, "partners")
 
 	// Setup the Handlers
 	configHandler := handlers.NewConfigHandler(config)
-	enumHandler := handlers.NewMongoHandler(enumStore)
-	partnerHandler := handlers.NewMongoHandler(partnerStore)
 	personHandler := handlers.NewPersonHandler(personStore)
 
 	// Setup the HttpServer Router
@@ -50,9 +46,6 @@ func main() {
 	gorillaRouter.HandleFunc("/api/person/", personHandler.GetPeople).Methods("GET")
 	gorillaRouter.HandleFunc("/api/person/{id}", personHandler.UpdatePerson).Methods("PATCH")
 	gorillaRouter.HandleFunc("/api/person/{id}", personHandler.GetPerson).Methods("GET")
-	gorillaRouter.HandleFunc("/api/enums/", enumHandler.GetAll).Methods("GET")
-	gorillaRouter.HandleFunc("/api/partners/", partnerHandler.GetNames).Methods("GET")
-	gorillaRouter.HandleFunc("/api/mentors/", personHandler.GetMentors).Methods("GET")
 	gorillaRouter.HandleFunc("/api/config/", configHandler.GetConfig).Methods("GET")
 	gorillaRouter.Path("/api/health/").Handler(promhttp.Handler())
 

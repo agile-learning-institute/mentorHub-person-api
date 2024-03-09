@@ -12,13 +12,8 @@ import (
 )
 
 type PersonStore struct {
-	config     *config.Config
-	MongoStore *MongoStore
+	config *config.Config
 }
-
-const (
-	CollectionName = "people"
-)
 
 /**
 * Construct a PersonStore to handle person database io
@@ -26,7 +21,6 @@ const (
 func NewPersonStore(cfg *config.Config) *PersonStore {
 	store := &PersonStore{}
 	store.config = cfg
-	store.MongoStore = NewMongoStore(cfg, "people")
 	return store
 }
 
@@ -52,6 +46,7 @@ func (store *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (
 		return nil, err
 	}
 
+	// Addres OID values
 	ConvertToOid(insertValues, "mentorId")
 	ConvertToOid(insertValues, "partnerId")
 
@@ -59,15 +54,40 @@ func (store *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (
 	insertValues["lastSaved"] = crumb
 
 	// Insert the document
-	result, err := store.MongoStore.InsertOne(insertValues)
+	context, cancel := store.config.GetTimeoutContext()
+	defer cancel()
+	result, err := store.config.GetPersonCollection().InsertOne(context, insertValues)
 	if err != nil {
 		return nil, err
 	}
-
 	id := result.InsertedID.(primitive.ObjectID).Hex()
 
-	// Get the new document
-	return store.MongoStore.FindId(id)
+	// Fetch the updated Person
+	query := bson.M{"_id": id}
+	var person map[string]interface{}
+
+	context, cancel = store.config.GetTimeoutContext()
+	defer cancel()
+	err = store.config.GetPersonCollection().FindOne(context, query).Decode(&person)
+	if err != nil {
+		return nil, err
+	}
+	return &person, nil
+}
+
+func (store *PersonStore) FindId(id string) (*map[string]interface{}, error) {
+	// get the bson ID
+	objectID, _ := primitive.ObjectIDFromHex(id)
+	query := bson.M{"_id": objectID}
+
+	var result map[string]interface{}
+	context, cancel := store.config.GetTimeoutContext()
+	defer cancel()
+	err := store.config.GetPersonCollection().FindOne(context, query).Decode(&result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
 }
 
 /**
@@ -100,9 +120,10 @@ func (store *PersonStore) FindOneAndUpdate(id string, request []byte, crumb *mod
 	options := options.FindOneAndUpdate().SetReturnDocument(options.After)
 
 	// Update the document
-	err = store.MongoStore.FindOneAndUpdate(query, update, options).Decode(&thePerson)
+	ctx, cancel := store.config.GetTimeoutContext()
+	defer cancel()
+	err = store.config.GetPersonCollection().FindOneAndUpdate(ctx, query, update, options).Decode(&thePerson)
 	if err != nil {
-		// throw the error up the call stack
 		return nil, err
 	}
 
@@ -122,13 +143,22 @@ func (store *PersonStore) FindNames(query bson.M) ([]models.ShortName, error) {
 		{Key: "name", Value: bson.M{"$concat": bson.A{"$firstName", " ", "$lastName"}}},
 	}
 	opts := options.Find().SetProjection(mentorProjection)
-	cursor, err := store.MongoStore.FindMany(query, opts)
+
+	fullQuery := bson.M{"$and": []bson.M{
+		{"name": bson.M{"$ne": "VERSION"}},
+		{"status": bson.M{"$ne": "Archived"}},
+		query,
+	}}
+
+	context, cancel := store.config.GetTimeoutContext()
+	defer cancel()
+	cursor, err := store.config.GetPersonCollection().Find(context, fullQuery, opts)
 	if err != nil {
 		return nil, err
 	}
 
 	// Fetch all the results
-	context, cancel := store.config.GetTimeoutContext()
+	context, cancel = store.config.GetTimeoutContext()
 	defer cancel()
 	err = cursor.All(context, &results)
 	if err != nil {
