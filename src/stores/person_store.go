@@ -38,7 +38,7 @@ func ConvertToOid(values bson.M, fieldName string) {
 /**
 * Insert a new person with the information provided
  */
-func (store *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (*map[string]interface{}, error) {
+func (store *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (*models.Person, error) {
 	// Get the document values
 	var insertValues bson.M
 	err := json.Unmarshal(information, &insertValues)
@@ -62,32 +62,22 @@ func (store *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (
 	}
 	id := result.InsertedID.(primitive.ObjectID).Hex()
 
-	// Fetch the updated Person
-	query := bson.M{"_id": id}
-	var person map[string]interface{}
-
-	context, cancel = store.config.GetTimeoutContext()
-	defer cancel()
-	err = store.config.GetPersonCollection().FindOne(context, query).Decode(&person)
-	if err != nil {
-		return nil, err
-	}
-	return &person, nil
+	return store.FindId(id)
 }
 
-func (store *PersonStore) FindId(id string) (*map[string]interface{}, error) {
+func (store *PersonStore) FindId(id string) (*models.Person, error) {
 	// get the bson ID
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	query := bson.M{"_id": objectID}
 
-	var result map[string]interface{}
+	var result *models.Person
 	context, cancel := store.config.GetTimeoutContext()
 	defer cancel()
 	err := store.config.GetPersonCollection().FindOne(context, query).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
-	return &result, nil
+	return result, nil
 }
 
 /**

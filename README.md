@@ -95,22 +95,22 @@ curl http://localhost:8082/api/person/
 ### Test get a person
 
 ```bash
-curl http://localhost:8081/api/person/[ID]
+curl http://localhost:8082/api/person/[ID]
 
 ```
 
 ### Test add a person
 
 ```bash
-curl -X POST http://localhost:8081/api/person/ \
-     -d '{"name":"Foo", "description":"Some short description"}'
+curl -X POST http://localhost:8082/api/person/ \
+     -d '{"userName":"Foo", "description":"Some short description"}'
 
 ```
 
 ### Test update a person
 
 ```bash
-curl -X PATCH http://localhost:8081/api/person/aaaa00000000000000000021 \
+curl -X PATCH http://localhost:8082/api/person/aaaa00000000000000000021 \
      -d '{"description":"Some long description"}'
 
 ```
