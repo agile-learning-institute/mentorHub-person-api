@@ -27,9 +27,9 @@ type StoreItem struct {
 type Config struct {
 	ConfigItems      []*ConfigItem
 	Stores           []*StoreItem
-	Mentors          []*models.ShortName
-	Partners         []*models.ShortName
-	Enumerators      []map[string]interface{}
+	Mentors          []*models.ShortName    `json:"mentors"`
+	Partners         []*models.ShortName    `json:"partners"`
+	Enumerators      map[string]interface{} `json:"enums"`
 	ApiVersion       string
 	port             string
 	patch            string
@@ -123,11 +123,13 @@ func (cfg *Config) Connect() {
 	}
 
 	// Fetch Enumerators
-	err = cursor.All(context, &cfg.Enumerators)
+	var result []map[string]interface{}
+	err = cursor.All(context, &result)
 	if err != nil {
 		cancel()
 		log.Fatal("Fetch Enumerators Failed:", err)
 	}
+	cfg.Enumerators = result[0]
 }
 
 /**
