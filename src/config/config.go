@@ -70,6 +70,13 @@ func GetMentorsQuery() bson.M {
 	}}
 }
 
+func GetMentorsProjection() bson.D {
+	return bson.D{
+		{Key: "ID", Value: "_id"},
+		{Key: "name", Value: bson.M{"$concat": bson.A{"$firstName", " ", "$lastName"}}},
+	}
+}
+
 /**
 * Construct a config item by finding all the configuration values
  */
@@ -167,14 +174,27 @@ func (cfg *Config) GetTimeoutContext() (context.Context, context.CancelFunc) {
  */
 
 func (cfg *Config) LoadLists() error {
-	mentors, err := cfg.findNames(MentorsCollection, GetMentorsQuery())
+
+	// Fetch Mentors
+	mentors, err := cfg.findNames(
+		MentorsCollection,
+		options.Find().SetProjection(GetMentorsProjection()),
+		GetMentorsQuery(),
+	)
+
 	if err != nil {
 		log.Printf("ERROR: Load Mentors failed %s", err)
 		return err
 	}
 	cfg.Mentors = mentors
 
-	partners, err := cfg.findNames(PartnersCollection, GetAllQuery())
+	// Fetch Partners
+	partners, err := cfg.findNames(
+		PartnersCollection,
+		options.Find(),
+		GetAllQuery(),
+	)
+
 	if err != nil {
 		log.Printf("ERROR: Load Partners failed %s", err)
 		return err
@@ -184,15 +204,14 @@ func (cfg *Config) LoadLists() error {
 	return nil
 }
 
-func (cfg *Config) findNames(collection string, query bson.M) ([]*models.ShortName, error) {
+func (cfg *Config) findNames(collection string, opts *options.FindOptions, query bson.M) ([]*models.ShortName, error) {
 	var results []*models.ShortName
 	var err error
 
 	// Query the database
-	options := options.Find()
 	context, cancel := cfg.GetTimeoutContext()
 	defer cancel()
-	cursor, err := cfg.database.Collection(collection).Find(context, query, options)
+	cursor, err := cfg.database.Collection(collection).Find(context, query, opts)
 	if err != nil {
 		return nil, err
 	}
