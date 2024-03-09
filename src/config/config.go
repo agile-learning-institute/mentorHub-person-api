@@ -170,9 +170,25 @@ func (cfg *Config) GetTimeoutContext() (context.Context, context.CancelFunc) {
 }
 
 /**
+* Get the collection schema version
+ */
+func (cfg *Config) GetVersion(collection string) string {
+	var theVersion models.VersionInfo
+	var err error
+
+	query := bson.M{"name": "VERSION"}
+	context, cancel := cfg.GetTimeoutContext()
+	defer cancel()
+	err = cfg.database.Collection(collection).FindOne(context, query).Decode(&theVersion)
+	if err != nil {
+		return err.Error()
+	}
+	return theVersion.Version
+}
+
+/**
 * Simple Loaders for Mentors, Partners
  */
-
 func (cfg *Config) LoadLists() error {
 
 	// Fetch Mentors
