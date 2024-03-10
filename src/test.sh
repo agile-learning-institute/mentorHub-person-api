@@ -2,6 +2,7 @@
 
 # Default port
 sequence=${1:-1}
+testAll=${2:-0}
 port=8082
 
 # Function to test HTTP request and exit if failed
@@ -38,11 +39,14 @@ main() {
     partner=$(sort -R ./loadData/partners.txt | head -n 1 | tr -d '\n\t\r')
     echo $sequence, $firstName, $lastName, $status, $cadence, $device, $title, $roles, $notes
 
-    test_http_request "/api/config/" "GET"
-    test_http_request "/api/health/" "GET"
-    test_http_request "/api/person/" "GET"
-    test_http_request "/api/person/aaaa00000000000000000017" "GET"
-    test_http_request "/api/person/aaaa00000000000000000017" "PATCH" '{"name":"Foo", "description":"Some short description"}'
+    if [ "$testAll" -eq 0 ]; then
+        test_http_request "/api/config/" "GET"
+        test_http_request "/api/health/" "GET"
+        test_http_request "/api/person/" "GET"
+        test_http_request "/api/person/aaaa00000000000000000017" "GET"
+        test_http_request "/api/person/aaaa00000000000000000017" "PATCH" '{"name":"Foo", "description":"Some short description"}'
+    fi
+
     test_http_request "/api/person/" \
         "POST" \
         "{\"userName\":\"$firstName.$lastName.$sequence\", \
