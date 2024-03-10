@@ -26,7 +26,6 @@ test_http_request() {
 # Main function
 main() {
     local current_time
-    current_time=$(date +"%Y-%m-%d_%H-%M-%S")
     firstName=$(sort -R ./loadData/firstNames.txt | head -n 1 | tr -d '\n')
     lastName=$(sort -R ./loadData/lastNames.txt | head -n 1 | tr -d '\n')
     status=$(sort -R ./loadData/status.txt | head -n 1 | tr -d '\n')
@@ -37,7 +36,7 @@ main() {
     notes=$(sort -R ./loadData/BOFH.txt | head -n 1 | tr -d '\n\t\r"' | tr -d "'" | cut -c 1-255)
     mentor=$(sort -R ./loadData/mentors.txt | head -n 1 | tr -d '\n\t\r')
     partner=$(sort -R ./loadData/partners.txt | head -n 1 | tr -d '\n\t\r')
-    echo $current_time, $sequence, $firstName, $lastName, $status, $cadence, $device, $title, $roles, $notes
+    echo $sequence, $firstName, $lastName, $status, $cadence, $device, $title, $roles, $notes
 
     test_http_request "/api/config/" "GET"
     test_http_request "/api/health/" "GET"
