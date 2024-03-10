@@ -1,0 +1,1959 @@
+To:	**blocked**
+cc:	 
+Subject:	BOFH
+
+
+--------------------------------------------------------------------------------
+
+The Bastard Operator from Hell is back ... 
+--------------------------------------------------------------------------------
+
+So I'm in my office again, reconfiguring the router when the phone rings. 
+Somehow I knew this was going to happen. I'm obviously going to have to 
+change my number (and Operator) YET AGAIN.
+I pick it up. 
+
+"Start talking."
+
+"Is this the network engineer?"
+
+Sigh. 
+
+"Yes it is," I say, resigned to my fate.
+
+I check the phone - there's no corresponding name on caller ID, which can 
+only mean one thing.
+
+"You're new here aren't you?" I ask.
+
+"Yeah, how did you know?"
+
+"Lucky guess. Tell me, how did you get my number?"
+
+"Oh, I just called the helpdesk."
+
+How helpful of them..
+
+"Anyway, I was just ringing to tell you that you've got a problem with the 
+network."
+
+"No," I answer, "no problems here."
+
+"You do have a problem - I can't get my PC to work."
+
+"Let's just look at this logically," I say. "You can't get your PC to 
+work, so I have a problem."
+
+"With the network, yes. It's probably a loose connector somewhere."
+
+Of all the things that REALLY piss me off, the 'loose connector' and 
+'loose wire' theories TOP the queue. He obviously thinks that my day 
+consists of sitting in a comms room somewhere 'wiggling loose wires' to 
+improve network services. Or that I designed the network by calling up a 
+cable supplier and ordering several drums of CAT-5 and asking for it to be 
+"scattered about the building in a spider web shape". 
+
+Next thing I know he'll be telling me that maybe one of the 'bulbs' burnt 
+out on my FDDI ring.
+
+"Hey, maybe one of the bulbs.."
+
+A little knowledge is a dangerous thing. 
+
+"No, it's not that! You've kicked out your patch cable," I say.
+
+"I can't have!" he backpeddles.
+
+"You've kicked out your patch cable."
+
+"No, all the wires are securely plugged into the back of my PC..."
+
+"You've kicked out your patch cable."
+
+"...and they all go to the box in the flo.. Oh, hey! I kicked out the 
+patch cable!"
+
+"Of course you did. It happens all the time. It's because the twisted 
+pairs in your cable get tangled, shortening the effective length of the 
+cable. It's just like the telephone cord when it gets tangled."
+
+"Oh right! I think I read something about that.." he burbles. What a 
+plonker.
+
+"Is there anything I can do to stop it?"
+
+"Well, all you need to do is unplug it from the floor socket and give the 
+cable a really really hard yank. Then all the twisted pairs come into 
+line."
+
+"But won't that damage my machine?"
+
+"Heck no! The connector at the other end is made to pop out when the 
+strain might damage the cable!"
+
+"OK, here goes..."
+
+CRASH!! 
+
+"HEY! I PULLED MY MACHINE ONTO THE FLOOR AND A BOARD'S RIPPED OUT OF THE 
+BACK OF IT!"
+
+"Oh well, you obviously pulled too hard," I say calmly.
+
+"WHAT AM I GOING TO DO? IT'S MY FIRST DAY!"
+
+"I don't know," I reply. "It sounds to me like a hardware problem. I'm 
+just a network engineer.."
+
+"But..."
+
+I hang up. It's time to have stern words with the helpdesk. First step, 
+into the comms room to 'wiggle their wires around' and drop out their 
+network. Step two, set their call-forwarding so all their calls go through 
+to the boss.
+
+I pick a floor at random and remote boot both the main and redundant 
+routers. 
+
+REQUEST LINES ARE NOW OPEN!
+
+Scant seconds later I hear the boss's phone ringing. I'll give the boss 
+about 10 minutes of irate users, then wander round and suggest the 
+helpdesk staff need a lesson on what's funny and what's not. Forwarding 
+your phone to the boss at network failure ISN'T funny. Helpdesk personnel 
+investigating the job market IS.
+
+My thoughts are interrupted by a call on the Red 'Bat' Phone. It's 
+obviously the boss.
+
+"Is this the network engineer?"
+
+"It certainly is, how can I be of help?" I crawl.
+
+"Ah, you've got a problem with your network."
+
+"Have we?" (grease grease).
+
+"Yeah, I guess it's probably a loose wire somewhere.."
+
+Sigh.
+
+He'll have to go.. 
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard trips up ... 
+--------------------------------------------------------------------------------
+
+"So what you're saying is that the network is wide open to hackers?" the 
+boss asks.
+The department Brown-Nose nods. I, however, shake my head.
+
+Guess who he believes?
+
+"Well, what have you been doing about these security holes?" asks the 
+boss, now more than a little concerned.
+
+"Ah..." 
+
+I consider the topic carefully for almost a nano-second prior to providing 
+my answer.
+
+"Not a thing."
+
+"But our network is wide open. The security implications are horrendous!"
+
+"That is correct," I say. "My much maligned co-'worker' has hit the nail 
+right on the side with his diagnosis of our situation, which I will now 
+attempt to summarise.
+
+"In the unlikely even that someone manages to pick both the seven-pin 
+tumbler locks on one of the comms room doors, bypass the alarm systems and 
+security cameras, then open the locked FDDI cage, or alternatively, smash 
+their way through six inches of reinforced concrete piping buried four 
+feet under a busy suburban road, then tap into our fibre-optic cable 
+without us knowing...then yes, we are wide open.
+
+"However, if as I surmise this is a thinly disguised ploy by the 
+departmental Brown-Nose to edge his way one rung up the perk ladder into a 
+trip to look at new security software, then I believe that our exposure to 
+danger is somewhat overstated."
+
+"Did you say trip?" the boss asks, eyes gleaming.
+
+EVERY TIME A COCONUT!
+
+"Yes," Brown-Nose chips in innocently. "Just to a manufacturer in the US 
+who has some software to quadrupally encrypt data streams while retaining 
+data integrity and not impacting bandwidth."
+
+Of course, as soon as the word 'US' pops up the boss has visions of 
+himself overseeing the 'evaluation' procedure at a convenient beach, 
+staying at the nearest resort because of its central placing. 
+
+Right.
+
+Brown-Nose smirks as his dreams of a holiday on the company come to full 
+fruition.
+
+It seems almost a crime to take his dreams and strike them with the iron 
+bar of reality, but network engineering is a dirty job...
+
+"Well, that really does sound like a good idea. However, I believe that 
+there is some quintupally encrypting software with a manufacturer who is 
+presently on a six-week tour of the States that I'd already lined-up a 
+meeting with."
+
+To add to the impact of my statement, I flash a sheet of paper with 
+impressive writing and letterhead as proof. They are not to know that it 
+is in fact from my lawyer who is attempting to defend me from some 
+libellous allegations of an illegal wiretap at my previous workplace (a 
+sordid blackmail allegation completely fabricated by some other employees 
+who were jealous of my six figure salary and my five minute working day).
+
+Flashing the paper at this stage is of course unnecessary, as the boss 
+wants to believe this...
+
+I tip him the 'junket-nod' with:
+
+"Hopefully we'll be able to catch up with them as they had booking 
+problems and had to review their venues and dates."
+
+Now the boss has carte blanche at junket level. His two options are either 
+he goes with Brown-Nose to the States for a brief holiday with a small 
+amount of technical content, or he goes to the States with me, 
+expenses-paid for five weeks, never quite catching the manufacturer, 
+returning home empty handed and still needing to find some encryption 
+software (in other words, up for another junket), no technical content, 
+with the minor danger of alcoholic poisoning.
+
+Choose the first option and Brown-Nose will wilt under their respective 
+inspections.
+
+The Boss smiles. I smile. We both smile.
+
+Brown-Nose sobs - he knows what's on the cards.
+
+"Of course," I say "we don't really want to muddy the waters of purchasing 
+and spread ourselves too thinly in researching this. A small team to 
+concentrate on the hardware should do."
+
+Engage cover-up plan.
+
+"Yes," the boss concurs knowingly, ".. too many cooks and all that. Some 
+technical reshuffle seems called for... I hear there's an opening for a 
+technical consultant in our site maintenance division in Hartlepool."
+
+Tears well up in Brown-Nose's eyes as he contemplates his next five years 
+of gardening and rubbish bin emptying...
+
+"That will do nicely sir. Book the tickets now?"
+
+I try not to think of it as spite, just seeing the job through to 
+completion. 
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard gives advice ... 
+--------------------------------------------------------------------------------
+
+I'm preparing for a six-week US junket on the company with the boss to 
+look at new comms gear. This means I'm going to have to take on someone to 
+do my job while I'm away.
+The ex-office brown-nose applied for the position, but unfortunately he 
+was late for his interview when the lift in which he was a passenger 
+mysteriously blew a control breaker. A pity they didn't discover him till 
+after the weekend, by which time he was a drooling vegetable. It all adds 
+fuel to my argument that I require a larger 'miscellaneous' budget to 
+employ part-time staff to check things like lift emergency telephones and 
+alarm switches.
+
+As far as the job went, within a couple of days I have a 'green and keen' 
+contractor occupying the spare desk. Now to teach him the ropes...
+
+"OK quick outline, we look after every communications entity in the 
+building. And they all belong to me. Not the user. Me. Remember that, it's 
+important!"
+
+"They belong to you." he repeats
+
+"No, never say that. Always say, they belong to 'ME'. You don't want to 
+give the users the idea that comms is something they should get involved 
+in."
+
+"They belong to me. So we look after phones as well?" 
+
+"Phones, fire and intruder alarms, intercoms, networks, microwave link, 
+miscellaneous control systems; hell, if they bought semaphore flags we'd 
+probably be looking after them," I say, pointing out the respective 
+chapters in my site management bible.
+
+"How do you get away with it?" he asks.
+
+"Simple. I apply the basic rule of standardisation. Everything gets done 
+in a standard way, and no-one but me knows anything about it."
+
+"It's all in your head?..."
+
+"No, no. It's all copiously documented in that safe over there," I reply, 
+indicating a large armageddon-proof box in the corner.
+
+"Who has access to it?"
+
+"Me."
+
+"And your boss..?"
+
+"He has a key that he likes to think will open it. In actual fact, it's a 
+duplicate of the key to the CEO's wine safe in the basement."
+
+"Does the boss know?"
+
+"How could he. He's not allowed in either area."
+
+"He's not allowed in here?"
+
+"Of course not. He's management and this is a sensitive area. 
+Standardisation, remember. Just mention to the CEO that we have phone-tap 
+equipment and you get a fat security budget to play with."
+
+"Aren't you worried the boss will find out about the key?" my employee 
+asks.
+
+"Not as worried as he'd be when I mention informing the CEO about it. 
+There's been a surprising amount of pilfering going on. It wouldn't look 
+good on his permanent record when he went looking for his next job..."
+
+"What a tragedy. Okay, I've got all that, what do I do?" 
+
+"Nothing, I've done it all. Familiarise yourself with the site management 
+bible. It'll tell you all the major problems that could befall us, what to 
+do and who to contact. See that phone on your desk - don't ever answer it, 
+it'll just be some user who's moved his machine and expects the 
+data-sockets to be live."
+
+"That's it?"
+
+"Like I said, it's mostly in the site bible. Oh, remember to put the voice 
+recorder tapes into the fireproof back-up safe!"
+
+"That's in case we have a verbal contract disagreement?"
+
+"No, that's so I can listen to the boss's personal phone calls. Honestly, 
+it's better than 'Days of Our Lives'. Also, never mention the name 'Pooky' 
+or he'll know I'm onto him."
+
+"OK, what if the helpdesk corners me?"
+
+"Hmmm. Well, as I haven't introduced you to them, you've got a week's 
+grace. After that, use the excuse that you can't accept helpdesk calls 
+until you have a username to receive the email so that the process can be 
+tracked by me when I return. That'll buy you another couple of days. Add 
+two more days for documentation on paper and then you might squeeze yet 
+another week or two out if you use the old routine 'log a fault call' - 
+preferably on some ancient noticeboard using the tried and trusted 
+postcard method. Remember to make some number up and write it on the 
+incident board as 'proof'. When you can't delay any more, use the network 
+monitor to drop the CEO's data ports. He has priority and you can kill at 
+least a day 'isolating the failure'."
+
+"What happens if the CEO corners me?"
+
+"Play it safe and brown-nose. Get him a coffee and take him on a tour of 
+the central comms room. When he's mesmerised by the flashing lights, nudge 
+his arm when you open a cabinet door so that the coffee spills through the 
+floor tiles. The master breaker will pop so fast he won't even have time 
+to say 'woopsy'. After that, no-one's going to complain about anything. 
+Got all that?"
+
+"Sorted!"
+
+"Right, get to work." 
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard gets non-PC 
+--------------------------------------------------------------------------------
+
+So I'm in the States with Sharon, the ex-boss's secretary, to check out 
+some new networking hardware and software. The boss couldn't make it after 
+unfortunately having a disagreement with the CEO when the CEO somehow got 
+'listen-only conferenced' into a telephone call between the boss and the 
+CEO's wife. (The bit about the boardroom table got to him apparently). 
+Being the only other person familiar with the whole deal, Sharon, a young, 
+part-time aerobics instructor and non-subscriber to the motto "Don't screw 
+the crew", was obliged to accompany me.
+What a tragedy.
+
+Strangely, it couldn't have worked out better if it were planned. (You 
+know, someone telling Sharon to familiarise herself with only 10 of the 
+1000 or so documents that pass over her desk every month; someone 
+accidentally tampering with the exchange configuration to allow 
+listen-only conference calls; someone tampering with the exchange to make 
+it auto conference calls to the CEO's home number back to the CEO's 
+private phone that no-one but his secretary has the number to...) But of 
+course, that's ridiculous.
+
+Of course I blame myself. If I hadn't taken the boss for a 'working 
+lunch', bought him 10 pints and mentioned the CEO's wife had a fixation on 
+him, perhaps none of this would have happened.
+
+Sigh. Oh well, at least I did my duty by the firm and made the most of it; 
+difficult though it was. I must remember that at contract renegotiation 
+time.
+
+We book in at a modestly priced hotel - (modest by the standards of the 
+Royal Family that is) and suffer an upgrade in rooms when it is discovered 
+that due to some computing glitch a Mr Babbage and a Mr Pascal have been 
+double-booked in our economy rooms. It's funny the number of times that 
+has happened to me...
+
+I ring my temp to see how he's doing in my absence. The phone rings about 
+50 times before finally being diverted to talking clock. At least I know 
+he's read my Site Management Bible...
+
+I then ring the boss's temporary replacement from the bar.
+
+"How's it going?" he asks keenly, disguising the fact that he's annoyed at 
+not being here.
+
+"Well, we're having some trouble tracking down the supplier's tour dates, 
+but we figure we'll track them down through computing magazines. Speaking 
+of which, can you wire me another thousand quid for...miscellaneous 
+expenses - the computing magazines, phone calls etc."
+
+"I sure can," he replies amiably. "Of course, you'll be bringing these 
+magazines back with you when you return so our accountant can rectify all 
+this with the bean counters upstairs?"
+
+Sneaky bastard - he's just upset that he didn't get to go and is obviously 
+going to cause problems. Best to nip this in the bud right now.
+
+"No problem - could you make that three thousand quid, the air freight 
+costs are likely to be quite high for the 250 odd magazines..."
+
+"Perhaps that IS unnecessary," he says, thinking about his plummeting 
+operations budget.
+
+"OK. Well I'll get back to you in a couple of days," I reply.
+
+He hangs up and immediately I whip back to my room and dial through to my 
+private modem pool at work.
+
+I wait 10 minutes for the temp-boss to type and print the expense memo, 
+then ethersniff his text and digitised signature on its way to the 
+printer. I quickly bash up another expense report for a couple of hundred 
+quid requesting some 'photographic' magazines from a dealer in Amsterdam 
+appending his home address as the delivery point. I 'accidentally' queue 
+it to print at Bean-Counting-Brown-Nose-Central then logout.
+
+Knowing the religious background of the CEO I expect to find yet another 
+empty desk on my return. Just applying the first law of networking - loose 
+ends are bad, termination is good.
+
+To enhance my job security, I make another phone call to a number that's 
+permanently etched into my memory. In a darkened comms cupboard on the 5th 
+floor, the call is answered by a 'Home Security Dialup Unit' and I type in 
+my pin number. Then type a three-digit code and hang up. The clock starts 
+now.
+
+Six minutes and twelve seconds later the phone rings. The helpdesk has 
+found me which can only mean that the temp-boss has given out my contact 
+number, which in turn must mean the CEO is displeased.
+
+"Something's wrong with the network!" the operator cries.
+
+"I see. Put me on hands-free and tell me what's going on," I reply in a 
+business-like manner.
+
+The earpiece tells me I'm on hands-free, speaking to, if my calculations 
+are correct, the helpdesk operator, the temp boss and the CEO (who likes 
+to be around when major panics are in session to get firsthand knowledge 
+of what the problem really is).
+
+"What's the problem?" I repeat.
+
+"The network appears to be bridged out somewhere in the computer room."
+
+"OK, have you looked at the network topology in the documentation 
+cabinet?" I ask, playing the knowledgeable and helpful network-person to 
+the hilt.
+
+"Your temp's trying to get into his office but there appears to be a 
+lockout on the comms room swipe-card lock."
+
+"Really? It sounds suspiciously like we've dropped a breaker in the 
+distributed UPS Unit."
+
+No-one has a clue what I'm talking about at this stage, but they also 
+don't want to appear ignorant.
+
+"Uh huh," the help desk operator says (probably accompanied by en-masse 
+nodding in the room).
+
+"OK, call the operations room, tell them to open the third UPS cabinet 
+from the left, and they'll find a breaker, number 15 or 16, has tripped. 
+If they reset that, the computer room repeater should come back to life 
+and the door access system should start communicating with the office 
+again..."
+
+Five minutes later I'm back in the bar, with one of the safest contracts 
+since Al Capone was alive. The CEO thinks I know each circuit breaker 
+personally, and that my temp will have to go as soon as I get back. 
+Situation Under Control.
+
+Good networking depends on good planning. 
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard on a devilish buying mission ... 
+--------------------------------------------------------------------------------
+
+The story so far... The Bastard Operator from Hell and his ex boss's 
+secretary Sharon are on a fact-finding mission to the States to check out 
+on some security hardware ... 
+Sharon and I have to make the junket look more plausible so I track down 
+several trade-shows for us to go to and pad out our cover story. I use the 
+basic two-step junket cover-up plan:
+
+1. Drop business cards saying I'm interested in everything so I get lots 
+of correspondence when I get back.
+
+2. Sign up for every free subscription and on-site demonstration (to be 
+farmed off to someone once I get home).
+
+I then engage the one-step Make The Most Of It Plan - get to the bar as 
+soon as possible and get freebies and drinks from suppliers.
+
+Later that day at a sales stand...
+
+"..combined with dual, redundant power delivery systems, opto-mode 
+indicators, and rapid install strain relief fixtures"
+
+"So what you're saying is it comes with a spare power cable, a 'power' LED 
+and a bag of cable ties?" I ask.
+
+"Ah well, you're obviously not aware of the full ramifications of system 
+redundancy, hardware stressors and high availability."
+
+"IT'S A BLOODY ROUTER!" I shout. "If the power goes out, it doesn't matter 
+how many spare power cables, lights or cable ties you have, it still 
+stops, you lose your net and get lots of phone calls!"
+
+"Yes, but it does come in a nice black case with eight rubber feet instead 
+of four!"
+
+"WHAT I'M AFTER," I repeat for the fifth time "is an FDDI hub with 
+IMPRESSIVE LOOKING ENCRYPTION built-in. I don't need another router."
+
+"It's a nice router.."
+
+"I don't care, I have routers. I want IMPRESSIVE LOOKING ENCRYPTION!"
+
+"What do you mean by impressive LOOKING?" the guy asks.
+
+"Something that'll fool a technical manager," I reply.
+
+"What about converting everything to lower case?" he suggests, knowing the 
+level of competence of the average technical manager.
+
+"No, no we might get an intelligent one sometime in the future."
+
+"Lowercase and all words spelt backwards?"
+
+"Better.."
+
+"Well, we do have this encryption chip set for terminal servers that we 
+could whack into a hub.."
+
+"What sort of speed would we get?"
+
+"FDDI in."
+
+"And out?"
+
+"96K.. ...on a good day."
+
+"NOT really what I want is it?"
+
+"Well, that would be version one. But we promise that version 1.1 would 
+have perfect performance, no lag, and so secure it'll seem like magic."
+
+"You're lying aren't you?"
+
+"Of course, I'm in sales!"
+
+"What would we really get?"
+
+"Like I said, version 1.1 would have the lot - everything you asked for."
+
+"When would it be delivered?"
+
+"Third quarter."
+
+"Third quarter?"
+
+"2012."
+
+"Thought so. Perhaps we give this one a miss?"
+
+"But it's the only hub on the market with high-speed-opto-interfacing!"
+
+"They all have that - that's what FDDI means."
+
+"Yeah, but no-one else calls it that in their brochures. And you get a 
+couple of bottles of 40-year old scotch with every one as a product 
+endorsement."
+
+"Make it half a dozen with each one and I'll take 10."
+
+Sharon looks a little concerned at this.
+
+"We'll never get away with it," she whispers. "They'll cripple the net!"
+
+"Sharon, Sharon, Sharon," I sigh. "We're never going to use them, that's 
+the key. We'll buy them and mention to the CEO that we'll be able to 
+ensure that absolutely no-one can snoop our networks without being 
+detected. He'll realise that the piece of software he uses to detect the 
+schemers among his junior execs will be compromised, and late one night 
+all the routers will disappear from the storage cupboard to reappear in a 
+landfill somewhere in Bognor."
+
+"You mean the CEO spies on the other execs to protect his job?"
+
+"Of course! I'd be most put out if I'd written that software for nothing!"
+
+"What if he's not snooping any more?"
+
+"Please! Upper management has all the 'filial loyalty' of a piranha 
+infested toilet bowl. And anyway, should that fail I will engage the 
+old-favourite 100 per cent-foolproof kit-destruction ploy."
+
+"What's that?"
+
+"Switch the voltage to 115 and PLUG 'EM IN! Works every time."
+
+"How much do they pay you to think up this stuff?"
+
+"NOT ENOUGH!" 
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard wreaks his terrible revenge ... 
+--------------------------------------------------------------------------------
+
+The problem with being away on a jolly, sorry fact-finding tour of the 
+States, is that there's a hell of a lot of paperwork to catch up on. 
+Normally, I shove this to one side and if any of the paper pushers 
+upstairs complain they get shown the door swiftly when the CEO receives 
+insulting e-mail from their PCs. It's amazing the rude words the chair 
+warmers can come up with sometimes.
+But this time it's different. It's yearly budget time again, which means 
+once more it's time to print the 'Basic Computing' OHPs so I can explain 
+to the technical management committee why we should look at upgrading our 
+network. 
+
+I briefly consider not printing the 'This is a BIT, This is a BYTE' 
+slides, but reconsider when I remember that one of the committee avoids 
+lace-up shoes because it takes him an hour longer to get ready for work...
+
+While I'm planning the phone rings. Caller-ID tells me that it's a nasty 
+specimen from Public Relations who just yesterday, as chance would have 
+it, was lucky enough to slip into a parking space that I myself was about 
+to enter.
+
+Lucky is, of course, a relative term, and subject to revision over time. 
+The time is now. I press the 'record conversation' button.
+
+"Hi, network ops," I say. 
+
+"I need a PCMCIA net card for my laptop. By Friday, 9am."
+
+Of course it's Thursday afternoon, 3:45pm.
+
+"Ah, equipment purchases must go through your department," I say. 
+
+"Then you'll have to loan me one. The purchase order wouldn't go through 
+in time. Besides, it's my personal machine, I've got a presentation to 
+give to the CEO that I've been working on at home."
+
+"Wouldn't it be preferable to transfer all this via back-up floppies to 
+your work machine?" I ask, praying for the desired response.
+
+"Don't be stupid, it'd take me a year to back this lot up. Just get me a 
+card and I'll do the presentation from my laptop tomorrow."
+
+"Well, I've got a ... doctor's appointment right now so I won't have time 
+to configure your machine for the card," I say, giving him the chance to 
+dig a nice big hole. "Also, I won't be in until about 9:30am tomorrow."
+
+"I'll do the bloody configuration!" he growls. "It's not rocket science, 
+despite what you geeks attempt to imply!"
+
+Hole dug nice and deep. Now to work on the edging details...
+
+"I don't know, if you get something wrong, or the card's incompatible.."
+
+"IT'S A BLOODY PCMCIA CARD. HOW CAN IT BE INCOMPATIBLE!?!"
+
+The hole is perfection, in fact it looks almost grave-like.
+
+"Well, OK, I'll leave one in the equipment room. But take a network card 
+and not a SECURE-network card. Do you know the difference?"
+
+He's in a lather now and there's no way he'd admit ignorance.
+
+"JUST LEAVE THE BLOODY CARD OUT AND I'LL PICK IT UP IN THE MORNING!"
+
+"Well OK.."
+
+He hangs up.
+
+From the 'documentation' safe I pull out the 'special' PCMCIA card and pop 
+it on the desk in the equipment room.
+
+The next day I roll in at about 9:30 in time to be summoned to the CEO's 
+office.
+
+"WHAT THE HELL IS GOING ON?" he rants.
+
+"About what?" I ask, innocence personified.
+
+"THAT BLOODY EXPLODING NETWORK CARD THAT CARSON IN PR GOT!"
+
+"Exploding network card? What explo.. Oh dear. He didn't try to install a 
+SECURE-network card in his machine did he? I told him yesterday to be 
+careful about installing and configuring it. They're programmed to 
+self-destruct if someone attempts to override their access parameters..."
+
+"By self-destruct you mean..?"
+
+"Well there's a tiny nitrate charge in them which burns out the 
+circuitry.."
+
+"Or perhaps blows a hole the size of a saucer through the laptop in 
+question?"
+
+"They DID have teething problems with the first batch, which is why I had 
+them recalled to the equipment room in preparation to send them back to 
+the manufacturer. But it shouldn't have been used in the first place. I 
+warned Carson yesterday when he asked, it's all on the voice tapes..."
+
+Much later as I'm watching the name 'Carson, MJ' being removed from the 
+floor directory and 'Carson, MJ' in person being removed from the 
+premises, I can't help but wonder what makes people think they can beat 
+the system.
+
+It's a good system. It's MY system.
+
+I like it.
+
+Now, to complete plans for the budget meeting... 
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard wreaks his terrible revenge ... 
+--------------------------------------------------------------------------------
+
+After a few days away I always attempt to come in slightly early to catch 
+up. So when I roll up at 11 o'clock I find the place ominously quiet. This 
+could mean two things; either my understudy didn't make it through my time 
+off, or he's been brainwashed by the boss and they're both hidden away 
+staring at the monitor of the closed-circuit BOFH-watching system that 
+they somehow installed while I was away. A quick scan of all the suitable 
+camera points shows that nothing quite so technical has happened (perhaps 
+the boss remembered that it didn't work first time they tried either), so 
+I wait for the knock at the door.
+I'm not disappointed.
+
+"Morning, operator," booms the boss as he strides in.
+
+Odd, the boss and I are on first name terms, he usually calls me 'the 
+bastard'.
+
+Hang on, this is a different boss.
+
+"You're probably wondering who I am."
+
+He's on the ball, this one.
+
+"You could say that," says I. "What happened to the previous generation?"
+
+"Nasty business. Installing security cameras or something according to the 
+paramedics. Something went 'bam' and there they both were, all kind of 
+charred and surprised-looking. Still, I'm still around, so look on the 
+bright side."
+
+Nasty. Ah, so they did try the cameras. Lucky I remembered to wire up all 
+the video cable to the three-phase supply.
+
+"While you've been away, we've decided to make a few changes," says the 
+boss.
+
+"We?" (What I really hate is someone trying to change my system).
+
+"We've noticed that the systems around here are slow," he continued, "and 
+that we need some new kit to to keep up with everything. It seems that the 
+new stuff they bought last month just can't cope with all the software we 
+run on it."
+
+For a minute I thought I smelled trouble; but it seems that my 
+clock-chipping exercise paid off. Neat bit of lateral thinking that - buy 
+the box the supplier recommends, clock it down from 133MHz to 13MHz, and 
+wait for someone to reason that they need something ten times faster to do 
+the work. Not only that, but the supplier gets sued for selling us 
+unsuitable kit.
+
+"Really?" I inquire cheerily. "What did you have in mind?"
+
+"Well, we figured you would be in the best position to tell us what to 
+buy, since you're the one who understands the technology."
+
+He's damned right; not just anyone understands how I get the pictures from 
+the stationery store to the TV in the coffee room at that quality, 
+especially with Nicam Stereo sound and zoom facility. "Leave it with me," 
+I reassure him. "I'll see if I can milk a bit more performance out of this 
+lot first." With a bit of luck I can get a couple of thousand a week for a 
+couple of months for 'upgrades' and wind the clock back up a bit every 
+Friday night (that's what they mean by incremental upgrades isn't it?). By 
+the end of it, I'll have enough for that new 52-inch 'console display', 
+which has a wide-screen TV and a built-in satellite decoder. AND The boss 
+will be happy that he's saved a couple of hundred grand.
+
+I sometimes wonder how I get away with it.
+
+Unfortunately that just leaves the more mundane jobs of the day. The 
+e-mail filter is disappointing; perhaps the CEO and the girl from Accounts 
+are starting to catch on and are using code. 
+
+I flick through the excuse book. Oh no, not lunar disturbances; who will 
+believe that?
+
+The phone rings. Damn, that was careless, I forgot to have it diverted.
+
+"Computer room."
+
+"Oh, I'm terribly, terribly sorry. Really, terribly, awfully sorry."
+
+That's nice, but perhaps a little less than descriptive.
+
+"Could you elaborate?"
+
+"I just broke the mainframe."
+
+Interesting. We don't have one of those any more. I downsized it to 
+something with faster graphics when Doom II came out.
+
+"How did you do that?"
+
+"I just added an entry to our mailshot with a spelling mistake in it, and 
+now the mainframe won't respond. It's only my second day here and I broke 
+the computer."
+
+"Where are you calling from?"
+
+"Marketing."
+
+It all becomes clear. She's on the segment that's 'accidentally' shorted 
+for the next half-hour. That reminds me, I must put in a 
+random-fault-duration feature before someone notices that I fix every 
+network fault in precisely twenty-nine minutes.
+
+"OK, don't worry. How long ago did you send the entry?"
+
+"About two minutes."
+
+"No problem. Because it's your boss's database, the mainframe contacts an 
+automatic system on his PC which has to confirm the transaction before the 
+mainframe will accept it. As long as you get to his office in the next 
+...er ... 23 seconds, and pull out the network plug, the transaction won't 
+have had time to get there for confirmation."
+
+"Oh thank you, thank you. How can I ever thank you enough?"
+
+I can think of a few ways, but she's dropped the phone and run for it, and 
+I find myself shouting "It's the yellow wire" to nobody. 
+
+I wait for the phone to ring. Given that it's a 20 second run, and a 
+further 15 seconds for her boss to comprehend why a secretary should 
+suddenly barge in and rip out all the wires from his computer I take the 
+opportunity of a quick 'grep' of the FTP log. Ten GIFs and fourteen JPEGs, 
+they'll take a while to download, so I'd better just allocate myself a 
+bigger slice of the Kilostream...it won't do them any harm to share 8Kbps 
+for a while.
+
+The phone rings, three seconds early.
+
+"Computer room?"
+
+"Yes?"
+
+"Can you explain why my secretary just charged in here and wrecked my PC, 
+saying that you told her to?" he demands.
+
+No, surely I couldn't get away with it. He's got to see through it...
+
+"Lunar disturbances."
+
+The sudden aura of sympathy at the other end of the phone tells me I've 
+got away with it again. Not just a pretty face, more a Bastard Astronomer 
+from Hell ...
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard establishes his territorial boundaries ... 
+--------------------------------------------------------------------------------
+
+I'm sitting at my desk, reconfiguring my network monitor, when the phone 
+rings. Caller-ID tells me it's one of the consultants in the Bean-counter 
+department on the sixth floor. I pick the receiver up, say "Wrong Number", 
+and hang up. 
+I know it's a wrong number - mine isn't listed internally. The number that 
+is listed rings through (I believe) to a locked storeroom in the basement. 
+Popular rumour has it that it was once answered... Network Engineering, 
+like a major credit card, has it's privileges. 
+
+The phone rings again and I'm getting concerned. Twice in one day is a 
+little excessive. 
+
+"Hello?" I ask, not wanting to give any clues away. 
+
+"Is that the network engineer?" a voice asks. 
+
+This concerns me even more. There's only one person who knows my extension 
+number - that's the system operator, and he knows better than to divulge 
+it to a user. At least, I thought he knew better. 
+
+"Yes?" I reply. 
+
+"I've got a little problem with my connection," the voice says. 
+
+"Call the helpdesk," I reply, and drop the receiver back into its cradle 
+
+Yet again the phone starts ringing. 
+
+"I already rang the helpdesk!" the voice wails. "They told me to call 
+you!" 
+
+Oh dear. There are three things wrong here: one, a user knows my extension 
+number, which means: two, the helpdesk has been talking to the operator 
+again; but more importantly: three, the operator is giving out my 
+extension number to people. 
+
+This is not a good thing. If I'd wanted calls, I would have put an advert 
+in a personal column. I'd best get to the very bottom of this before 
+things get out of hand. 
+
+"Why did the helpdesk tell you to call me?" 
+
+"Because they don't know what the writing on the patch-panels means." 
+
+My network monitor is now beeping at me, which brings the concern level 
+into the upper percentiles. 
+
+"On my patch panels?" I say. 
+
+"No, the ones up here in our section on the sixth floor." 
+
+"Yes. My patch panels. The ones I lock away from everyone," I fume. 
+
+"Well, I ... " 
+
+"Just a minute. One question. What were you doing in the Comms Cupboard?" 
+
+"Well, my connection went dead, so I ..." 
+
+"So you broke into the Comms cupboard?" 
+
+"No, not broke into - the operator gave me the key." 
+
+"The ex-operator gave you the key?" 
+
+"Yeah." 
+
+I grab the phone, go to the inspection window, and get the operator's 
+attention. He exits to the corridor heading in my direction. 
+
+"And you've touched something haven't you?" I ask down the phone, knowing 
+the worst. 
+
+"Uh ... I ... er" 
+
+"You got drawn in by the pretty lights, and you touched something. Don't 
+bother denying it, I know you did, and you know you did. And pretty soon, 
+if I'm not mistaken, most of your division will know you did too. What did 
+you touch?" 
+
+"Well, I thought the router might have crashed, so I ... " 
+
+"Wait! Another question. Where did you hear the word 'Router'?" 
+
+"I read it in a manual that I got at Dil... " 
+
+"WHAT?! You've been reading forbidden literature as well?" 
+
+"It's not forbidden to read ... " 
+
+"Stop! The book was in the technical section wasn't it?" 
+
+"Well, it ... " 
+
+By this time the operator has arrived at my office and has realised the 
+significance of the tones coming from the network monitor. 
+
+"What were you doing in the technical section? You know you don't belong 
+there! But let me piece this together. You skim-read a technical tome, 
+wait for your chance, impress the gullible ex-operator with a host of 
+buzzword lies, then, under the false impression that the router had gone 
+down, rebooted it. Didn't you?" 
+
+"Uh ... Yes. Sort of. I didn't know which of the three routers was at 
+fault, so I ... " 
+
+"You booted them all didn't you?" 
+
+Sure enough, my screen shows the sixth floor as a sea of red. 
+
+"Uh, yes. I was just wondering if there's anything else I should've done." 
+
+Looking directly at the 'ex' operator, I reply: "Well, come to think of 
+it, yes there is. Usual procedure after causing a major network outage is 
+to collect your personal effects from your desk and work area, not 
+forgetting your coffee mug, then sit in a large open area until security 
+comes to escort you from the building." 
+
+"But I ... " 
+
+"Oh, and make sure they don't have to search you for your keys or ID card. 
+I've heard people have nasty accidents that way. Bye now! Oh, and if 
+you've written my extension number down anywhere, I'd advise you to 
+dispose of it carefully." 
+
+He hangs up, and I prepare to show our operator why the electric stapler 
+has all those warning signs about keeping the body clear. 
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard negotiates around 'budget constraints'... 
+--------------------------------------------------------------------------------
+
+So I'm at my first budget meeting of the month, which has one and ONLY one 
+purpose - to increase the size of our modem pool by 10 modems.
+Small potatoes on the budgetry scale, but it does set a precedent for 
+future meetings, a fact which is never overlooked.
+
+Normally I'd get about a quarter of whatever I ask for (due to 'budget 
+constraints' - ie the technical managers want the latest flashy 
+status-symbol toys), however today I'm feeling lucky for some reason.
+
+"Well, I still don't see what the problem is," Technical Manager One says. 
+"It's not as if the modems are used 24 hours a day!"
+
+"No," I say, "But at peak times they are 100 per cent utilised causing us 
+problems."
+
+"Perhaps our staff should be educated in modem use?" Tech One says 
+smarmily.
+
+The other Tech Managers fall into line with this statement with 
+lapdog-like nods.
+
+Time to play the ace up my sleeve.
+
+"Yes, education is an answer, however it achieves little when modems are 
+in use for excessive periods of time..."
+
+"Meaning?" Tech Two asks, smelling a rodent-type creature in the immediate 
+vicinity.
+
+"Mainly people downloading large files from Internet's Usenet News..."
+
+"Ah," Tech Two chips in quickly, "Perhaps there is a measure of expansion 
+needed."
+
+"...Large downloads," I continue, "Probably picture files of some 
+description."
+
+"Yes yes, I'm sure there's no need to go into extraneous detail on this."
+
+Tech Two interrupts sweating slightly...
+
+"No, you're right," I say, "None whatsoever. But newsgroups are only one 
+problem. There are a lot of heavy image downloads from Web-Sites as well."
+
+Tech One is suddenly fully awake. He knows (as do I) just which sites I'm 
+talking about here and what images. AND what they depict. AND more 
+importantly, who's downloading them... 
+
+I continue...
+
+"Of course, should 'budget constraints' require usage statistics from our 
+News host and Web-cache server, I'm sure I can dig up what articles and 
+images were downloaded, when and by whom. In fact one site is getting 
+fairly heavy access by only one user at our site and..."
+
+"Yes, yes. Shall we move along? " Tech One pleads, "I believe you have a 
+valid point and I am fully behind he move to get more modems."
+
+"I would agree," Tech Two adds.
+
+The Technical Lapdogs once more fall into line...
+
+"Certainly," I say, "I think those 15 modems will be most helpful."
+
+"FIFTEEN!" Tech One says "Your proposal was for TEN!"
+
+"True, but on second thoughts, I feel it prudent to leave room for 
+expansion in this area. Don't you agree?"
+
+The moment of truth. Will he fold or not? Better safe than sorry...
+
+"ESPECIALLY if modems are going to be used to access sites that have 
+dubious relevance to the purpose of the company, such as..."
+
+"ALL RIGHT!" Tech One cries, "Fifteen seems quite... reasonable."
+
+I'm out of the meeting a record two hours eight minutes and back in my 
+office in time to hear my phone ringing. What the hell, I answer it.
+
+"Network Engineer."
+
+"Hello is this the Network Engineer?"
+
+"No, I'm sorry this is the Mail Room. Please hold, I'll put you through."
+
+I forward the user to the talking clock and look over the error reports 
+that have accumulated in my absence.
+
+I grab one at random to give the impression of service. I ring the user.
+
+"Hello, Payments"
+
+"Hi, I'm Simon the Network Engineer. I gather you had a problem with 
+telephone call-pickup."
+
+"Yes, I can't pickup the phones in the office like everyone else."
+
+"And you logged this as a Priority One call?"
+
+"Well it's quite important!"
+
+"OK, your problem is obviously an... EEPROM CONFIG CHARGE LOSS."
+
+"Uh?"
+
+"The battery that saves your phone's information is flat."
+
+"But it's just new!"
+
+"Of course. But it's been sitting for months in a storeroom."
+
+"Oh. Should I get a new battery then?"
+
+"No, no," I chuckle, "It's rechargeable! Just whip down to the basement 
+car park and borrow the vehicle jump starter. Put one of the big clips on 
+either side of the battery and press the red button. In seconds your 
+battery will be back to new."
+
+"OK, thanks."
+
+"Don't mention it."
+
+Five minutes later I'm sitting in the comms room by the exchange. One of 
+the line level LEDs glows very brightly for a fraction of a second then 
+goes out.
+
+Some users have it coming. I'm just a delivery mechanism.
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard dislikes his boss's use of foul language ... 
+--------------------------------------------------------------------------------
+
+I'm not impressed. The Boss has just said the "C" word, and with no 
+provocation either. 
+"What did you say?", I ask, still not believing what my ears tell me I'm 
+hearing. 
+
+"Oh, don't put on the shocked look. I thought you'd enjoy having a 
+consultant to play with; it'll take your mind off annoying the users." 
+
+Me?? Annoy users? 
+
+"So when is our new friend coming then?" 
+
+"First thing after lunch" 
+
+Yes, that should give me enough time. 
+
+"And might I ask who ... errr ... 'invited' him?" 
+
+"Well, the Finance Director did actually. He's worried that we're open to 
+hacking, and that people might get at confidential and potentially 
+damaging financial information, so it was decided that an outside opinion 
+was the best thing. In fact, the FD recommended this chap himself". 
+
+Ah, I knew the bean-counters had to have a hand in it somewhere. I've 
+known for some time just how much they spend on hotels for "one-to-one 
+briefings", but one wouldn't want just _anyone_ to know, would one? 
+
+"And how much is he charging?" 
+
+The number quoted by the boss closely resembles a telephone number. I 
+wonder ... 
+
+No time to lose. First thing is to shift a bit of kit around the building; 
+that doesn't take more than half an hour, so I'm soon on-line with that 
+password I found recently. Ah, just as I suspected ... now, just a quick 
+Email (anonymous, of course) to the Personnel people ... 
+
+Just then, the new arrival knocks and waits to be asked before entering. 
+He's obviously come across electrified doorhandles in his career. The Boss 
+strides confidently in after him. 
+
+"Good afternoon,", spouts the Boss cheerily. I get the feeling it's going 
+to be. "Welcome to our machine room. Let me introduce Simon, our BOFH" 
+
+Nice firm handshake, but a little sweaty; he didn't ask what BOFH stands 
+for, so he's obviously used to accepting acronyms he's never heard of 
+without flinching. 
+
+"Simon will show you around", adds the Boss. "Can you present your 
+preliminary report to the CEO and myself last thing this afternoon?" 
+
+"Certainly. And don't worry about showing me around; I've been in setups 
+like this before". 
+
+Oh, no, you haven't ... 
+
+He heads off in the direction of the comms room, and I wait for the 
+scream. Silence. Must be wearing rubber-soled shoes ... this guy knows 
+what he's doing. 
+
+I busy myself with the tasks of the day, and wonder what he's up to. He 
+certainly seems to be spending a long time in there looking at the 
+firewall, which is reassuring - while he's playing with that, he can't be 
+buggering something else up. I put the coffee pot on, sit back, and watch 
+the CCTV monitor ... now ... all we have to do is wait ... 
+
+
+I remotely drop the main hub from the management console, and the alarm 
+pierces not only the dull hum of the air conditioning but also probably 
+one of his eardrums. 
+
+"WHAT'S THAT ALARM MEAN?" he shouts over the alarm. 
+
+I silence the alarm with an accurately thrown manual 
+
+"WHAT DID YOU TOUCH?" 
+
+"NOTHING ... HONEST" - a standard admission of guilt. 
+
+Obviously deaf as a post. Nice bonus. I stride into the comms room and 
+grab a bunch of unconnected wires. Okay, they have never been connected to 
+anything, ever, but this is a minor detail. 
+
+"So what the hell are these?" 
+
+"Pardon?" 
+
+"I SAID, WHAT THE HELL ARE THESE?" 
+
+"I ... THINK I'LL JUST GO LOOK AT THE REMOTE BRIDGES" 
+
+Five o'clock comes, and we're all sat in the CEO's office. Me, the FD, the 
+CEO, the Boss, and our aurally-challenged friend who is shouting his 
+report so he can hear himself. 
+
+"... SO WITH SUCH DISORGANISED CABLING AND A SIXTY-GRAND FIREWALL WHICH IS 
+KNOWN THROUGHOUT THE WORLD TO LEAK LIKE A SIEVE, YOUR NETWORK IS FULL OF 
+HOLES. WHOEVER PUT THIS KIT IN IS AN IMBECILE". 
+
+The CEO looks at me. 
+
+"Well?" 
+
+"Well, sir," (creeping usually helps), "I wonder if I might just explain a 
+few facts. First, the cabling arrangements weren't helped by our colleague 
+here and his size-tens; didn't you hear the alarm when he trod on 
+something important? Second, I didn't actually order that firewall". 
+
+"So who did?" 
+
+All eyes turn to the Boss, who remembers an important appointment and 
+dashes out with panic in his eyes. One down, two to go. 
+
+"One thing". I look at the CEO. "How long was our consultative associate 
+in your office for this afternoon?". 
+
+"Well, I hadn't seen him before this meeting. Why?" 
+
+"Because our active firewall is in that data closet over there," I answer, 
+waving toward a door in the corner of the office, "so unless our friend 
+here had been sitting in your room for a couple of hours or so there's no 
+way he could have evaluated our security. Perhaps he just invented a 
+damning report so we could pay him to 'fix' our security on top of the fat 
+consultation fee. That's fraud, isn't it?". 
+
+"But what about the firewall in the comms room?", asks a worried-looking 
+consultant. 
+
+"Oh, well, when the Boss ordered it I thought I'd better put it somewhere, 
+even though as you rightly say it's no good at all; after all, he could 
+lose his job for blowing sixty grand on something that just sat in the 
+cardboard box, so I thought I'd help him out. Didn't you notice it wasn't 
+connected to the LAN?" 
+
+A few choice words from the CEO, detailing where he thought he might 
+insert the cheque for the consulation fee, and our numbers are again 
+decremented. 
+
+BONG! 
+
+The silence is broken by the CEO's PC telling him he has new mail. I know 
+this has to be from Personnel (I filtered everything else to /dev/null 
+earlier lest this message get lost among a flood of trivia). I excuse 
+myself, reasoning that I probably couldn't keep a straight face as the CEO 
+inquired of the FD whether he thought that a director who employs a 
+crooked consultant who happens to be married to his sister could possibly 
+stay in office. 
+
+As I sit by my console and gaze out of the window, I see our ex-FD drop 
+the contents of his ex-desk all over the car park as Security body-search 
+him for the keys of his company Jag. On-line registers of births, deaths 
+and marriages are a wonderful thing ... 
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard blasts the confidence of the most well meaning souls ... 
+--------------------------------------------------------------------------------
+
+It's a slow day network-wise, and for some reason I'm feeling a little 
+like Clint Eastwood ... 
+"I know what you're thinking. You're thinking, is he monitoring the fourth 
+floor or the fifth? Well, to tell you the truth, in all the excitement, I 
+haven't looked at the screen myself. But, taking into account I have a 
+defined key to invoke a kernel debugger on the server which can erase even 
+the MEMORY of your database process - and the work you've done this 
+morning - I'd like you to ask yourself one question: do I feel lucky? ... 
+Well, do ya? ... Punk! ?" I demand. 
+
+I hear the clatter of the receiver on the wall, and in my mind's eye I can 
+almost see the frightened accounts clerk scurrying back to the office to 
+close the connection to the database in an orderly fashion before failover 
+time. 
+
+My mind's eye being not what it once was, I flip through my CCTV monitors 
+of the fourth floor until I see a geeky guy, laden with lunch, beating a 
+hasty path to his office. 
+
+I click on the security window and deactivate the 'Door Open' knobs on the 
+stairwell. 
+
+I almost wish I'd turned the CCTV sound on so I could hear the thud when 
+the door didn't open, but you can't have everything. 
+
+Rule 75 of Network Ops: never log a fault on a device from the lunchroom. 
+Especially if your office is up a flight of stairs and on the other side 
+of the building. 
+
+I get on with my work, which today is 'fixing' the swipecard door-access 
+machine. Apparently there's some logic glitch that no-one knew about until 
+a particularly annoying sales consultant got accidentally locked in the 
+secure area over the holiday weekend. The poor guy was a drooling wreck 
+when they found him - apparently the sirens and sprinklers were playing up 
+in there too, every 10 minutes. 
+
+It all goes to show that you can't be too careful when you don't hold the 
+lift open for someone laden with networking magazines ... 
+
+I upload the original swipecard microcode over my specialised patched 
+version, and give the system a clean bill of health. It was obviously a 
+freak hardware problem, and nothing to do with the network whatsoever ... 
+
+While I'm in the computer room, a hard drive arrives in preparation for a 
+disk replacement, which means the engineer can't be far away. 
+
+Quick as a flash I have the box open, wind a couple of paper clips round 
+the power terminals at the back of the drive and return it to its 
+packaging. 
+
+Scant seconds later a pin-striped service engineer arrives. 
+
+"Hi, I've come to replace the faulty drive," he buzzes. 
+
+I lead him over to the machine with the Fault Status on it and he goes to 
+work. 
+
+"Will you be wanting me to have the system shut down?" I ask. 
+
+"Oh no, didn't you know, this machine is mirrored and hot-swapable. I just 
+pull the cover off like this." 
+
+Clip! 
+
+"Loosen these two retaining screws, grab the new disk and ... ... Hey, did 
+you open this bag?" 
+
+"No, it must have been sent like that." 
+
+"Oh. It was probably the office when they pre-formatted it." 
+
+He has now added 'lying to the client' to his list of sins. Tragic. 
+
+He continues: "I get the new drive in one hand, slide out the old drive 
+like so ... place it on the ground like so ..." 
+
+Clunk! 
+
+"And slide in the new one like so ... and ..." 
+
+BANG! 
+
+The smell of ozone tells me that both the paper clips and the power supply 
+are no more. Time to play dirty. 
+
+"What the hell happened?!" I demand. 
+
+"Er, it appears that the replacement drive was slightly faulty, and the 
+extra load may have overworked your power supply." 
+
+"You blew up our machine!" 
+
+"No, no, it's only a power supply problem. All I need to do is slide the 
+disk out like so, switch the power off and flick this switch to change 
+over the power supplies. Now I switch her on, and ..." 
+
+Nothing happens. 
+
+"Nothing's happened!" 
+
+He hits me with the old engineer special: "That's interesting!" 
+
+"Yeah, that's what yesterday's engineer said when he blew the other power 
+supply." 
+
+A network loading alarm shakes me awake in front of my terminal and I 
+realise that it had all been a pleasant dream. Ah well, I guess a network 
+engineer's got to know his limitations. 
+
+The phone rings, I pick it up. 
+
+"I know what you're thinking ..." 
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard maintains his level of bad taste and seeks sweet revenge ... 
+--------------------------------------------------------------------------------
+
+It's New Boss time yet again and, because it was caused by politics that I 
+was uninvolved in, I'm worried. Doubly worrying - the official office 
+grapevine (Sharon the ex-ex-boss's secretary) has it that the new boss is 
+a Bean Counter!!! 
+A new boss is bad enough, as they all want to distinguish themselves by 
+re-arranging the department hierarchy to transform it from a stunted 
+money-soak into a glittering and applauded service division. 
+
+But a Bean Counter is bound to be much worse! 
+
+Bean Counters have a reputation for reshuffles that are worse than a 
+half-blind, epileptic poker player in a disco. 
+
+To get to this position he must have: 
+
+* got the CEO completely suckered with his glittering dream, or 
+
+* found out that while the interior decorating of the CEO's office cost 
+the company tens of thousands of pounds, the redecorating of the CEO's 
+entire home only cost 47p. 
+
+Amazing what you find out when you throw a passive fax-receiver across the 
+CEO's personal fax line ... 
+
+It's 9.15am on Monday morning, and the entire department waits with bated 
+breath for the arrival of Gerry, the new commander in chief. 
+
+He emerges from the rear stairwell catching half the department 
+lift-gazing - quite a change from the normal clock watching. 
+
+Straight away he calls a meeting to discuss his 'departmental 
+economising'. 
+
+None of the staff really care, they've been moved around so much in the 
+last couple of years that the walls are on wheels and the room directory 
+is a blackboard. Not even X.500 can keep up. 
+
+The meeting trundles along with the usual nightmarish staff regroupings 
+(PC support with the telephone operators; Unix operators with the tea lady 
+, and so on). 
+
+Groups are renamed 'Knowledge Units', so everyone gets a warm feeling from 
+the reshuffle shafting they just got. 
+
+The meeting takes a turn for the worse as the bifocals of death come to 
+rest on me. 
+
+"Simon, as network engineer, you will be invaluable in your position on 
+the help desk. Your co-operation will ensure network fault resolution 
+times drop dramatically ..." 
+
+I don't think I need to mention that the chances of me accepting a 
+position on the help desk are so slim that it would make an anorexic 
+Ethiopian on a hunger strike look like Porky Pig. 
+
+On the way back to my office I realise that I can make the most of this by 
+rising from the hell I've just been placed in, or by wasting my time in 
+pointless revenge. 
+
+I let a coin decide by flipping it ... 
+
+Heads. 
+
+Revenge it is then. 
+
+A freak earthquake shocks the coin to 'Tails'. 
+
+Revenge it is then. 
+
+'Edge' was so close too. 
+
+The way is clear. Gerry has obviously spent a weekend formulating this and 
+will shortly fire a salvo of memos both around the department and up to 
+the Execs. 
+
+I dust off my Router Text-Change software (a simple piece of code that 
+simply watches packets go by and occasionally introduces a spelling 
+mistake or adds a zero to the end of a figure), make a few modifications 
+and upload it to the network hardware. To be on the safe side, I upload 
+the duplicator code as well. 
+
+Scant minutes later my workstation beeps as e-mail from the boss comes in. 
+A memo confirming the decisions made at the meeting if I'm not mistaken. 
+(Never am. Never was. Never will be.) 
+
+I don't need to open the message to know that the 'To:' line has been 
+written with an inventive expletive sequence. 
+
+Two minutes later the phone rings. Caller ID returns: 'Big Guy'. 
+
+"What the hell's going on with the system?" The CEO growls. 
+
+"What do you mean?" I ask, caring and concerned. 
+
+"My printer's spewing the same memo over and over and I've been receiving 
+repeated e-mail messages" 
+
+"That's not from Gerry is it?" 
+
+"Yes, why?" 
+
+"Oh, he's probably been playing around with his printer and mail client 
+settings again. I'll sort it out post haste." 
+
+The CEO hangs up, and I drop the router out, so solving the problem. Round 
+One to me, I think. 
+
+I would ring the Boss, but he appears to be talking to the CEO about 
+something quite pressing at the moment. Perhaps later ... 
+
+To be continued ... 
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard gets his retaliation in first ... 
+--------------------------------------------------------------------------------
+
+It's a hot morning and I've forced the security windows open for air 
+conditioning. This has the unfortunate side effect of illuminating a 
+warning lamp on the security desk, but due to a CAD wiring design flaw 
+that was never quite explained, there's only one lamp for the 204 windows 
+on six floors, so it will take about an hour for security to find me. 
+In the meantime, the Boss has charged into my soon-to-be-ex-office because 
+he noticed me chatting to the CEO this morning and wants to know what it 
+was about ... After last-week's e-mail/print debacle, he's keeping a low 
+profile until his master reshuffle produces the sweet fruit of victory. 
+The Boss's command of small-talk doesn't even extend as far as weather, so 
+it only takes him 10 seconds to get to the point. 
+
+"So what did the CEO want this morning?" 
+
+"The CEO?" I ask, playing dumb to the limit. 
+
+"OUR CEO!" he repeats a little harshly. "You were talking to him outside 
+the building." 
+
+"Oh, that CEO," I say. "Well, he was worried that we didn't have 
+sufficient higher-level redundancy." 
+
+"Really?" the boss exclaims, eyebrows in flight. "I didn't think he knew 
+anything at all about networks". 
+
+"He doesn't," I reply smugly. "You're fired!" 
+
+"What are you talking about?" he demands 
+
+"Fired. You know, dismissed. Let Go. Terminated. Made redundant!" 
+
+"I don't believe you!" He sneers. 
+
+"Of course you don't. The CEO DID want to tell you himself, but he owed me 
+a favour ..." 
+
+"He owed YOU a FAVOUR?" 
+
+"Yes, for bringing that Invoice to his attention". 
+
+"Invoice?" 
+
+"Yes, from you for those two big-screen TVs you had delivered to your home 
+this morning, filed under 'enhanced communications equipment'." 
+
+"I didn't order any TVs!" 
+
+I carefully shuffle out some papers. 
+
+"So this isn't your signature?" I ask, pointing. 
+
+"N ... Well, I admit, it does bear a resemblance, bu ..." 
+
+"It should do, it took me a week and two of your souvenir airline pens to 
+perfect! 
+
+The paper's even got your fingerprints on it!" 
+
+"It can't have! I've never seen it before in my life." 
+
+"So you didn't fill your laser printer with paper when it ran out 
+yesterday?" 
+
+"I ..." 
+
+"That was silly wasn't it?" 
+
+"I can't bel ..." 
+
+"Believe it. But it's not that bad. If you'd trusted the digitised 
+signature service, we would've had this conversation a week and two pens 
+ago, so at least you bought yourself some time. That's one more week 
+before your mortgage foreclosure notice arrives ..." 
+
+"You bastard!" 
+
+"In the flesh, the very same, on the job and tampering with your 
+outstanding holiday leave! Oooh look! Isn't that security, looking for 
+you?" 
+
+He backs away, straight through the open security windows and down two 
+floors below. 
+
+Nothing like a couple of fractures to slow you down at work. Security is, 
+of course, on the scene in less time than it takes to fully reconfigure a 
+10-slot WAN router over a 150 baud modem. (Not quick, in case you're 
+wondering). The CEO is also present. 
+
+"What happened?" the CEO asks. 
+
+"Well," I say, "it's hard to say. He was babbling about some order and 
+televisions and things. I don't like to say it, but I think the stress was 
+getting to him. The suicide attempt was just a cry for help ..." 
+
+"Not a cry that's going to be answered by this company!" the CEO growls. 
+"He's out of here!" 
+
+Good old CEO, loyal to the bitter end! And to think, only this morning he 
+was as cheery as pie when we had that nice chat about his excellent choice 
+of tailors. 
+
+They say I play a mean game of poker too. 
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard finds a new use for an electric wheelchair ... 
+--------------------------------------------------------------------------------
+
+It's a strange Tuesday morning. Despite his unfortunate fall from the 
+window, my Beancounter ex-boss apparently wangled (with menaces no doubt) 
+a job back at Beancounter Central on the sixth floor. 
+Yesterday, electric-wheelchair-dependent, he initiated an asset audit of 
+the entire department, down to the last router cable. An asset audit of 
+the big stuff alone takes four people about a week to complete, so this is 
+just bloody-mindedness after his tragic misadventure with the roadside two 
+weeks back. Some people just never learn ... 
+
+The asset audit is a potential problem. I'm not sure I want anyone finding 
+out about my unique and quite lucrative asset-disposal policy ... 
+
+His previous position in our department has been temporarily assumed by 
+one of the technical managers who's done this before. In fact, so many 
+times before that he has two sets of business cards. 
+
+Temp-Boss rolls in at about 10am. 
+
+"Simon?" 
+
+I look up from my Ethernet monitor. "Yup?" 
+
+"Have you seen Gerry this morning?" 
+
+"Gerry?" 
+
+"Your last boss? You know, the one with half his body in plaster, strapped 
+into a wheelchair?" 
+
+"Oh Gerry! No, not this morning." 
+
+"Strange. We called him about this audit thing and Accounts hasn't seen 
+him." 
+
+"Really?" 
+
+"No. And apparently they called his home and he'd left at 7am." 
+
+"Mmm. Well, I've got no idea. Speaking of missing things, have you seen 
+that SNMP-managed antenna servo set and the Cell-Phone-based SNMP link 
+box?" 
+
+He frowns for a bit. "... No." 
+
+He thinks for a bit "..What was it for?" 
+
+"Well, together we were going to use them to control the direction and 
+altitude of our satlink antenna." 
+
+He thinks for another minute. "You haven't!" 
+
+"Haven't what?" I ask innocently, secretly surprised at this guy's 
+technical competence and sheer vision. 
+
+"Lost them!?" 
+
+Once more my faith in the system is restored. Had he said, "SNMP-managed 
+Gerry's wheelchair," I would've had a serious ethical crisis on my hands. 
+
+"No no," I say. "I'm sure they're around here. I was just configuring them 
+yesterday." 
+
+"Oh." 
+
+Topic ended, he looks around for something to fill in the day. 
+
+"New game?" he asks, pointing at my laptop complete with spanking new 
+modem ... 
+
+"New game? OH! Yes, new game. Very new. A day old. Only started playing 
+this morning." 
+
+"What do you do?" 
+
+"Well, the object is to manoeuvre the, er, robot through the streets of 
+what looks like Cornwall." 
+
+"That's it?" 
+
+"Uh huh." 
+
+"Not much of a game, is it?" 
+
+"I don't know about that. I get a measure of satisfaction out of it. I've 
+been playing since 7am this morning. Especially satisfying when I put it 
+through one of those automatic car washes three times ..." 
+
+"Oh yeah! OK, mind if I have a go?" 
+
+"Be my guest!" 
+
+Five seconds later ... 
+
+"Woopsy." 
+
+"What happened?" 
+
+"Ah, I wasn't used to the controls, I drove it down that manhole thingy 
+and it's disappeared. How do you get a new man?" 
+
+"Appoint another accountant as boss?" I suggest, removing the cotton wool 
+from his clouded brain. 
+
+His eyes widen slightly as my copious stack of clues adds up in his grey 
+matter. 
+
+"You didn't!" 
+
+"No. You did. I just watched. 'Witness for the prosecution', you could 
+say." 
+
+"But I thought ... You bastard!" 
+
+"Don't worry" I say. "They're fairly good about grievous bodily harm these 
+days. You'll be eligible for parole in two or three years as a first 
+offence, assuming it's your first offence. Oh - and only if he lives, of 
+course." 
+
+He wastes several lungfulls of perfectly good air burbling on about 
+department loyalty, and so on. I mentally switch off for a bit till the 
+droning stops. He finally notices. 
+
+"OK, what do you want?" 
+
+"Two new routers, a back-up FDDI hub, and full ISDN to my home, for 
+testing purposes." 
+
+"I see ... OK." 
+
+"Excellent. Sign here." 
+
+"But it's a blank order form!" 
+
+"That manhole did look rather deep didn't it ..." 
+
+He signs, I smile benignly, he leaves. 
+
+Networking is a funny old world ... 
+
+
+
+--------------------------------------------------------------------------------
+
+The Bastard spreads peace and good will among colleagues ... 
+--------------------------------------------------------------------------------
+
+The season of goodwill is upon us once again, and the endless round of 
+Christmas festivities is just about to start. Gerry, the ex-boss from 
+beancounter control was pulled out of the manhole with only minor injuries 
+to the SNMP servo set attached to the wheelchair. Unfortunately, the 
+casing was slightly damaged by the soapy water from the carwash, but 
+nothing too serious. 
+I sit back in my armchair, and think about informing all users that they 
+must log-out for vital maintenance work, so Systems can settle down to a 
+serious game of network DOOM II. 
+
+I think again, and just finish rebooting the server and changing the 
+log-in script when the phone rings. No caller id shows up. Bad news. I 
+have all the office, mobile and home numbers logged on call-line 
+identification. I pick up the phone. 
+
+"Start talking." 
+
+"Simon, Gerry here." 
+
+"Hi Gerry," I say, matter of fact. 
+
+"You won't get away with this you know. I know you remote-controlled my 
+wheelchair. You really are a complete and utter bastard." 
+
+Now what's the point of calling THE Bastard Operator From Hell a bastard. 
+I mean, what does he expect? This conversation is going nowhere. "Stop 
+talking," I say, and place the telephone back gently on the desk. Short 
+but sweet. I like that. 
+
+I record the number Gerry rang from on the database. It's the pay phone at 
+the company's BUPA hospital. Some people just never, ever learn ... I get 
+to work. Christmas is such a good time for dabbling in office politics. 
+
+I dig out the automatic phone log on the boss's mobile, and do a quick 
+search for 'I'm sorry darling, but that's the day of the office party'. 
+It's amazing what CTI technology can do nowadays. 
+
+I dive into the e-mail and write a simple little rules-based filter. I 
+divert the 'to everyone' memo from office services about the Christmas 
+party straight to me. 
+
+Back to Doom II and happiness. Later in the afternoon, I get the e-mail. 
+Office services are sending out a request for Christmas party suggestions. 
+How good of them. The venues are a boat trip or a barn dance on the 14th. 
+What are these people on? 
+
+I check Sharon's (the boss's secretary) personal organiser. So far so 
+good. I send the e-mail on, and all the punters have their vote for their 
+venue of choice. How democratic. 
+
+The e-mails come back to me. It appears the majority want the boat trip on 
+the 14th. I add up my version of the totals for office services 
+automatically - I'm helpful like that. 
+
+Before forwarding to office services, I also add a little note to say that 
+I'd had a call from Gerry, and thought it would be a seasonal gesture to 
+club together and buy him some flowers, champagne, chocolates, and maybe 
+even arrange for him to get a chauffeur driven limo to take him back to 
+the party - presuming the doctors had finished operating. 
+
+I add that I'd prefer it if office services could do the running on this 
+one for me. It's so vulgar to display your charity. Charity suffereth long 
+and is kind, and all that ... Office services duly receives my helpful 
+e-mail and announces the decision on the Christmas party. They've raised a 
+great deal of money for Gerry, and the venue is to be the barn dance - but 
+as many people unexpectedly can't make the 14th, the date is now the 13th. 
+Unlucky for some. 
+
+I wait 10 minutes. Right on call, the boss comes in very pale and 
+tongue-tied. I help him out. 
+
+"Problem, guv?" 
+
+"Sort of ..." 
+
+He pretends to hide the serious nature of the situation. I'd seen how much 
+he'd had to put on his Amex card so that poor Sharon could stay in a 
+luxury hotel in the Mambo King suite on the 14th instead of braving a taxi 
+home. I also knew just how difficult it was to arrange the office party 
+for the same night as his wife's night out with the girls. I almost feel 
+sorry for him, but recover immediately. 
+
+"I heard the news. I couldn't believe it either. A barn dance. Still, at 
+least Gerry will be happy." 
+
+"Gerry ...?" growls the boss. 
+
+"Yes. It was his idea. He didn't want to miss out on the party, so he's 
+ordered a chauffeur-driven limo to take him there on the 13th. And of 
+course, he can join in on the barn dancing from his wheelchair, unlike a 
+traditional disco." 
+
+"Chauffeur-driven limo?" exclaims the boss, now back on fine form with the 
+blood running to his cheeks. "I'll kill him." 
+
+"No need to do that. The doctors are already on the case." 
+
+I hand him the BUPA bill, along with other assorted receipts for 
+champagne, chocolates, flowers and one very, very large telephone bill, 
+which helpfully lists all the 0898 numbers Gerry has called from his 
+hospital bed, as well as the police report citing him for careless use of 
+a wheelchair. 
+
+The boss goes through the receipts and says the fateful words. "He's 
+fired." 
+
+"But you can't fire a hospitalised man," pushing him that little bit 
+further. 
+
+"Just bloody well watch me," says the boss resuming command. "And another 
+thing, can you say there has been a systems error and that we are going 
+back to the boat trip on the 14th. You'll know how to fix it won't you." 
+
+No problems. I think I can sort it. 
