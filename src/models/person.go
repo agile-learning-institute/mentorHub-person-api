@@ -9,7 +9,7 @@ type Person struct {
 	UserName    string             `json:"userName,omitempty"`
 	FirstName   string             `json:"firstName,omitempty"`
 	LastName    string             `json:"lastName,omitempty"`
-	Rolls       []string           `json:"rolls,omitempty"`
+	Roles       []string           `json:"roles,omitempty"`
 	Description string             `json:"description,omitempty"`
 	Status      string             `json:"status,omitempty"`
 	Member      bool               `json:"member,omitempty"`
