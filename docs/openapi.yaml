@@ -22,7 +22,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Person'
+              $ref: '#/components/schemas/people'
         required: true
       responses:
         '200':
@@ -30,7 +30,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Person'          
+                $ref: '#/components/schemas/people'          
         '405':
           description: Invalid input
     get:
@@ -42,7 +42,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Names'          
+                $ref: '#/components/schemas/names'          
         '404':
           description: not found
         '405':
@@ -65,7 +65,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Person'
+              $ref: '#/components/schemas/people'
         required: true
       responses:
         '200':
@@ -73,7 +73,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Person'          
+                $ref: '#/components/schemas/people'          
         '404':
           description: person not found
         '405':
@@ -96,7 +96,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Person'          
+                $ref: '#/components/schemas/people'          
         '404':
           description: person not found
         '405':
@@ -111,7 +111,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Config'          
+                $ref: '#/components/schemas/people'          
   /api/health/:
     get:
       summary: Promethius Healthcheck endpoint
@@ -122,7 +122,7 @@ paths:
 
 components:
   schemas:
-    Names:
+    names:
       type: array
       items:
         type: object
@@ -134,27 +134,13 @@ components:
           name:
             description: Name
             type: string      
-    Config:
+    config:
       type: object
       properties:
         apiVersion:
           type: string
           description: Symantic Version Number
-        Stores: 
-          type: array
-          items:
-            type: object
-            properties:
-              CollectionName: 
-                description: Mongodb Collection name
-                type: string
-              Version:
-                description: Schema Version for the collection
-                type: string
-              Filter:
-                description: special Filter applied to collection
-                type: string
-        ConfigItems:
+        configItems:
           type: array
           items:
             type: object
@@ -172,7 +158,40 @@ components:
                   - default
                   - environment
                   - file
+        versions: 
+          type: array
+          items:
+            type: object
+            properties:
+              _id: 
+                description: Collection Version Document ID
+                type: string
+              collectionName: 
+                description: Mongodb Collection name
+                type: string
+              currentVersion:
+                description: Schema Version for the collection
+                type: string
+        enumerators: 
+          type: object
+          properties: 
+            name:
+              description: Enumerator Name
+              type: string
+            status:
+              description: Enumerator Status 
+              type: string
+              enum: 
+                - Active
+                - Depricated
+            version:
+              description: Enumerator Version
+              type: string
+            enumerators: 
+              description: List of Enumerator Value:Description pairs
+              type: object
         mentors:
+          description: List of all members with role Mentor
           type: array
           items:
             type: object
@@ -180,11 +199,11 @@ components:
               ID:
                 description: MongoDB _id
                 type: string
-                format: uuid
               name:
                 description: Name
                 type: string      
         partners:
+          description: List of all partners
           type: array
           items:
             type: object
@@ -192,120 +211,113 @@ components:
               ID:
                 description: MongoDB _id
                 type: string
-                format: uuid
               name:
                 description: Name
                 type: string      
-        enums:
-          type: object
-    Person:
-      type: object
+    people:
       required:
-      - name
+        - _id
+        - userName
       properties:
         _id:
           description: The unique identifier for a person
           type: string
-          format: UUID
         userName:
-          description: The persons user name
-            document
+          description: Username
+          pattern: ^[^\s]{0,32}$
           type: string
-          maxLength: 32
         firstName:
           description: The persons first name
-            document
+          pattern: ^[^\s]{0,32}$
           type: string
-          maxLength: 32
         lastName:
           description: The persons last name
-            document
+          pattern: ^[^\s]{0,32}$
           type: string
-          maxLength: 32
         description:
           description: Notes or other descriptive text
+          pattern: ^[ -~]{0,256}$
           type: string
-          maxLength: 256
         status:
           description: The status of this member
-          type: string
           enum:
-          - Pending
-          - Active
-          - Inactive
-          - Archived
-        member:
-          description: Is this person a Member
-          type: boolean
-        mentor:
-          description: Is this person a Mentor
-          type: boolean
-        donor:
-          description: Is this person a Donor
-          type: boolean
-        contact:
-          description: Is this person a Partner Contact
-          type: boolean
+            - Pending
+            - Onboarding
+            - Matching
+            - Active
+            - Hold
+            - Inactive
+            - TimedOut
+            - Archived
+          type: string
+        roles:
+          description: RBAC Roles for this person
+          items:
+            enum:
+              - Member
+              - Mentor
+              - Partner
+              - Donor
+              - Staff
+            type: string
+          type: array
         mentorId:
           description: the _id of this persons Mentor if they have one
           type: string
-          format: UUID
         partnerId:
           description: the _id of this persons partner (contacts and members)
           type: string
-          format: UUID
         title:
           description: The person's title in the career path
-          type: string
           enum:
-          - Apprentice Candidate
-          - Apprentice
-          - Resident
-          - Associate
-          - Senior
-          - Distinguished
-          - N/A
+            - Candidate
+            - Apprentice
+            - Resident
+            - Master
+            - Distinguished
+            - N/A
+          type: string
         cadence:
           description: This person's preferred meeting cadence
-          type: string
           enum:
-          - As Needed
-          - Monthly
-          - Every 2 Weeks
-          - Weekly
-          - Twice a Week
-          - Daily
+            - As Needed
+            - Monthly
+            - Every 2 Weeks
+            - Weekly
+            - Twice a Week
+            - Daily
+          type: string
         eMail:
           description: The person's eMail address
+          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
           type: string
-          maxLength: 256
-          pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
         gitHub:
           description: The person's gitHub User ID
+          pattern: ^[^\s]{0,32}$
           type: string
-          maxLength: 32
         phone:
           description: The person's phone number
+          pattern: ^\+?1?\s?(\([0-9]{3}\)|[0-9]{3})[-.\s]?[0-9]{3}[-.\s]?[0-9]{4}$
           type: string
-          pattern: "^\\d{3}[-.\\s]?\\d{3}[-.\\s]?\\d{4}$"
         device:
           description: The type of PC this person is using
-          type: string
           enum:
-          - Mac Intel
-          - Mac Apple
-          - Linux
-          - Windows / WSL
+            - Mac (Intel)
+            - Mac (Apple)
+            - Linux
+            - Windows
+          type: string
         location:
           description: The location where this person lives
+          pattern: ^[ -~]{0,256}$
           type: string
-          maxLength: 64
         lastSaved:
-          description: The location where this person lives
-          type: object
+          description: Change Tracking breadcrumb
           properties:
             fromIp:
               description: Http Request remote IP address
+              pattern: >-
+                ^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$
               type: string
             byUser:
               description: UUID Of User
@@ -316,3 +328,7 @@ components:
             correlationId:
               description: The logging correlation ID of the update transaction
               type: string
+          additionalProperties: false
+          type: object
+      additionalProperties: false
+      type: object
