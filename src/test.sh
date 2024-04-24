@@ -44,7 +44,7 @@ main() {
         test_http_request "/api/health/" "GET"
         test_http_request "/api/person/" "GET"
         test_http_request "/api/person/aaaa00000000000000000017" "GET"
-        test_http_request "/api/person/aaaa00000000000000000017" "PATCH" '{"name":"Foo", "description":"Some short description"}'
+        test_http_request "/api/person/aaaa00000000000000000017" "PATCH" '{"userName":"Foo", "description":"Some short description"}'
     fi
 
     test_http_request "/api/person/" \
