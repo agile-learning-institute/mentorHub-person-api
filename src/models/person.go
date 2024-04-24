@@ -12,10 +12,6 @@ type Person struct {
 	Roles       []string           `json:"roles,omitempty"`
 	Description string             `json:"description,omitempty"`
 	Status      string             `json:"status,omitempty"`
-	Member      bool               `json:"member,omitempty"`
-	Mentor      bool               `json:"mentor,omitempty"`
-	Donor       bool               `json:"donor,omitempty"`
-	Contact     bool               `json:"contact,omitempty"`
 	Title       string             `json:"title,omitempty"`
 	Cadence     string             `json:"cadence,omitempty"`
 	Email       string             `json:"eMail,omitempty"`

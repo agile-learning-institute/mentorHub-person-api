@@ -55,7 +55,7 @@ func (store *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (
 	ConvertToOid(insertValues, "partnerId")
 
 	// Add the breadcrumb
-	insertValues["lastSaved"] = crumb
+	insertValues["lastSaved"] = crumb.AsBson()
 
 	// Insert the document
 	context, cancel := store.config.GetTimeoutContext()
