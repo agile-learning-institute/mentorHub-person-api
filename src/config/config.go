@@ -22,13 +22,6 @@ type CurrentVersion struct {
 	CurrentVersion string `json:"currentVersion"`
 }
 
-type Enumerators struct {
-	Name        string                 `json:"name"`
-	Status      string                 `json:"status"`
-	Version     int                    `json:"version"`
-	Enumerators map[string]interface{} `json:"enumerators"`
-}
-
 type Config struct {
 	// Configuration values exposed on the /config endpoint
 	ConfigItems []*ConfigItem          `json:"ConfigItems"`

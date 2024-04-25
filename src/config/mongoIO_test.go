@@ -6,9 +6,11 @@
 package config
 
 import (
+	"log"
 	"mentorhub-person-api/src/models"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -39,17 +41,19 @@ func TestInsertOne(t *testing.T) {
 	assert.Equal(t, "people", people.Name())
 
 	// Insert a Person
-	input := models.Person{UserName: "Foo"}
-	output := models.Person{}
-
-	err := mongoIO.InsertOne(people, input, output)
-	assert.NotNil(t, err)
-	assert.Equal(t, "Foo", output.UserName)
+	testName := uuid.New().String()[:31]
+	input := struct {
+		UserName string `bson:"userName,omitempty"`
+	}{UserName: testName}
+	log.Print(input.UserName)
+	output, err := mongoIO.InsertOne(people, input)
+	assert.Nil(t, err)
+	assert.NotNil(t, output.InsertedID)
 
 	mongoIO.Disconnect()
 }
 
-func TestGet(t *testing.T) {
+func TestFindOne(t *testing.T) {
 	// Initilize Config, connect to database
 	cfg := NewConfig()
 	mongoIO := NewMongoIO(cfg)
@@ -59,17 +63,16 @@ func TestGet(t *testing.T) {
 	assert.Equal(t, "people", people.Name())
 
 	// Get a Person from the test data
-	ID, err := primitive.ObjectIDFromHex("AAAA00000000000000000000")
+	ID, err := primitive.ObjectIDFromHex("aaaa00000000000000000000")
 	assert.Nil(t, err)
 
 	output := models.Person{}
 	query := bson.M{"_id": ID}
-	opts := options.Find()
 
-	err = mongoIO.FindOne(people, query, opts, output)
-	assert.NotNil(t, err)
+	err = mongoIO.FindOne(people, query, &output)
+	assert.Nil(t, err)
 	assert.Equal(t, "JamesSmith", output.UserName)
-	assert.Nil(t, output.Description)
+	assert.Equal(t, "She was too busy always talking about what she wanted to do to actually do any of it.", output.Description)
 
 	mongoIO.Disconnect()
 }
@@ -90,9 +93,9 @@ func TestUpdateOne(t *testing.T) {
 	input := models.Person{Description: "Updated"}
 	output := models.Person{}
 	query := bson.M{"_id": ID}
-	opts := options.Find()
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
 
-	err = mongoIO.UpdateOne(people, query, opts, input, output)
+	err = mongoIO.UpdateOne(people, query, opts, input, &output)
 	assert.NotNil(t, err)
 	assert.Equal(t, "Foo", output.UserName)
 	assert.Equal(t, "Updated", output.Description)
@@ -113,7 +116,7 @@ func TestFindNames(t *testing.T) {
 	opts := options.Find()
 	opts.SetProjection(NameProjection())
 	err := mongoIO.Find(mongoIO.GetPeopleCollection(), query, opts, &results)
-	assert.NotNil(t, err)
+	assert.Nil(t, err)
 	assert.Greater(t, len(results), 0)
 
 	mongoIO.Disconnect()

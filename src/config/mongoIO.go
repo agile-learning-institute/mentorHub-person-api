@@ -14,7 +14,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -24,6 +23,13 @@ import (
 type ShortName struct {
 	ID   primitive.ObjectID `bson:"_id,omitempty" json:"ID,omitempty"`
 	Name string             `json:"name,omitempty"`
+}
+
+type Enums struct {
+	Name        string                 `json:"name"`
+	Status      string                 `json:"status"`
+	Version     int                    `json:"version"`
+	Enumerators map[string]interface{} `json:"enumerators"`
 }
 
 type MongoIO struct {
@@ -118,24 +124,37 @@ func (mongoIO *MongoIO) Find(collection *mongo.Collection, query bson.M, opts *o
 }
 
 /**
-* Find one document by _id
+* Find one document
  */
-func (mongoIO *MongoIO) FindOne(collection *mongo.Collection, query bson.M, opts *options.FindOptions, results interface{}) error {
-	return errors.New("Not Yet Implemented")
+func (mongoIO *MongoIO) FindOne(collection *mongo.Collection, query bson.M, results interface{}) error {
+	context, cancel := mongoIO.getTimeoutContext()
+	defer cancel()
+	isok := collection.FindOne(context, query).Decode(results)
+	return isok
 }
 
 /**
 * Insert one document
  */
-func (mongoIO *MongoIO) InsertOne(collection *mongo.Collection, document interface{}, result interface{}) error {
-	return errors.New("Not Yet Implemented")
+func (mongoIO *MongoIO) InsertOne(collection *mongo.Collection, document interface{}) (*mongo.InsertOneResult, error) {
+	context, cancel := mongoIO.getTimeoutContext()
+	defer cancel()
+	log.Print(document)
+	result, err := collection.InsertOne(context, document)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 /**
-* Update one document by _id
+* Update one document
  */
-func (mongoIO *MongoIO) UpdateOne(collection *mongo.Collection, query bson.M, opts *options.FindOptions, update interface{}, results interface{}) error {
-	return errors.New("Not Yet Implemented")
+func (mongoIO *MongoIO) UpdateOne(collection *mongo.Collection, query bson.M, opts *options.FindOneAndUpdateOptions, update interface{}, results interface{}) error {
+	ctx, cancel := mongoIO.getTimeoutContext()
+	defer cancel()
+	isok := collection.FindOneAndUpdate(ctx, query, update, opts).Decode(&results)
+	return isok
 }
 
 /**
@@ -193,7 +212,7 @@ func (mongoIO *MongoIO) LoadEnumerators() {
 	}
 
 	// Query Enumerators
-	results := []*Enumerators{}
+	results := []*Enums{}
 	query := bson.M{"version": versionNumber}
 	opts := options.Find()
 	err = mongoIO.Find(mongoIO.enumsCollection, query, opts, &results)
