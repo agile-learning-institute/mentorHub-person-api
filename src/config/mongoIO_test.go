@@ -87,18 +87,27 @@ func TestUpdateOne(t *testing.T) {
 	assert.Equal(t, "people", people.Name())
 
 	// Update a Person
-	ID, err := primitive.ObjectIDFromHex("AAAA00000000000000000000")
+	ID, err := primitive.ObjectIDFromHex("aaaa00000000000000000001")
 	assert.Nil(t, err)
 
-	input := models.Person{Description: "Updated"}
-	output := models.Person{}
+	// Update description to "Updated"
+	input := bson.M{"$set": bson.M{"description": "Updated"}}
+	output := &models.Person{}
 	query := bson.M{"_id": ID}
 	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
 
-	err = mongoIO.UpdateOne(people, query, opts, input, &output)
-	assert.NotNil(t, err)
-	assert.Equal(t, "Foo", output.UserName)
+	err = mongoIO.UpdateOne(people, query, opts, input, output)
+	assert.Nil(t, err)
+	assert.Equal(t, "MichaelSmith", output.UserName)
 	assert.Equal(t, "Updated", output.Description)
+
+	// Update description to "Reset"
+	input = bson.M{"$set": bson.M{"description": "Reset"}}
+
+	err = mongoIO.UpdateOne(people, query, opts, input, output)
+	assert.Nil(t, err)
+	assert.Equal(t, "MichaelSmith", output.UserName)
+	assert.Equal(t, "Reset", output.Description)
 
 	mongoIO.Disconnect()
 }

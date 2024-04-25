@@ -153,8 +153,16 @@ func (mongoIO *MongoIO) InsertOne(collection *mongo.Collection, document interfa
 func (mongoIO *MongoIO) UpdateOne(collection *mongo.Collection, query bson.M, opts *options.FindOneAndUpdateOptions, update interface{}, results interface{}) error {
 	ctx, cancel := mongoIO.getTimeoutContext()
 	defer cancel()
-	isok := collection.FindOneAndUpdate(ctx, query, update, opts).Decode(&results)
-	return isok
+	result := collection.FindOneAndUpdate(ctx, query, update, opts)
+	if result.Err() != nil {
+		return result.Err()
+	}
+	err := result.Decode(results)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 /**
