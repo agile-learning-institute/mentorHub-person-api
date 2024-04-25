@@ -7,36 +7,42 @@
 package config
 
 import (
+	"context"
+	"log"
+	"strconv"
+	"strings"
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+type ShortName struct {
+	ID   primitive.ObjectID `bson:"_id,omitempty" json:"ID,omitempty"`
+	Name string             `json:"name,omitempty"`
+}
+
 type MongoIO struct {
-	// config             Config
-	// client             *mongo.Client
-	// database           *mongo.Database
-	// peopleCollection   *mongo.Collection
-	// enumsCollection    *mongo.Collection
-	// partnersCollection *mongo.Collection
-	// versionsCollection *mongo.Collection
-	// cancel             context.CancelFunc
+	config             *Config
+	client             *mongo.Client
+	database           *mongo.Database
+	peopleCollection   *mongo.Collection
+	enumsCollection    *mongo.Collection
+	partnersCollection *mongo.Collection
+	versionsCollection *mongo.Collection
+	cancel             context.CancelFunc
 }
 
-// Common MongoDB Query Objects
-func GetAllQuery() bson.M {
-	return bson.M{"$and": []bson.M{
-		{"name": bson.M{"$ne": "VERSION"}},
-		{"status": bson.M{"$ne": "Archived"}},
-	}}
-}
+const (
+	PeoplesCollectionName     = "people"
+	PartnersCollectionName    = "partners"
+	EnumeratorsCollectionName = "enumerators"
+	VersionsCollectionName    = "msmCurrentVersions"
+)
 
-func GetMentorsQuery() bson.M {
-	return bson.M{"$and": []bson.M{
-		{"status": bson.M{"$ne": "Archived"}},
-		{"roles": "Mentor"},
-	}}
-}
-
-func GetMentorsProjection() bson.D {
+func NameProjection() bson.D {
 	return bson.D{
 		{Key: "ID", Value: "_id"},
 		{Key: "name", Value: bson.M{"$concat": bson.A{"$firstName", " ", "$lastName"}}},
@@ -46,171 +52,190 @@ func GetMentorsProjection() bson.D {
 /**********************************************************************
 * Constructor - initilize configuration values
  */
-func NewMongoIO() *MongoIO {
-	return &MongoIO{}
+func NewMongoIO(config *Config) *MongoIO {
+	this := &MongoIO{}
+	this.config = config
+	return this
 }
 
-// /********************************************************************************
-// * Connect to the Database, load the Versions and Enumerators Config values
-//  */
-// func (mongo *MongoIO) Connect() {
-// 	// Connect to the database
-// 	ctx, cancel := mongo.GetTimeoutContext()
-// 	mongo.cancel = cancel
-// 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(config.getConnectionString()))
-// 	if err != nil {
-// 		cancel()
-// 		log.Fatal("Database Connection Failed:", err)
-// 	}
+/********************************************************************************
+* Connect to the Database, initilize connected values
+ */
+func (mongoIO *MongoIO) Connect() {
+	// Connect to the database
+	ctx, cancel := mongoIO.GetTimeoutContext()
+	mongoIO.cancel = cancel
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoIO.config.GetConnectionString()))
+	if err != nil {
+		cancel()
+		log.Fatal("Database Connection Failed:", err)
+	}
 
-// 	// Get the database object, and collection objects
-// 	cfg.client = client
-// 	cfg.database = cfg.client.Database(cfg.databaseName)
-// 	cfg.peopleCollection = cfg.database.Collection(PeoplesCollectionName)
-// 	cfg.enumsCollection = cfg.database.Collection(EnumeratorsCollectionName)
-// 	cfg.partnersCollection = cfg.database.Collection(PartnersCollectionName)
-// 	cfg.versionsCollection = cfg.database.Collection(VersionsCollectionName)
+	// Get the database object, and collection objects
+	mongoIO.client = client
+	mongoIO.database = mongoIO.client.Database(mongoIO.config.GetDatabaseName())
+	mongoIO.peopleCollection = mongoIO.database.Collection(PeoplesCollectionName)
+	mongoIO.enumsCollection = mongoIO.database.Collection(EnumeratorsCollectionName)
+	mongoIO.partnersCollection = mongoIO.database.Collection(PartnersCollectionName)
+	mongoIO.versionsCollection = mongoIO.database.Collection(VersionsCollectionName)
+}
 
-// 	// Find Versions
-// 	query := bson.M{}
-// 	opts := options.Find()
-// 	cfg.FindDocuments(cfg.versionsCollection, query, opts, &cfg.Versions)
-// 	if len(cfg.Versions) == 0 {
-// 		log.Fatal("Versions not found")
-// 	}
+/**
+* Find multiple documents
+ */
+func (mongoIO *MongoIO) Find(collection *mongo.Collection, query bson.M, opts *options.FindOptions, results interface{}) error {
+	context, cancel := mongoIO.GetTimeoutContext()
+	defer cancel()
 
-// 	// Find the current version for the people collection
-// 	versionString := ""
-// 	for _, v := range cfg.Versions {
-// 		if v.CollectionName == PeoplesCollectionName {
-// 			versionString = v.CurrentVersion
-// 		}
-// 	}
-// 	if versionString == "" {
-// 		log.Fatalf("People Collection not found %d", len(cfg.Versions))
-// 	}
+	cursor, err := collection.Find(context, query, opts)
+	if err != nil {
+		return err
+	}
+	defer cursor.Close(context)
 
-// 	// Extract the enumerators version number from the version string
-// 	var versionNumber int
-// 	parts := strings.Split(versionString, ".")
-// 	versionNumber, err = strconv.Atoi(parts[len(parts)-1])
-// 	if err != nil {
-// 		log.Fatalf("Version Number not an integer: %s", versionString)
-// 	}
+	if err = cursor.All(context, results); err != nil {
+		return err
+	}
 
-// 	// Query Enumerators
-// 	results := []*Enumerators{}
-// 	query = bson.M{"version": versionNumber}
-// 	opts = options.Find()
-// 	opts.SetSort(bson.D{{Key: "version", Value: 1}})
-// 	cfg.FindDocuments(cfg.enumsCollection, query, opts, &results)
+	return nil
+}
 
-// 	// Set enumerators
-// 	if len(results) == 1 {
-// 		cfg.Enumerators = results[0].Enumerators
-// 	} else {
-// 		log.Fatalf("Enumerators List is wrong size %d", len(results))
-// 	}
-// }
+/**
+* Find one document by _id
+ */
+func (mongoIO *MongoIO) FindOne(collection *mongo.Collection, query bson.M, opts *options.FindOptions, results interface{}) error {
+	return nil
+}
 
-// func (cfg *Config) FindDocuments(collection *mongo.Collection, query bson.M, opts *options.FindOptions, results interface{}) {
-// 	context, cancel := cfg.GetTimeoutContext()
-// 	defer cancel()
+/**
+* Insert one document
+ */
+func (mongoIO *MongoIO) InsertOne(collection *mongo.Collection, query bson.M, opts *options.FindOptions, results interface{}) error {
+	return nil
+}
 
-// 	cursor, err := collection.Find(context, query, opts)
-// 	if err != nil {
-// 		log.Fatalf("Query Failed: %s %v", collection.Name(), err)
-// 	}
-// 	defer cursor.Close(context)
+/**
+* Update one document by _id
+ */
+func (mongoIO *MongoIO) UpdateOne(collection *mongo.Collection, query bson.M, opts *options.FindOptions, results interface{}) error {
+	return nil
+}
 
-// 	// Directly pass results to cursor.All
-// 	if err = cursor.All(context, results); err != nil {
-// 		log.Fatalf("Fetch Failed: %s %v", collection.Name(), err)
-// 	}
-// }
+/********************************************************************************
+* Disconnect fromthe Database
+ */
+func (mongoIO *MongoIO) Disconnect() {
+	ctx, cancel := mongoIO.GetTimeoutContext()
+	defer cancel()
+	mongoIO.client.Disconnect(ctx)
+	mongoIO.cancel()
+}
 
-// /********************************************************************************
-// * Disconnect fromthe Database
-//  */
-// func (cfg *Config) Disconnect() {
-// 	ctx, cancel := cfg.GetTimeoutContext()
-// 	defer cancel()
-// 	cfg.client.Disconnect(ctx)
-// 	cfg.cancel()
-// }
+/**
+* Simple getter for peopleCollection
+ */
+func (mongoIO *MongoIO) GetPeopleCollection() *mongo.Collection {
+	return mongoIO.peopleCollection
+}
 
-// /********************************************************************************
-// * Simple Getters
-//  */
-// func (cfg *Config) GetPort() string {
-// 	return cfg.port
-// }
+/**
+* Get a timeout to be used with mongo calls
+ */
+func (mongoIO *MongoIO) GetTimeoutContext() (context.Context, context.CancelFunc) {
+	timeout := time.Duration(mongoIO.config.GetDatabaseTimeout()) * time.Second
+	return context.WithTimeout(context.Background(), timeout)
+}
 
-// func (cfg *Config) GetPersonCollection() *mongo.Collection {
-// 	return cfg.peopleCollection
-// }
+/**
+*
+ */
+func (mongoIO *MongoIO) LoadVersions() {
+	// Find Versions
+	query := bson.M{}
+	opts := options.Find()
+	err := mongoIO.Find(mongoIO.versionsCollection, query, opts, &mongoIO.config.Versions)
+	if err != nil {
+		log.Fatal("Error geting Versions")
+	}
 
-// func (cfg *Config) GetTimeoutContext() (context.Context, context.CancelFunc) {
-// 	timeout := time.Duration(cfg.databaseTimeout) * time.Second
-// 	return context.WithTimeout(context.Background(), timeout)
-// }
+	if len(mongoIO.config.Versions) == 0 {
+		log.Fatal("No Versions not found")
+	}
+}
 
-// /********************************************************************************
-// * Load the Mentors and Partners list
-//  */
-// func (cfg *Config) LoadLists() error {
+/**
+* Load the Enumerators that match the person collection
+ */
+func (mongoIO *MongoIO) LoadEnumerators() {
+	// Find the current version for the people collection
+	versionString := ""
+	for _, v := range mongoIO.config.Versions {
+		if v.CollectionName == PeoplesCollectionName {
+			versionString = v.CurrentVersion
+		}
+	}
+	if versionString == "" {
+		log.Fatalf("People Collection not found %d", len(mongoIO.config.Versions))
+	}
 
-// 	// Fetch Mentors
-// 	mentors, err := cfg.findNames(
-// 		cfg.peopleCollection,
-// 		options.Find().SetProjection(GetMentorsProjection()),
-// 		GetMentorsQuery(),
-// 	)
+	// Extract the enumerators version number from the version string
+	parts := strings.Split(versionString, ".")
+	versionNumber, err := strconv.Atoi(parts[len(parts)-1])
+	if err != nil {
+		log.Fatalf("Version Number not an integer: %s", versionString)
+	}
 
-// 	if err != nil {
-// 		log.Printf("ERROR: Load Mentors failed %s", err)
-// 		return err
-// 	}
-// 	cfg.Mentors = mentors
+	// Query Enumerators
+	results := []*Enumerators{}
+	query := bson.M{"version": versionNumber}
+	opts := options.Find()
+	err = mongoIO.Find(mongoIO.enumsCollection, query, opts, &results)
+	if err != nil {
+		log.Fatalf("Error getting Enumerators %s", err)
+	}
 
-// 	// Fetch Partners
-// 	partners, err := cfg.findNames(
-// 		cfg.partnersCollection,
-// 		options.Find(),
-// 		GetAllQuery(),
-// 	)
+	// Set enumerators
+	if len(results) == 1 {
+		mongoIO.config.Enumerators = results[0].Enumerators
+	} else {
+		log.Fatalf("Enumerators List is wrong size %d", len(results))
+	}
+}
 
-// 	if err != nil {
-// 		log.Printf("ERROR: Load Partners failed %s", err)
-// 		return err
-// 	}
-// 	cfg.Partners = partners
+/********************************************************************************
+*
+ */
+func (mongoIO *MongoIO) FetchMentors() error {
 
-// 	return nil
-// }
+	// Fetch Mentors
+	results := []*ShortName{}
+	query := bson.M{"$and": []bson.M{
+		{"status": bson.M{"$ne": "Archived"}},
+		{"roles": "Mentor"},
+	}}
+	opts := options.Find()
+	opts.SetProjection(NameProjection())
+	err := mongoIO.Find(mongoIO.peopleCollection, query, opts, &results)
+	if err != nil {
+		log.Fatalf("Error getting Mentors %s", err)
+	}
+	mongoIO.config.Mentors = results
+	return nil
+}
 
-// /**
-// * Get a list of people names based on the query and options provided
-//  */
-// func (cfg *Config) findNames(collection *mongo.Collection, opts *options.FindOptions, query bson.M) ([]*models.ShortName, error) {
-// 	var results []*models.ShortName
-// 	var err error
+/********************************************************************************
+*
+ */
+func (mongoIO *MongoIO) FetchPartners() error {
+	// Fetch Partners
+	results := []*ShortName{}
+	query := bson.M{"status": bson.M{"$ne": "Archived"}}
+	opts := options.Find()
+	err := mongoIO.Find(mongoIO.partnersCollection, query, opts, &results)
+	if err != nil {
+		log.Fatalf("Error getting Partners %s", err)
+	}
+	mongoIO.config.Partners = results
 
-// 	// Query the database
-// 	context, cancel := cfg.GetTimeoutContext()
-// 	defer cancel()
-// 	cursor, err := collection.Find(context, query, opts)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	// Fetch all the results
-// 	context, cancel = cfg.GetTimeoutContext()
-// 	defer cancel()
-// 	err = cursor.All(context, &results)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	return results, nil
-// }
+	return nil
+}

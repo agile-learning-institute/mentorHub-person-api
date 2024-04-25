@@ -7,7 +7,6 @@ package config
 
 import (
 	"log"
-	"mentorhub-person-api/src/models"
 	"os"
 	"strconv"
 )
@@ -32,11 +31,11 @@ type Enumerators struct {
 
 type Config struct {
 	// Configuration values exposed on the /config endpoint
-	ConfigItems []*ConfigItem       `json:"ConfigItems"`
-	Versions    []*CurrentVersion   `json:"versions"`
-	Enumerators interface{}         `json:"enums"`
-	Mentors     []*models.ShortName `json:"mentors"`
-	Partners    []*models.ShortName `json:"partners"`
+	ConfigItems []*ConfigItem     `json:"ConfigItems"`
+	Versions    []*CurrentVersion `json:"versions"`
+	Enumerators interface{}       `json:"enums"`
+	Mentors     []*ShortName      `json:"mentors"`
+	Partners    []*ShortName      `json:"partners"`
 	ApiVersion  string
 
 	// Configurations returned by getters
