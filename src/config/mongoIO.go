@@ -2,7 +2,8 @@
 ** MongoIO
 **    This class is a wrapper for MongoDB interactions. It manages
 **    the database connection, and executes all mongoDb calls with
-**    easy to mock wrappers.
+**    easy to mock wrappers. This requires a local mongoDb with test data
+**	  You can start this contianer with the command "mh up mongodb"
 ********************************************************************************/
 package config
 
@@ -13,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -63,7 +65,7 @@ func NewMongoIO(config *Config) *MongoIO {
  */
 func (mongoIO *MongoIO) Connect() {
 	// Connect to the database
-	ctx, cancel := mongoIO.GetTimeoutContext()
+	ctx, cancel := mongoIO.getTimeoutContext()
 	mongoIO.cancel = cancel
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoIO.config.GetConnectionString()))
 	if err != nil {
@@ -80,11 +82,27 @@ func (mongoIO *MongoIO) Connect() {
 	mongoIO.versionsCollection = mongoIO.database.Collection(VersionsCollectionName)
 }
 
+/********************************************************************************
+* Disconnect fromthe Database
+ */
+func (mongoIO *MongoIO) Disconnect() {
+	ctx, cancel := mongoIO.getTimeoutContext()
+	defer cancel()
+	mongoIO.client.Disconnect(ctx)
+	mongoIO.cancel()
+	mongoIO.database = nil
+	mongoIO.peopleCollection = nil
+	mongoIO.enumsCollection = nil
+	mongoIO.partnersCollection = nil
+	mongoIO.versionsCollection = nil
+	cancel()
+}
+
 /**
 * Find multiple documents
  */
 func (mongoIO *MongoIO) Find(collection *mongo.Collection, query bson.M, opts *options.FindOptions, results interface{}) error {
-	context, cancel := mongoIO.GetTimeoutContext()
+	context, cancel := mongoIO.getTimeoutContext()
 	defer cancel()
 
 	cursor, err := collection.Find(context, query, opts)
@@ -96,7 +114,6 @@ func (mongoIO *MongoIO) Find(collection *mongo.Collection, query bson.M, opts *o
 	if err = cursor.All(context, results); err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -104,31 +121,21 @@ func (mongoIO *MongoIO) Find(collection *mongo.Collection, query bson.M, opts *o
 * Find one document by _id
  */
 func (mongoIO *MongoIO) FindOne(collection *mongo.Collection, query bson.M, opts *options.FindOptions, results interface{}) error {
-	return nil
+	return errors.New("Not Yet Implemented")
 }
 
 /**
 * Insert one document
  */
-func (mongoIO *MongoIO) InsertOne(collection *mongo.Collection, query bson.M, opts *options.FindOptions, results interface{}) error {
-	return nil
+func (mongoIO *MongoIO) InsertOne(collection *mongo.Collection, document interface{}, result interface{}) error {
+	return errors.New("Not Yet Implemented")
 }
 
 /**
 * Update one document by _id
  */
-func (mongoIO *MongoIO) UpdateOne(collection *mongo.Collection, query bson.M, opts *options.FindOptions, results interface{}) error {
-	return nil
-}
-
-/********************************************************************************
-* Disconnect fromthe Database
- */
-func (mongoIO *MongoIO) Disconnect() {
-	ctx, cancel := mongoIO.GetTimeoutContext()
-	defer cancel()
-	mongoIO.client.Disconnect(ctx)
-	mongoIO.cancel()
+func (mongoIO *MongoIO) UpdateOne(collection *mongo.Collection, query bson.M, opts *options.FindOptions, update interface{}, results interface{}) error {
+	return errors.New("Not Yet Implemented")
 }
 
 /**
@@ -141,7 +148,7 @@ func (mongoIO *MongoIO) GetPeopleCollection() *mongo.Collection {
 /**
 * Get a timeout to be used with mongo calls
  */
-func (mongoIO *MongoIO) GetTimeoutContext() (context.Context, context.CancelFunc) {
+func (mongoIO *MongoIO) getTimeoutContext() (context.Context, context.CancelFunc) {
 	timeout := time.Duration(mongoIO.config.GetDatabaseTimeout()) * time.Second
 	return context.WithTimeout(context.Background(), timeout)
 }
