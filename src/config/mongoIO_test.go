@@ -6,7 +6,6 @@
 package config
 
 import (
-	"log"
 	"mentorhub-person-api/src/models"
 	"testing"
 
@@ -45,7 +44,6 @@ func TestInsertOne(t *testing.T) {
 	input := struct {
 		UserName string `bson:"userName,omitempty"`
 	}{UserName: testName}
-	log.Print(input.UserName)
 	output, err := mongoIO.InsertOne(people, input)
 	assert.Nil(t, err)
 	assert.NotNil(t, output.InsertedID)
