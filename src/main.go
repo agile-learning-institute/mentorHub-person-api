@@ -17,13 +17,12 @@ import (
 func main() {
 	// Setup the Config
 	config := config.NewConfig()
-
-	// Connect to the database
-	config.Connect()
-	defer config.Disconnect()
+	mongoIO := config.NewMongoIO(config)
+	mongoIO.Connect()
+	defer mongoIO.Disconnect()
 
 	// Setup the Stores
-	personStore := stores.NewPersonStore(config)
+	personStore := stores.NewPersonStore(mongoIO)
 
 	// Setup the Handlers
 	configHandler := handlers.NewConfigHandler(config)

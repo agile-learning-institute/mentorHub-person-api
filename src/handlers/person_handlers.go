@@ -137,7 +137,7 @@ func (handler *PersonHandler) GetPeople(responseWriter http.ResponseWriter, requ
 	defer log.Printf("End CID: %s Get All People", correltionId)
 
 	// Get all the people
-	results, err := handler.PersonStore.FindNames(bson.M{})
+	results, err := handler.PersonStore.FindNames()
 	if err != nil {
 		log.Printf("ERROR CID: %s GetAllNames %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
