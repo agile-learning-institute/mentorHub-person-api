@@ -6,6 +6,7 @@ package stores
 
 import (
 	"encoding/json"
+	"log"
 
 	"mentorhub-person-api/src/config"
 	"mentorhub-person-api/src/models"
@@ -25,7 +26,7 @@ type PersonStoreInterface interface {
 	Insert(information []byte, crumb *models.BreadCrumb) (string, error)
 	FindId(id string) (*models.Person, error)
 	UpdateId(id string, request []byte, crumb *models.BreadCrumb) (*models.Person, error)
-	FindNames() ([]config.ShortName, error)
+	FindNames() ([]*config.ShortName, error)
 }
 
 var _ PersonStoreInterface = (*PersonStore)(nil)
@@ -36,6 +37,10 @@ var _ PersonStoreInterface = (*PersonStore)(nil)
 func NewPersonStore(io config.MongoIOInterface) *PersonStore {
 	store := &PersonStore{}
 	store.mongoIO = io
+	store.person = io.GetPeopleCollection()
+	if store.person == nil {
+		log.Fatal("MongoIO GetPeopleCollection returns nil")
+	}
 	return store
 }
 
@@ -126,25 +131,22 @@ func (store *PersonStore) UpdateId(id string, request []byte, crumb *models.Brea
 /**
 * Find Names
  */
-func (store *PersonStore) FindNames() ([]config.ShortName, error) {
-	var results []config.ShortName
-	var err error
-
-	// Query the database
-	mentorProjection := bson.D{
-		{Key: "ID", Value: "_id"},
-		{Key: "name", Value: bson.M{"$concat": bson.A{"$firstName", " ", "$lastName"}}},
-	}
+func (store *PersonStore) FindNames() ([]*config.ShortName, error) {
+	// Setup Projections and Sort
 	sortOrder := bson.D{
 		{Key: "firstName", Value: 1},
 		{Key: "lastName", Value: 1},
 	}
-	opts := options.Find().
-		SetProjection(mentorProjection).
-		SetSort(sortOrder)
 
+	// Setup the Query
+	var results []*config.ShortName
 	query := bson.M{"status": bson.M{"$ne": "Archived"}}
-	err = store.mongoIO.Find(store.person, query, opts, &results)
+	opts := options.Find()
+	opts.SetProjection(config.NameProjection())
+	opts.SetSort(sortOrder)
+
+	// Find the documents
+	err := store.mongoIO.Find(store.person, query, opts, &results)
 	if err != nil {
 		return nil, err
 	}

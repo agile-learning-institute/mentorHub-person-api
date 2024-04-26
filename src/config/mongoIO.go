@@ -50,6 +50,7 @@ type MongoIOInterface interface {
 	FindOne(collection *mongo.Collection, query bson.M, results interface{}) error
 	InsertOne(collection *mongo.Collection, document interface{}) (*mongo.InsertOneResult, error)
 	UpdateOne(collection *mongo.Collection, query bson.M, opts *options.FindOneAndUpdateOptions, update interface{}, results interface{}) error
+	GetPeopleCollection() *mongo.Collection
 	FetchPartners() error
 	FetchMentors() error
 }
@@ -121,6 +122,10 @@ func (mongoIO *MongoIO) Disconnect() {
 * Find multiple documents
  */
 func (mongoIO *MongoIO) Find(collection *mongo.Collection, query bson.M, opts *options.FindOptions, results interface{}) error {
+	if collection == nil {
+		log.Fatal("CollectionError parameter is null in MongoIO.Find")
+	}
+
 	context, cancel := mongoIO.getTimeoutContext()
 	defer cancel()
 
@@ -140,6 +145,10 @@ func (mongoIO *MongoIO) Find(collection *mongo.Collection, query bson.M, opts *o
 * Find one document
  */
 func (mongoIO *MongoIO) FindOne(collection *mongo.Collection, query bson.M, results interface{}) error {
+	if collection == nil {
+		log.Fatal("CollectionError parameter is null in MongoIO.FindOne")
+	}
+
 	context, cancel := mongoIO.getTimeoutContext()
 	defer cancel()
 	isok := collection.FindOne(context, query).Decode(results)
@@ -150,9 +159,12 @@ func (mongoIO *MongoIO) FindOne(collection *mongo.Collection, query bson.M, resu
 * Insert one document
  */
 func (mongoIO *MongoIO) InsertOne(collection *mongo.Collection, document interface{}) (*mongo.InsertOneResult, error) {
+	if collection == nil {
+		log.Fatal("CollectionError parameter is null in MongoIO.InsertOne")
+	}
+
 	context, cancel := mongoIO.getTimeoutContext()
 	defer cancel()
-	log.Print(document)
 	result, err := collection.InsertOne(context, document)
 	if err != nil {
 		return nil, err
@@ -164,6 +176,10 @@ func (mongoIO *MongoIO) InsertOne(collection *mongo.Collection, document interfa
 * Update one document
  */
 func (mongoIO *MongoIO) UpdateOne(collection *mongo.Collection, query bson.M, opts *options.FindOneAndUpdateOptions, update interface{}, results interface{}) error {
+	if collection == nil {
+		log.Fatal("CollectionError parameter is null in MongoIO.UpdateOne")
+	}
+
 	ctx, cancel := mongoIO.getTimeoutContext()
 	defer cancel()
 	result := collection.FindOneAndUpdate(ctx, query, update, opts)

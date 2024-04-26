@@ -15,17 +15,19 @@ import (
 )
 
 func main() {
-	// Setup the Config
-	config := config.NewConfig()
-	mongoIO := config.NewMongoIO(config)
+	// Setup companies
+	cfg := config.NewConfig()
+	mongoIO := config.NewMongoIO(cfg)
+
+	// Connect to the database, and load static-ish data
 	mongoIO.Connect()
 	defer mongoIO.Disconnect()
+	mongoIO.LoadVersions()
+	mongoIO.LoadEnumerators()
 
-	// Setup the Stores
+	// Setup store and handlers
+	configHandler := handlers.NewConfigHandler(cfg, mongoIO)
 	personStore := stores.NewPersonStore(mongoIO)
-
-	// Setup the Handlers
-	configHandler := handlers.NewConfigHandler(config)
 	personHandler := handlers.NewPersonHandler(personStore)
 
 	// Setup the HttpServer Router
@@ -49,8 +51,8 @@ func main() {
 	gorillaRouter.Path("/api/health/").Handler(promhttp.Handler())
 
 	// Start the server with Cors handler
-	port := config.GetPort()
-	log.Printf("INFO: API Server Version %s", config.ApiVersion)
+	port := cfg.GetPort()
+	log.Printf("INFO: API Server Version %s", cfg.ApiVersion)
 	log.Printf("INFO: Server Listening at %s", port)
 	err := http.ListenAndServe(port, gorillaHandlers.CORS(originsOk, headersOk, methodsOk)(gorillaRouter))
 	if err != nil {

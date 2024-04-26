@@ -33,7 +33,7 @@ func (m *MockPersonStore) UpdateId(id string, request []byte, crumb *models.Brea
 	return nil, args.Error(1)
 }
 
-func (m *MockPersonStore) FindNames() ([]config.ShortName, error) {
+func (m *MockPersonStore) FindNames() ([]*config.ShortName, error) {
 	args := m.Called()
-	return args.Get(0).([]config.ShortName), args.Error(1)
+	return args.Get(0).([]*config.ShortName), args.Error(1)
 }

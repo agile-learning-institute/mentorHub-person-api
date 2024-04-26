@@ -45,6 +45,10 @@ func (m *MockMongoIO) UpdateOne(collection *mongo.Collection, query bson.M, opts
 	return args.Error(0)
 }
 
+func (m *MockMongoIO) GetPeopleCollection() *mongo.Collection {
+	return nil
+}
+
 func (m *MockMongoIO) FetchMentors() error {
 	return nil
 }
