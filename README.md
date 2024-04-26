@@ -114,7 +114,7 @@ curl -X PATCH http://localhost:8082/api/person/aaaa00000000000000000021 \
 
 ## Observability and Configuration
 
-The ```api/config/``` endpoint will return a list of configuration values. These values are either "defaults" or loaded from an Environment Variable, or found in a singleton configuration file of the same name. Environment Variables take precidence. The variable "CONFIG_FOLDER" will change the location of configuration files from the default of ```./```
+The ```api/config/``` endpoint will return a list of configuration values. These values are either "defaults" or loaded from an Environment Variable, or found in a singleton configuration file of the same name. Configuration files take precidence over environment variables. The variable "CONFIG_FOLDER" will change the location of configuration files from the default of ```./```
 
 The ```api/health/``` endpoint is a Promethius Healthcheck endpoint.
 
