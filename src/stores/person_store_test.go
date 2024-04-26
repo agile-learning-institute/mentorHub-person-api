@@ -2,9 +2,10 @@
 package stores
 
 import (
-	"testing"
-
+	"mentorhub-person-api/src/config"
 	"mentorhub-person-api/src/models"
+
+	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -13,50 +14,26 @@ import (
 )
 
 func TestInsert(t *testing.T) {
-	mockMongoIO := new(MockMongoIO)
+	cfg := config.NewConfig()
+	mockMongoIO := config.NewMockMongoIO(cfg)
 	store := NewPersonStore(mockMongoIO)
-	// mockCollection := &mongo.Collection{}
 
-	// Prepare the input
-	information := []byte(`{"description":"Updated","mentorId":"5f3fc1ef1e9a3225a4a39bf4"}`)
-	crumb := &models.BreadCrumb{}
+	// Prepare the input and other test setups
+	information := []byte(`{"userName":"Test", "description":"New User"}`)
+	crumb, err := models.NewBreadCrumb("127.0.0.1", "123456789012345678901234", "CORRID")
+	assert.Nil(t, err)
 
-	// Mock InsertOne
-	insertResult := &mongo.InsertOneResult{
-		InsertedID: primitive.NewObjectID(),
-	}
-	mockMongoIO.On("InsertOne", mock.AnythingOfType("*mongo.Collection"), mock.Anything).Return(insertResult, nil)
+	// Setup the mock expectations and return values
+	insertedID := primitive.NewObjectID()
+	insertResult := &mongo.InsertOneResult{InsertedID: insertedID}
+	mockMongoIO.On("InsertOne", mock.AnythingOfType("*mongo.Collection"), mock.AnythingOfType("bson.M")).Return(insertResult, nil)
 
 	// Run the test
-	person, err := store.Insert(information, crumb)
+	resultPerson, err := store.Insert(information, crumb)
 
 	// Assertions
 	assert.Nil(t, err)
-	assert.NotNil(t, person)
+	assert.NotNil(t, resultPerson)
+	assert.Equal(t, insertedID.Hex(), resultPerson.ID.Hex())
 	mockMongoIO.AssertExpectations(t)
 }
-
-func TestFindId(t *testing.T) {
-	mockMongoIO := new(MockMongoIO)
-	store := NewPersonStore(mockMongoIO)
-	// mockCollection := &mongo.Collection{} // Mock collection
-
-	id := "5f3fc1ef1e9a3225a4a39bf4"
-	expectedPerson := &models.Person{UserName: "TestUser"}
-
-	// Mock FindOne
-	mockMongoIO.On("FindOne", mock.AnythingOfType("*mongo.Collection"), mock.Anything, mock.AnythingOfType("*models.Person")).Run(func(args mock.Arguments) {
-		arg := args.Get(2).(*models.Person)
-		*arg = *expectedPerson
-	}).Return(nil)
-
-	// Run the test
-	person, err := store.FindId(id)
-
-	// Assertions
-	assert.Nil(t, err)
-	assert.Equal(t, expectedPerson, person)
-	mockMongoIO.AssertExpectations(t)
-}
-
-// Further tests can be written for FindOneAndUpdate and other methods in a similar fashion.

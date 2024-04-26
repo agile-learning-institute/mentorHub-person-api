@@ -17,16 +17,16 @@ import (
 )
 
 type PersonStore struct {
-	mongIO *config.MongoIO
-	person *mongo.Collection
+	mongoIO config.MongoIOInterface
+	person  *mongo.Collection
 }
 
 /**
 * Construct a PersonStore to handle person database io
  */
-func NewPersonStore(io *config.MongoIO) *PersonStore {
+func NewPersonStore(io config.MongoIOInterface) *PersonStore {
 	store := &PersonStore{}
-	store.mongIO = io
+	store.mongoIO = io
 	return store
 }
 
@@ -60,7 +60,7 @@ func (store *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (
 	insertValues["lastSaved"] = crumb.AsBson()
 
 	// Insert the document
-	result, err := store.mongIO.InsertOne(store.person, insertValues)
+	result, err := store.mongoIO.InsertOne(store.person, insertValues)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +74,7 @@ func (store *PersonStore) FindId(id string) (*models.Person, error) {
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	query := bson.M{"_id": objectID}
 	result := models.Person{}
-	err := store.mongIO.FindOne(store.person, query, &result)
+	err := store.mongoIO.FindOne(store.person, query, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func (store *PersonStore) FindOneAndUpdate(id string, request []byte, crumb *mod
 	resposne := &models.Person{}
 
 	// Update the document
-	err = store.mongIO.UpdateOne(store.person, query, options, update, resposne)
+	err = store.mongoIO.UpdateOne(store.person, query, options, update, resposne)
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +136,7 @@ func (store *PersonStore) FindNames() ([]config.ShortName, error) {
 		SetSort(sortOrder)
 
 	query := bson.M{"status": bson.M{"$ne": "Archived"}}
-	err = store.mongIO.Find(store.person, query, opts, &results)
+	err = store.mongoIO.Find(store.person, query, opts, &results)
 	if err != nil {
 		return nil, err
 	}
