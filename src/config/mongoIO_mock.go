@@ -26,7 +26,7 @@ func (m *MockMongoIO) Disconnect() {
 }
 
 func (m *MockMongoIO) Find(collection *mongo.Collection, query bson.M, opts *options.FindOptions, results interface{}) error {
-	args := m.Called(collection, results)
+	args := m.Called(collection, query, opts, results)
 	return args.Error(0)
 }
 

@@ -44,12 +44,12 @@ func ConvertToOid(values bson.M, fieldName string) {
 /**
 * Insert a new person with the information provided
  */
-func (store *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (*models.Person, error) {
+func (store *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (string, error) {
 	// Get the document values
 	var insertValues bson.M
 	err := json.Unmarshal(information, &insertValues)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	// Addres OID values
@@ -62,11 +62,10 @@ func (store *PersonStore) Insert(information []byte, crumb *models.BreadCrumb) (
 	// Insert the document
 	result, err := store.mongoIO.InsertOne(store.person, insertValues)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	id := result.InsertedID.(primitive.ObjectID).Hex()
-
-	return store.FindId(id)
+	return id, nil
 }
 
 func (store *PersonStore) FindId(id string) (*models.Person, error) {
@@ -84,7 +83,7 @@ func (store *PersonStore) FindId(id string) (*models.Person, error) {
 /**
 * Find One person and Update with the data provided
  */
-func (store *PersonStore) FindOneAndUpdate(id string, request []byte, crumb *models.BreadCrumb) (*models.Person, error) {
+func (store *PersonStore) UpdateId(id string, request []byte, crumb *models.BreadCrumb) (*models.Person, error) {
 
 	// Create the update set values
 	var updateValues bson.M
