@@ -86,7 +86,7 @@ func TestGetPeople(t *testing.T) {
 	personHandler := NewPersonHandler(mockStore)
 	request := httptest.NewRequest("GET", "/person/", nil)
 	responseRecorder := httptest.NewRecorder()
-	findNamesResult := []config.ShortName{}
+	findNamesResult := []*config.ShortName{}
 
 	// Initilize Mock
 	mockStore.On("FindNames").Return(findNamesResult, nil)

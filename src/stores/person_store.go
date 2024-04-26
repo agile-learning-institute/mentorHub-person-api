@@ -6,7 +6,6 @@ package stores
 
 import (
 	"encoding/json"
-	"log"
 
 	"mentorhub-person-api/src/config"
 	"mentorhub-person-api/src/models"
@@ -38,9 +37,6 @@ func NewPersonStore(io config.MongoIOInterface) *PersonStore {
 	store := &PersonStore{}
 	store.mongoIO = io
 	store.person = io.GetPeopleCollection()
-	if store.person == nil {
-		log.Fatal("MongoIO GetPeopleCollection returns nil")
-	}
 	return store
 }
 
@@ -139,13 +135,12 @@ func (store *PersonStore) FindNames() ([]*config.ShortName, error) {
 	}
 
 	// Setup the Query
-	var results []*config.ShortName
+	results := []*config.ShortName{}
 	query := bson.M{"status": bson.M{"$ne": "Archived"}}
 	opts := options.Find()
 	opts.SetProjection(config.NameProjection())
 	opts.SetSort(sortOrder)
 
-	// Find the documents
 	err := store.mongoIO.Find(store.person, query, opts, &results)
 	if err != nil {
 		return nil, err

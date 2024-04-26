@@ -113,25 +113,27 @@ func TestFindNames(t *testing.T) {
 	store := NewPersonStore(mockMongoIO)
 
 	// Setup the Teting Data
-	findResult := []config.ShortName{}
-	findResult = append(findResult, config.ShortName{
+	findResult := []*config.ShortName{}
+	fooName := &config.ShortName{
 		Name: "foo",
 		ID:   primitive.NewObjectID(),
-	})
-	findResult = append(findResult, config.ShortName{
+	}
+	barName := &config.ShortName{
 		Name: "bar",
 		ID:   primitive.NewObjectID(),
-	})
+	}
+	findResult = append(findResult, fooName)
+	findResult = append(findResult, barName)
 
 	// setup the mock
 	mockMongoIO.On("Find",
-		mock.AnythingOfType("*mongo.Collection"),    // the collection
-		mock.AnythingOfType("primitive.M"),          // the filter query
-		mock.AnythingOfType("*options.FindOptions"), // the find options
-		mock.AnythingOfType("*[]config.ShortName"),  // pointer to the result slice
+		mock.Anything,
+		mock.Anything,
+		mock.Anything,
+		mock.AnythingOfType("*[]*config.ShortName"),
 	).Run(func(args mock.Arguments) {
 		// Populate the results in the slice pointed to by the 4th argument
-		arg := args.Get(3).(*[]config.ShortName)
+		arg := args.Get(3).(*[]*config.ShortName)
 		*arg = findResult
 	}).Return(nil)
 
