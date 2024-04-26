@@ -50,6 +50,8 @@ type MongoIOInterface interface {
 	FindOne(collection *mongo.Collection, query bson.M, results interface{}) error
 	InsertOne(collection *mongo.Collection, document interface{}) (*mongo.InsertOneResult, error)
 	UpdateOne(collection *mongo.Collection, query bson.M, opts *options.FindOneAndUpdateOptions, update interface{}, results interface{}) error
+	FetchPartners() error
+	FetchMentors() error
 }
 
 var _ MongoIOInterface = (*MongoIO)(nil)

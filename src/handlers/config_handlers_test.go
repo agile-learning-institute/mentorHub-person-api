@@ -15,8 +15,9 @@ import (
 
 func TestNewConfigHandler(t *testing.T) {
 	// Setup a config
-	config := config.NewConfig()
-	configHandler := NewConfigHandler(config)
+	cfg := config.NewConfig()
+	mockMongoIO := config.NewMockMongoIO(cfg)
+	configHandler := NewConfigHandler(cfg, mockMongoIO)
 
 	// Examine the result
 	assert.NotNil(t, configHandler)
@@ -24,13 +25,13 @@ func TestNewConfigHandler(t *testing.T) {
 
 func TestGetConfig(t *testing.T) {
 	// Setup
-	config := config.NewConfig()
-	configHandler := NewConfigHandler(config)
+	cfg := config.NewConfig()
+	mongoIO := config.NewMockMongoIO(cfg)
+	configHandler := NewConfigHandler(cfg, mongoIO)
 	request := httptest.NewRequest("GET", "/config/", nil)
 	responseRecorder := httptest.NewRecorder()
-	// jsonString, _ := json.Marshal(config)
 
-	// Invoke NewPerson
+	// Invoke GetConfig
 	configHandler.GetConfig(responseRecorder, request)
 
 	// Examine the result

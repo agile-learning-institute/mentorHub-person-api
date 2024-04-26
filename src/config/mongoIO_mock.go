@@ -44,3 +44,11 @@ func (m *MockMongoIO) UpdateOne(collection *mongo.Collection, query bson.M, opts
 	args := m.Called(collection, query, opts, update, results)
 	return args.Error(0)
 }
+
+func (m *MockMongoIO) FetchMentors() error {
+	return nil
+}
+
+func (m *MockMongoIO) FetchPartners() error {
+	return nil
+}

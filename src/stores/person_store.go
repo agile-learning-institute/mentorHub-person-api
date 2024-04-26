@@ -21,6 +21,15 @@ type PersonStore struct {
 	person  *mongo.Collection
 }
 
+type PersonStoreInterface interface {
+	Insert(information []byte, crumb *models.BreadCrumb) (string, error)
+	FindId(id string) (*models.Person, error)
+	UpdateId(id string, request []byte, crumb *models.BreadCrumb) (*models.Person, error)
+	FindNames() ([]config.ShortName, error)
+}
+
+var _ PersonStoreInterface = (*PersonStore)(nil)
+
 /**
 * Construct a PersonStore to handle person database io
  */

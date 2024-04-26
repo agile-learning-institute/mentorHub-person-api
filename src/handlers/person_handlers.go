@@ -17,10 +17,10 @@ import (
 )
 
 type PersonHandler struct {
-	PersonStore *stores.PersonStore
+	PersonStore stores.PersonStoreInterface
 }
 
-func NewPersonHandler(personStore *stores.PersonStore) *PersonHandler {
+func NewPersonHandler(personStore stores.PersonStoreInterface) *PersonHandler {
 	handler := &PersonHandler{}
 	handler.PersonStore = personStore
 	return handler

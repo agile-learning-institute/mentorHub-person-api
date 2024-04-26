@@ -11,10 +11,10 @@ import (
 
 type ConfigHandler struct {
 	config  *config.Config
-	mongoIO *config.MongoIO
+	mongoIO config.MongoIOInterface
 }
 
-func NewConfigHandler(theConfig *config.Config, theMongoIO *config.MongoIO) *ConfigHandler {
+func NewConfigHandler(theConfig *config.Config, theMongoIO config.MongoIOInterface) *ConfigHandler {
 	this := &ConfigHandler{}
 	this.config = theConfig
 	this.mongoIO = theMongoIO
