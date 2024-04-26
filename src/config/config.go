@@ -43,7 +43,7 @@ type Config struct {
 const (
 	// Version Major.Minog PATCH loaded at runtime
 	VersionMajor = "1"
-	VersionMinor = "3"
+	VersionMinor = "4"
 
 	// Default Values for Configuration Values
 	DefaultConfigFolder     = "./"
