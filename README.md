@@ -17,34 +17,33 @@ The OpenAPI specifications for the api can be found in the ``docs`` folder, and 
 
 ## Install Go Dependencies
 ```bash
-go get 
+make install
+```
+
+## Run Unit Testing
+```bash
+make test
 ```
 
 ## Run the API locally 
 ```bash
-make run
+make local
 ```
 Serves up the API locally with a backign mongodb database, ctrl-c to exit
 
 ## Build the API Container
 ```bash
-make build
+make container
 ```
-This will build the new container, and start the mongodb and API container ready for testing
+This will build the new container, and start the mongodb and API container ready for testing. The test script ./test/test.sh is also run so you should see information about an inserted document. You will get a ``failed. Received HTTP code 000`` message if there are problems
 
-## Run a simple test
-```bash
-make test
-```
-This is a quick simple curl test of the endpoitns
-
-## Generate Loads of Test Data
+## Generate Test Data
 ```bash
 make generate
 ```
 Generattes loads of test data, ctrl-c to exit
 
-## Local API Testing with CURL
+## API Testing with CURL
 If you want to do more manual testing, here are the curl commands to use
 
 ### Test Health Endpoint
