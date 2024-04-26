@@ -1,9 +1,6 @@
 package models
 
 import (
-	"fmt"
-	"strings"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -25,14 +22,4 @@ type Person struct {
 	MentorId    primitive.ObjectID `json:"mentorId,omitempty"`
 	PartnerId   primitive.ObjectID `json:"partnerId,omitempty"`
 	LastSaved   *BreadCrumb        `json:"lastSaved,omitempty"`
-}
-
-func (p Person) String() string {
-	// Use a StringBuilder to efficiently build the string representation
-	var sb strings.Builder
-
-	sb.WriteString(fmt.Sprintf("Person[ID=%s, UserName=%s, FirstName=%s, LastName=%s, Email=%s, Phone=%s, Roles=[%s]]",
-		p.ID.Hex(), p.UserName, p.FirstName, p.LastName, p.Email, p.Phone, strings.Join(p.Roles, ", ")))
-
-	return sb.String()
 }
