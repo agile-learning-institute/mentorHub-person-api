@@ -27,16 +27,16 @@ test_http_request() {
 # Main function
 main() {
     local current_time
-    firstName=$(sort -R ./loadData/firstNames.txt | head -n 1 | tr -d '\n')
-    lastName=$(sort -R ./loadData/lastNames.txt | head -n 1 | tr -d '\n')
-    status=$(sort -R ./loadData/status.txt | head -n 1 | tr -d '\n')
-    cadence=$(sort -R ./loadData/cadence.txt | head -n 1 | tr -d '\n')
-    device=$(sort -R ./loadData/device.txt | head -n 1 | tr -d '\n' )
-    title=$(sort -R ./loadData/title.txt | head -n 1 | tr -d '\n' )
-    roles=$(sort -R ./loadData/roles.txt | head -n 1 | tr -d '\n' )
-    notes=$(sort -R ./loadData/BOFH.txt | head -n 1 | tr -d '\n\t\r"' | tr -d "'" | cut -c 1-255)
-    mentor=$(sort -R ./loadData/mentors.txt | head -n 1 | tr -d '\n\t\r')
-    partner=$(sort -R ./loadData/partners.txt | head -n 1 | tr -d '\n\t\r')
+    firstName=$(sort -R ./test/loadData/firstNames.txt | head -n 1 | tr -d '\n')
+    lastName=$(sort -R ./test/loadData/lastNames.txt | head -n 1 | tr -d '\n')
+    status=$(sort -R ./test/loadData/status.txt | head -n 1 | tr -d '\n')
+    cadence=$(sort -R ./test/loadData/cadence.txt | head -n 1 | tr -d '\n')
+    device=$(sort -R ./test/loadData/device.txt | head -n 1 | tr -d '\n' )
+    title=$(sort -R ./test/loadData/title.txt | head -n 1 | tr -d '\n' )
+    roles=$(sort -R ./test/loadData/roles.txt | head -n 1 | tr -d '\n' )
+    notes=$(sort -R ./test/loadData/BOFH.txt | head -n 1 | tr -d '\n\t\r"' | tr -d "'" | cut -c 1-255)
+    mentor=$(sort -R ./test/loadData/mentors.txt | head -n 1 | tr -d '\n\t\r')
+    partner=$(sort -R ./test/loadData/partners.txt | head -n 1 | tr -d '\n\t\r')
     echo $sequence, $firstName, $lastName, $status, $cadence, $device, $title, $roles, $notes
 
     if [ "$testAll" -eq 0 ]; then

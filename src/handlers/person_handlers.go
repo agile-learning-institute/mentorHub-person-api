@@ -14,19 +14,21 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 type PersonHandler struct {
-	PersonStore *stores.PersonStore
+	PersonStore stores.PersonStoreInterface
 }
 
-func NewPersonHandler(personStore *stores.PersonStore) *PersonHandler {
+func NewPersonHandler(personStore stores.PersonStoreInterface) *PersonHandler {
 	handler := &PersonHandler{}
 	handler.PersonStore = personStore
 	return handler
 }
 
+/********************************************************************************
+***** POST - Add A Person
+********************************************************************************/
 func (handler *PersonHandler) AddPerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
 	correltionId, _ := uuid.NewRandom()
@@ -52,19 +54,34 @@ func (handler *PersonHandler) AddPerson(responseWriter http.ResponseWriter, requ
 	}
 
 	// Insert the new person document
-	newPerson, err := handler.PersonStore.Insert(body, crumb)
+	id, err := handler.PersonStore.Insert(body, crumb)
 	if err != nil {
-		log.Printf("ERROR CID: %s PostPerson %s", correltionId, err.Error())
+		log.Printf("ERROR CID: %s Insert Person Failed %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())
 		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	// Get the Inserted Document from the database
+	newPerson, err := handler.PersonStore.FindId(id)
+	if err != nil {
+		log.Printf("ERROR CID: %s Get Inserted Document Failed %s", correltionId, err.Error())
+		responseWriter.Header().Add("CorrelationId", correltionId.String())
+		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// Return the JSON
+	responseWriter.Header().Set("Content-Type", "application/json")
 
 	// Return the new Person as JSON
 	responseWriter.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(responseWriter).Encode(newPerson)
 }
 
+/********************************************************************************
+***** PATCH - Update A Person
+********************************************************************************/
 func (handler *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
 	correltionId, _ := uuid.NewRandom()
@@ -93,7 +110,7 @@ func (handler *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, r
 	}
 
 	// Update the person
-	updatedPerson, err := handler.PersonStore.FindOneAndUpdate(id, body, crumb)
+	updatedPerson, err := handler.PersonStore.UpdateId(id, body, crumb)
 	if err != nil {
 		log.Printf("ERROR CID: %s Bad PatchPerson %s", correltionId, err.Error())
 		log.Printf("Request Body: %s ", body)
@@ -107,6 +124,9 @@ func (handler *PersonHandler) UpdatePerson(responseWriter http.ResponseWriter, r
 	json.NewEncoder(responseWriter).Encode(updatedPerson)
 }
 
+/********************************************************************************
+***** GET - Get A Person by ID
+********************************************************************************/
 func (handler *PersonHandler) GetPerson(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
 	correltionId, _ := uuid.NewRandom()
@@ -130,6 +150,9 @@ func (handler *PersonHandler) GetPerson(responseWriter http.ResponseWriter, requ
 	json.NewEncoder(responseWriter).Encode(results)
 }
 
+/********************************************************************************
+***** GET - Get a list of Name, PersonID
+********************************************************************************/
 func (handler *PersonHandler) GetPeople(responseWriter http.ResponseWriter, request *http.Request) {
 	// transaction logging
 	correltionId, _ := uuid.NewRandom()
@@ -137,27 +160,7 @@ func (handler *PersonHandler) GetPeople(responseWriter http.ResponseWriter, requ
 	defer log.Printf("End CID: %s Get All People", correltionId)
 
 	// Get all the people
-	results, err := handler.PersonStore.FindNames(bson.M{})
-	if err != nil {
-		log.Printf("ERROR CID: %s GetAllNames %s", correltionId, err.Error())
-		responseWriter.Header().Add("CorrelationId", correltionId.String())
-		http.Error(responseWriter, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	// Return the new Person as JSON
-	responseWriter.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(responseWriter).Encode(results)
-}
-
-func (handler *PersonHandler) GetMentors(responseWriter http.ResponseWriter, request *http.Request) {
-	// transaction logging
-	correltionId, _ := uuid.NewRandom()
-	log.Printf("Begin CID: %s Get Mentors", correltionId)
-	defer log.Printf("End CID: %s Get Mentors", correltionId)
-
-	// Get all the Mentors
-	results, err := handler.PersonStore.FindNames(bson.M{"mentor": true})
+	results, err := handler.PersonStore.FindNames()
 	if err != nil {
 		log.Printf("ERROR CID: %s GetAllNames %s", correltionId, err.Error())
 		responseWriter.Header().Add("CorrelationId", correltionId.String())

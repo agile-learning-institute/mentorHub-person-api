@@ -1,53 +1,50 @@
 # institute-person-api
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Prerequisits](#prerequisits)
-- [Using the Database Container](#using-the-database-container)
-- [Install Dependencies and Run](#install-dependencies-and-run-the-api-locally)
-- [Build and Test the container](#building-and-testing-the-container-locally)
-- [Local API Testing with CURL](#local-api-testing-with-curl)
-- [Observability and Configuration](#observability-and-configuration)
-
 ## Overview
 
-This is a simple GoLang API that provides Get/Post/Patch services for docuements in the People collection, as well as Get services for a number of related collections. This API uses data from a [backing Mongo Database](https://github.com/agile-learning-institute/mentorHub-mongodb), and supports a [VueJS Single Page Appliaction.](https://github.com/agile-learning-institute/mentorHub-person-ui)
+This is a simple GoLang API that provides Get/Post/Patch services for docuements in the People collection. This API uses data from a [backing Mongo Database](https://github.com/agile-learning-institute/mentorHub-mongodb), and supports a [VueJS Single Page Appliaction.](https://github.com/agile-learning-institute/mentorHub-person-ui)
 
 The OpenAPI specifications for the api can be found in the ``docs`` folder, and are served [here](https://agile-learning-institute.github.io/mentorHub-person-api/)
 
 ## Prerequisits
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- [Mentorhub Developer Edition](https://github.com/agile-learning-institute/mentorHub/blob/main/mentorHub-developer-edition/README.md)
 - [Go Language](https://go.dev/doc/install)
 
 ### Optional
 
 - [Mongo Compass](https://www.mongodb.com/try/download/compass) - if you want a way to look into the database
 
-### Using the Database Container
-
-If you want a local database, with test data preloaded, you can find instructions in the [mentorHub repository - docker configurations](https://github.com/agile-learning-institute/mentorHub/blob/main/docker-configurations/README.md#run-the-mongodb-backing-database)
-
-### Install dependencies and run the API locally
-
-If you have started the database separatly, you can run the API locally
-
+## Install Go Dependencies
 ```bash
-cd ./src
-go get 
-go run main.go
+make install
 ```
 
-### Building and Testing the container locally
-
-You should build the container and test changes locally before making a pull request. You can use the build script below, and then [run curl tests](#local-api-testing-with-curl) to confirm the build.
-
+## Run Unit Testing
 ```bash
-./src/docker/docker-build.sh
+make test
 ```
 
-## Local API Testing with CURL
+## Run the API locally 
+```bash
+make local
+```
+Serves up the API locally with a backign mongodb database, ctrl-c to exit
+
+## Build the API Container
+```bash
+make container
+```
+This will build the new container, and start the mongodb and API container ready for testing. The test script ./test/test.sh is also run so you should see information about an inserted document. You will get a ``failed. Received HTTP code 000`` message if there are problems
+
+## Generate Test Data
+```bash
+make generate
+```
+Generattes loads of test data, ctrl-c to exit
+
+## API Testing with CURL
+If you want to do more manual testing, here are the curl commands to use
 
 ### Test Health Endpoint
 
@@ -95,7 +92,7 @@ curl http://localhost:8082/api/person/
 ### Test get a person
 
 ```bash
-curl http://localhost:8082/api/person/[ID]
+curl http://localhost:8082/api/person/aaaa00000000000000000000
 
 ```
 
@@ -117,8 +114,8 @@ curl -X PATCH http://localhost:8082/api/person/aaaa00000000000000000021 \
 
 ## Observability and Configuration
 
-The ```api/config/``` endpoint will return a list of configuration values. These values are either "defaults" or loaded from an Environment Variable, or found in a singleton configuration file of the same name. Environment Variables take precidence. The variable "CONFIG_FOLDER" will change the location of configuration files from the default of ```./```
+The ```api/config/``` endpoint will return a list of configuration values. These values are either "defaults" or loaded from an Environment Variable, or found in a singleton configuration file of the same name. Configuration files take precidence over environment variables. The variable "CONFIG_FOLDER" will change the location of configuration files from the default of ```./```
 
 The ```api/health/``` endpoint is a Promethius Healthcheck endpoint.
 
-The [Dockerfile](./src/docker/Dockerfile) uses a 2-stage build, and supports both amd64 and arm64 architectures. See [docker-build.sh](./src/docker/docker-build.sh) for details about how to build in the local architecture for testing, and [docker-push.sh] for details about how to build and push multi-architecture images.
+The [Dockerfile](./Dockerfile) uses a 2-stage build, and supports both amd64 and arm64 architectures. See [docker-build.sh](./src/docker/docker-build.sh) for details about how to build in the local architecture for testing, and [docker-push.sh] for details about how to build and push multi-architecture images.

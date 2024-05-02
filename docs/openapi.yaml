@@ -174,22 +174,6 @@ components:
                 type: string
         enumerators: 
           type: object
-          properties: 
-            name:
-              description: Enumerator Name
-              type: string
-            status:
-              description: Enumerator Status 
-              type: string
-              enum: 
-                - Active
-                - Depricated
-            version:
-              description: Enumerator Version
-              type: string
-            enumerators: 
-              description: List of Enumerator Value:Description pairs
-              type: object
         mentors:
           description: List of all members with role Mentor
           type: array
@@ -215,6 +199,7 @@ components:
                 description: Name
                 type: string      
     people:
+      type: object
       required:
         - _id
         - userName
@@ -331,4 +316,3 @@ components:
           additionalProperties: false
           type: object
       additionalProperties: false
-      type: object
