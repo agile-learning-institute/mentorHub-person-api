@@ -32,5 +32,4 @@ stepci:
 # Start containers and run stepCI testing
 blackbox:
 	make container
-	mh up person-api
-	make stepCI
+	make stepci
