@@ -1,0 +1,195 @@
+version: "1.1"
+name: Person API Check
+env:
+  host: localhost:8082
+tests:
+  observable:
+    name: Test Observability
+    steps:
+      - name: GET Config Values
+        http:
+          url: http://${{env.host}}/api/config/
+          method: GET
+          check:
+            status: /200/
+            schema:
+              type: object
+              properties:
+                ApiVersion:
+                  type: string
+                ConfigItems:
+                  type: array
+                versions:
+                  type: array
+                enums:
+                  type: object
+                mentors:
+                  type: array
+                partners:
+                  type: array
+              required:
+                - ApiVersion
+                - ConfigItems
+                - versions
+                - enums
+                - mentors
+                - partners
+              additionalProperties: false
+      - name: GET Health
+        http:
+          url: http://${{env.host}}/api/health/
+          method: GET
+          check:
+            status: /200/
+  people:
+    name: Test /api/person endpoints
+    steps:
+      - name: GET a list of people
+        http:
+          url: http://${{env.host}}/api/person/
+          method: GET
+          check:
+            status: /200/
+            schema:
+              type: array
+              items: 
+                type: object
+                properties:
+                  ID:
+                    type: string
+                  name:
+                    type: string
+                required:
+                  - ID
+                  - name
+                additionalProperties: false
+      - name: GET a single person
+        http:
+          url: http://${{env.host}}/api/person/aaaa00000000000000000000
+          method: GET
+          check:
+            status: /200/
+            schema:
+              type: object
+              properties:
+                ID:
+                  type: string
+                userName:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                roles:
+                  type: array
+                description:
+                  type: string
+                status:
+                  type: string
+                title:
+                  type: string
+                cadence:
+                  type: string
+                eMail:
+                  type: string
+                gitHub:
+                  type: string
+                phone:
+                  type: string
+                device:
+                  type: string
+                location:
+                  type: string
+                mentorId:
+                  type: string
+                partnerId:
+                  type: string
+                lastSaved:
+                  type: object
+                  properties:
+                    atTime:
+                      type: string
+                    byUser:
+                      type: string
+                    fromIp:
+                      type: string
+                    correlationId:
+                      type: string
+                  required:
+                    - atTime
+                    - byUser
+                    - fromIp
+                    - correlationId
+                  additionalProperties: false
+              required:
+                - ID
+                - userName
+                - firstName
+                - lastName
+                - roles
+                - description
+                - status
+                - title
+                - cadence
+                - eMail
+                - gitHub
+                - phone
+                - device
+                - location
+                - mentorId
+                - partnerId
+              additionalProperties: false
+      - name: Create a New Person
+        http:
+          url: http://${{env.host}}/api/person/
+          method: Post
+          headers:
+            Content-Type: application/json
+          json: 
+            userName: stepCiPostPersonTest
+            firstName: Foo
+            lastName: Bar
+            description: The description
+          captures:
+            theId:
+              jsonpath: $.ID            
+          check:
+            status: /200/
+            jsonpath:
+              $.userName: stepCiPostPersonTest
+              $.description: The description
+      - name: Patch the new Person Description
+        http:
+          url: http://${{env.host}}/api/person/${{captures.theId}}
+          method: Patch
+          headers:
+            Content-Type: application/json
+          json: 
+            description: An updated description
+          check:
+            status: /200/
+            jsonpath:
+              $.description: An updated description
+      - name: Verify the Patched Value
+        http:
+          url: http://${{env.host}}/api/person/${{captures.theId}}
+          method: GET
+          check:
+            status: /200/
+            jsonpath:
+              $.userName: stepCiPostPersonTest
+              $.description: An updated description
+      - name: Archive Test Data
+        http:
+          url: http://${{env.host}}/api/person/${{captures.theId}}
+          method: Patch
+          headers:
+            Content-Type: application/json
+          json: 
+            userName: ${{captures.theId}}
+            status: Archived
+          check:
+            status: /200/
+            jsonpath:
+              $.userName: ${{captures.theId}}
+              $.status: Archived
