@@ -49,7 +49,7 @@ make blackbox
 
 ## Generate Test Data
 ```bash
-make generate
+make testdata
 ```
 Generattes loads of test data, ctrl-c to exit
 

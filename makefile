@@ -22,7 +22,7 @@ container:
 	./test/test.sh
 
 # Generate test data
-generate:
+testdata:
 	./test/buildTestData.sh
 
 # Run StepCI Testing
