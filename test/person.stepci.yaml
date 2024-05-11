@@ -6,7 +6,7 @@ config:
   loadTest:
     phases:
       - duration: 2
-        arrivalRate: 105
+        arrivalRate: 100
 tests:
   observable:
     name: Test Observability
