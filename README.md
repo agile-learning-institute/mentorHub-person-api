@@ -29,7 +29,7 @@ make test
 ```bash
 make local
 ```
-Serves up the API locally with a backign mongodb database, ctrl-c to exit
+Serves up the API locally with a backing mongodb database, use ctrl-c to exit
 
 ## Build the API Container
 ```bash
@@ -37,9 +37,19 @@ make container
 ```
 This will build the new container, and start the mongodb and API container ready for testing. The test script ./test/test.sh is also run so you should see information about an inserted document. You will get a ``failed. Received HTTP code 000`` message if there are problems
 
+## Test with StepCI
+```bash
+make stepci
+```
+This will run the stepci tests, and expectes to find the API with backing test data at localhost:8082. If you need to start the database and api before running the test you can use 
+
+```bash
+make blackbox
+```
+
 ## Generate Test Data
 ```bash
-make generate
+make testdata
 ```
 Generattes loads of test data, ctrl-c to exit
 

@@ -1,6 +1,6 @@
 # Makefile
 
-.PHONY: install test local container generate
+.PHONY: install test local container generate stepci blackbox loadtest
 
 # Install dependencies
 install:
@@ -22,5 +22,18 @@ container:
 	./test/test.sh
 
 # Generate test data
-generate:
+testdata:
 	./test/buildTestData.sh
+
+# Run StepCI Testing
+stepci:
+	stepci run ./test/person.stepci.yaml
+
+# Run StepCI Load Testing
+loadtest:
+	stepci run ./test/person.stepci.yaml --loadtest
+
+# Start containers and run stepCI testing
+blackbox:
+	make container
+	make stepci
