@@ -1,6 +1,6 @@
 # Makefile
 
-.PHONY: install test local container generate stepci blackbox loadtest
+.PHONY: install test local container testdata stepci blackbox loadtest
 
 # Install dependencies
 install:

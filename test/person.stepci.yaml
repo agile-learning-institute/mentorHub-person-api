@@ -8,8 +8,8 @@ config:
       - duration: 5
         arrivalRate: 50
 tests:
-  observable:
-    name: Test Observability
+  observable-config:
+    name: Get Config
     steps:
       - name: GET Config Values
         http:
@@ -40,14 +40,17 @@ tests:
                 - mentors
                 - partners
               additionalProperties: false
+  observable-health:
+    name: Get Health
+    steps:
       - name: GET Health
         http:
           url: http://${{env.host}}/api/health/
           method: GET
           check:
             status: /200/
-  people:
-    name: Test /api/person endpoints
+  list-people:
+    name: List People
     steps:
       - name: GET a list of people
         http:
@@ -68,6 +71,9 @@ tests:
                   - ID
                   - name
                 additionalProperties: false
+  get-person:
+    name: Get Person
+    steps:
       - name: GET a single person
         http:
           url: http://${{env.host}}/api/person/aaaa00000000000000000000
@@ -144,6 +150,9 @@ tests:
                 - mentorId
                 - partnerId
               additionalProperties: false
+  new-person:
+    name: New Person
+    steps:
       - name: Create a New Person
         http:
           url: http://${{env.host}}/api/person/
@@ -163,27 +172,6 @@ tests:
             jsonpath:
               $.userName: stepCiPostPersonTest
               $.description: The description
-      - name: Patch the new Person Description
-        http:
-          url: http://${{env.host}}/api/person/${{captures.theId}}
-          method: Patch
-          headers:
-            Content-Type: application/json
-          json: 
-            description: An updated description
-          check:
-            status: /200/
-            jsonpath:
-              $.description: An updated description
-      - name: Verify the Patched Value
-        http:
-          url: http://${{env.host}}/api/person/${{captures.theId}}
-          method: GET
-          check:
-            status: /200/
-            jsonpath:
-              $.userName: stepCiPostPersonTest
-              $.description: An updated description
       - name: Archive Test Data
         http:
           url: http://${{env.host}}/api/person/${{captures.theId}}
@@ -198,3 +186,38 @@ tests:
             jsonpath:
               $.userName: ${{captures.theId}}
               $.status: Archived
+  patch-person:
+    name: Patch Person
+    steps:
+      - name: Patch the new Person Description
+        http:
+          url: http://${{env.host}}/api/person/aaaa00000000000000000000
+          method: Patch
+          headers:
+            Content-Type: application/json
+          json: 
+            description: An updated description
+          check:
+            status: /200/
+            jsonpath:
+              $.description: An updated description
+      - name: Verify the Patched Value
+        http:
+          url: http://${{env.host}}/api/person/aaaa00000000000000000000
+          method: GET
+          check:
+            status: /200/
+            jsonpath:
+              $.description: An updated description
+      - name: Reset the Patched Value
+        http:
+          url: http://${{env.host}}/api/person/aaaa00000000000000000000
+          method: Patch
+          headers:
+            Content-Type: application/json
+          json: 
+            description: The Original Description
+          check:
+            status: /200/
+            jsonpath:
+              $.description: The Original Description
